@@ -12,6 +12,7 @@
 
     <ImageView
         android:id="@+id/loginImage"
+        android:src="@mipmap/pie"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
