@@ -3,4 +3,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="nome_utente_hint">Nome Utente</string>
     <string name="password">Password</string>
+    <string name="accedi">ACCEDI</string>
+    <string name="title_activity_lista_profili">ListaProfiliActivity</string>
 </resources>
