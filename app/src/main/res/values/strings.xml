@@ -3,4 +3,5 @@
     <string name="username">Nome Utente</string>
     <string name="password">Password</string>
     <string name="enter">Accedi</string>
+    <string name="errorLogin">Credenziali errate</string>
 </resources>

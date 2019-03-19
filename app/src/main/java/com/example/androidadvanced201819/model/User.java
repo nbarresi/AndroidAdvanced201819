@@ -2,27 +2,27 @@ package com.example.androidadvanced201819.model;
 
 public class User {
 
-    private String username;
-    private String password;
+    private String user;
+    private String pass;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public User(String user, String pass) {
+        this.user = user;
+        this.pass = pass;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPass() {
+        return pass;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 }

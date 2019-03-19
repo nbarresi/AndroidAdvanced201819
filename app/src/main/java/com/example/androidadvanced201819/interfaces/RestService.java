@@ -1,6 +1,6 @@
 package com.example.androidadvanced201819.interfaces;
 
-
+import com.example.androidadvanced201819.model.LoginResponse;
 import com.example.androidadvanced201819.model.User;
 
 import retrofit2.Call;
@@ -11,6 +11,6 @@ public interface RestService {
 
 
     @POST("academy/login")
-    Call<User> login(@Body User user);
+    Call<LoginResponse> login(@Body User user);
 
 }
