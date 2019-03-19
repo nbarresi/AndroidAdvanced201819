@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidAdvanced201819</string>
+    <string name="nome_utente_hint">Nome Utente</string>
+    <string name="password">Password</string>
 </resources>
