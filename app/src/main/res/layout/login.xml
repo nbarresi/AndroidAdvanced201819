@@ -55,10 +55,11 @@
             tools:ignore="SpUsage" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:orientation="vertical"
         android:layout_marginTop="250dp">
 
         <EditText
@@ -66,30 +67,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/username"
+            android:singleLine="true"
             android:textAlignment="gravity"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="@dimen/textsize"
-            android:singleLine="true"
             tools:ignore="SpUsage" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:hint="@string/password"
             android:inputType="textPassword"
+            android:singleLine="true"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="@dimen/textsize"
-            android:singleLine="true"
             tools:ignore="SpUsage" />
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/remindme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remindMe"
+                android:text="@string/remindme" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="0dp">
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/accessButton"
@@ -100,6 +113,7 @@
             android:layout_marginBottom="@dimen/textsize"
             android:background="@color/blue"
             android:text="@string/enter"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:onClick="access"/>
     </RelativeLayout>
 </RelativeLayout>

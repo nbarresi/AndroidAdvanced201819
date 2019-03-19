@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static final String DATABASE_CREATE_PROFILE =
-            "CREATE TABLE items(" +
+            "CREATE TABLE profile(" +
                     ProfileDatabaseManager.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ProfileDatabaseManager.KEY_PROFILE_NAME + " TEXT, " +
                     ProfileDatabaseManager.KEY_OPTION_SELECTED + " INTEGER, " +

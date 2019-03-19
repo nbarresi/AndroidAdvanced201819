@@ -20,8 +20,9 @@ public class ProfileDatabaseManager {
     public static final String KEY_VOLUME = "volume";
     public static final String KEY_BLUETHOOTH = "bluethoot";
     public static final String KEY_WIFI = "wifi";
+    public static final String KEY_APPLICATION = "application";
 
-    public ProfileDatabaseManager(Context context){
+    public ProfileDatabaseManager(Context context) {
         this.context = context;
     }
 
@@ -36,7 +37,7 @@ public class ProfileDatabaseManager {
     }
 
 
-    private ContentValues createContentValues(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi) {
+    private ContentValues createContentValues(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi, String application) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_PROFILE_NAME, profile_name);
         contentValues.put(KEY_OPTION_SELECTED, option);
@@ -44,22 +45,21 @@ public class ProfileDatabaseManager {
         contentValues.put(KEY_VOLUME, volume);
         contentValues.put(KEY_BLUETHOOTH, bluethoot);
         contentValues.put(KEY_WIFI, wifi);
+        contentValues.put(KEY_APPLICATION, application);
 
         return contentValues;
     }
 
-    public long createItem(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi) {
-        ContentValues initialValues = createContentValues(profile_name, option, luminosity, volume, bluethoot, wifi);
+    public long createItem(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi, String application) {
+        ContentValues initialValues = createContentValues(profile_name, option, luminosity, volume, bluethoot, wifi, application);
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 
-    public Cursor fetchAllItems() {
-        return database.query(DATABASE_TABLE, null, null, null, null, null, null);
+    public Cursor fetchAllProfile() {
+        return database.rawQuery("select * from " + DATABASE_TABLE, null);
     }
 
-    public Cursor readItem(int id) {
-        String[] columns = new String[]{"*"};
-        return database.query(DATABASE_TABLE, columns, "_id = '" + id + "'", null, null, null, null);
+    public Cursor fetchAllProfileName() {
+        return database.rawQuery("select name from " + DATABASE_TABLE, null);
     }
-
 }
