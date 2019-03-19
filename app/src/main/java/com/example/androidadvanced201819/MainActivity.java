@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                             image.setImageResource(R.mipmap.ok);
 
 
-                            Intent listIntent = new Intent(getApplicationContext(),ListaProfiliActivity.class);
+                            Intent listIntent = new Intent(getApplicationContext(),CreateProfileActivity.class);
                             startActivity(listIntent);
 
                         }else{

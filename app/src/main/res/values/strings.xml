@@ -4,7 +4,7 @@
     <string name="nome_utente_hint">Nome Utente</string>
     <string name="password">Password</string>
     <string name="accedi">ACCEDI</string>
-    <string name="title_activity_lista_profili">ListaProfiliActivity</string>
+    <string name="title_activity_create_profile">Crea Profilo</string>
     <string name="nome_profilo">Nome Profilo</string>
     <string name="metodo_di_rilevamento">Metodo di rilevamento</string>
     <string name="gps">GPS</string>

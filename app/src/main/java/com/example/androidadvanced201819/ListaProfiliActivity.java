@@ -10,8 +10,8 @@ public class ListaProfiliActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_profili);
-        
+        //setContentView(R.layout.activity_create_profile);
+
     }
 
 }
