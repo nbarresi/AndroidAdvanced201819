@@ -1,4 +1,4 @@
-package org.its.entity;
+package org.its.login.entity;
 
 public class Login {
 

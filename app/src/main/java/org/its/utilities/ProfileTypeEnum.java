@@ -1,7 +1,7 @@
 package org.its.utilities;
 
 public  enum ProfileTypeEnum {
-    WIFI(0), BEACON(1), NFC(3), GPS(4);
+    WIFI(0), BEACON(1), NFC(2), GPS(3);
 
     private int value;
 
