@@ -6,32 +6,39 @@ import java.util.Objects;
 
 public class Profilo {
     private Integer id;
+    private String nome;
     private Integer volume;
     private Integer luminosita;
     private boolean autoLuminosita;
     private boolean wifi;
     private boolean bluetooth;
     private ProfileTypeEnum metodo;
+    private String rilevazione;
 
     public Profilo() {
     }
-    public Profilo(Integer id, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo) {
+
+    public Profilo(Integer id, String nome, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione) {
         this.id = id;
+        this.nome = nome;
         this.volume = volume;
         this.luminosita = luminosita;
         this.autoLuminosita = autoLuminosita;
         this.wifi = wifi;
         this.bluetooth = bluetooth;
         this.metodo = metodo;
+        this.rilevazione = rilevazione;
     }
 
-    public Profilo(Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo) {
+    public Profilo(Integer volume, String nome,Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione) {
         this.volume = volume;
+        this.nome = nome;
         this.luminosita = luminosita;
         this.autoLuminosita = autoLuminosita;
         this.wifi = wifi;
         this.bluetooth = bluetooth;
         this.metodo = metodo;
+        this.rilevazione = rilevazione;
     }
 
     public Integer getId() {
@@ -90,35 +97,40 @@ public class Profilo {
         this.metodo = metodo;
     }
 
+    public String getRilevazione() {
+        return rilevazione;
+    }
+
+    public void setRilevazione(String rilevazione) {
+        this.rilevazione = rilevazione;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Profilo)) return false;
         Profilo profilo = (Profilo) o;
         return autoLuminosita == profilo.autoLuminosita &&
                 wifi == profilo.wifi &&
                 bluetooth == profilo.bluetooth &&
                 Objects.equals(id, profilo.id) &&
+                Objects.equals(nome, profilo.nome) &&
                 Objects.equals(volume, profilo.volume) &&
                 Objects.equals(luminosita, profilo.luminosita) &&
-                metodo == profilo.metodo;
+                metodo == profilo.metodo &&
+                Objects.equals(rilevazione, profilo.rilevazione);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, volume, luminosita, autoLuminosita, wifi, bluetooth, metodo);
+        return Objects.hash(id, nome, metodo);
     }
 
-    @Override
-    public String toString() {
-        return "Profilo{" +
-                "id=" + id +
-                ", volume=" + volume +
-                ", luminosita=" + luminosita +
-                ", autoLuminosita=" + autoLuminosita +
-                ", wifi=" + wifi +
-                ", bluetooth=" + bluetooth +
-                ", metodo=" + metodo +
-                '}';
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
