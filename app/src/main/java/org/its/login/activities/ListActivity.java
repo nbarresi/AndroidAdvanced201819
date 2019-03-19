@@ -1,13 +1,17 @@
 package org.its.login.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.EditText;
 
 import com.example.androidadvanced201819.R;
 
 import org.its.db.entities.Profile;
+import org.its.login.LoginManager;
 import org.its.login.adapters.RecyclerAdapter;
 
 import java.util.ArrayList;
@@ -43,6 +47,8 @@ public class ListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
     }
+
+
 
 
 }

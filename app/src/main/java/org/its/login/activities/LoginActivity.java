@@ -1,5 +1,6 @@
 package org.its.login.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import com.example.androidadvanced201819.R;
 
 
+import org.its.login.LoginManager;
 import org.its.login.Servicies.*;
 
 import retrofit2.Call;
@@ -22,60 +24,77 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity{
 
+    private Context context;
+
+    private Context getContext(){
+        return context;
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loginlayout);
 
-        Button myButton = (Button) findViewById(R.id.accedi);
-        myButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Retrofit retrofit= new Retrofit.Builder()
-                        .baseUrl("https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                LoginService service =retrofit.create(LoginService.class);
+        this.context = this;
 
-                EditText usernameEdit = (EditText) findViewById(R.id.username);
-                EditText passwordEdit = (EditText) findViewById(R.id.password);
-                final String username = usernameEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
+        if(LoginManager.getLoggedStatus(this))
+        {
+            startApp(this);
+        }
+        else {
 
-                LoginRequest request = new LoginRequest(username,password);
+            setContentView(R.layout.loginlayout);
 
-                Call<LoginResponse> response = service.login(request);
+            Button myButton = (Button) findViewById(R.id.accedi);
+            myButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    LoginService service = retrofit.create(LoginService.class);
 
-                final ImageView loginImage = (ImageView) findViewById(R.id.imageView);
+                    EditText usernameEdit = (EditText) findViewById(R.id.username);
+                    EditText passwordEdit = (EditText) findViewById(R.id.password);
+                    final String username = usernameEdit.getText().toString();
+                    String password = passwordEdit.getText().toString();
 
-                response.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(
-                            Call<LoginResponse> call, Response<LoginResponse> response) {
-                        System.out.println(response.code());
-                        if(response.body().getStatusCode() == 200){
-                            Drawable image = getResources().getDrawable(R.drawable.successicon);
-                            loginImage.setImageDrawable(image);
-;
-                                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
-                                intent.putExtra("username", username);
-                                startActivity(intent);
+                    LoginRequest request = new LoginRequest(username, password);
+
+                    Call<LoginResponse> response = service.login(request);
+
+                    final ImageView loginImage = (ImageView) findViewById(R.id.imageView);
+
+                    response.enqueue(new Callback<LoginResponse>() {
+                        @Override
+                        public void onResponse(
+                                Call<LoginResponse> call, Response<LoginResponse> response) {
+                            System.out.println(response.code());
+                            if (response.body().getStatusCode() == 200) {
+                                Drawable image = getResources().getDrawable(R.drawable.successicon);
+                                loginImage.setImageDrawable(image);
+                                LoginManager.setLoggedStatus(getContext(), true, username);
+                                startApp(getContext());
+                            } else {
+                                Drawable image = getResources().getDrawable(R.drawable.erroricon);
+                                loginImage.setImageDrawable(image);
+                            }
 
                         }
-                        else{
-                            Drawable image = getResources().getDrawable(R.drawable.erroricon);
-                            loginImage.setImageDrawable(image);
+
+                        @Override
+                        public void onFailure(Call<LoginResponse> call, Throwable t) {
+                            call.cancel();
                         }
-
-                    }
-                    @Override
-                    public void onFailure(Call<LoginResponse> call, Throwable t) {
-                        call.cancel();
-                    }
-                });
+                    });
 
 
+                }
+            });
+        }
+    }
 
-            }
-        });
+    private void startApp(Context context){
+        Intent intent = new Intent(context, ListActivity.class);
+        startActivity(intent);
     }
 }
