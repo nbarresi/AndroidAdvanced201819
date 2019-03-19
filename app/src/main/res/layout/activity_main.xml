@@ -43,6 +43,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:text="@string/accedi"
+        android:background="@color/colorPrimary"/>
 
 </RelativeLayout>
