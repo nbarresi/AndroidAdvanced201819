@@ -6,4 +6,15 @@
     <string name="addProfile">Aggiungi profilo</string>
     <string name="errorLogin">Credenziali errate</string>
     <string name="remindme">Ricordami</string>
+    <string name="detectionMerhod">Metodo di pagamento</string>
+    <string name="gps">GPS</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="nfc">NFC</string>
+    <string name="beacon">Beacon</string>
+    <string name="brightness">Luminosità</string>
+    <string name="auto">Auto</string>
+    <string name="volume">Volume</string>
+    <string name="bluethoot">Bluethoot</string>
+    <string name="create">Crea Profilo</string>
+    <string name="app">App</string>
 </resources>
