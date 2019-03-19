@@ -1,7 +1,5 @@
 package com.example.androidadvanced201819;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -49,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
                             Call<LoginResponse> call, Response<LoginResponse> response) {
                         if(response.body().getBody().equals("OK") && response.body().getStatusCode().equals("200")) {
                             Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
-
                             image.setImageResource(R.mipmap.ok);
 
                         }else{
                             Toast.makeText(MainActivity.this, "Login non effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.ko);
+
                         }
                     }
                     @Override
