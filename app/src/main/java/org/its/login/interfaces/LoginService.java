@@ -1,7 +1,9 @@
-package org.its.interfaces;
+package org.its.login.interfaces;
 
-import org.its.entity.Login;
-import org.its.entity.LoginResponse;
+
+
+import org.its.login.entity.Login;
+import org.its.login.entity.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

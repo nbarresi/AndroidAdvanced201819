@@ -12,9 +12,10 @@ import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 
-import org.its.entity.Login;
-import org.its.entity.LoginResponse;
-import org.its.interfaces.LoginService;
+import org.its.login.entity.Login;
+import org.its.login.entity.LoginResponse;
+import org.its.login.interfaces.LoginService;
+import org.its.utilities.StringCollection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final ImageView image = findViewById(R.id.image);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(getString(R.string.base_url))
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(StringCollection.baseUrl)
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
 

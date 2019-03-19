@@ -1,4 +1,3 @@
 <resources>
     <string name="app_name">AndroidAdvanced201819</string>
-    <string name="base_url">https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/academy/</string>
 </resources>
