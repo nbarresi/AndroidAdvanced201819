@@ -2,19 +2,19 @@ package org.its.entity;
 
 public class LoginResponse {
 
-    private String statusCode;
+    private Integer statusCode;
     private String body;
 
-    public LoginResponse(String statusCode, String body) {
+    public LoginResponse(Integer statusCode, String body) {
         this.statusCode = statusCode;
         this.body = body;
     }
 
-    public String getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
 

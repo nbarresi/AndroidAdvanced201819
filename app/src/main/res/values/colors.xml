@@ -5,4 +5,8 @@
     <color name="colorAccent">#D81B60</color>
     <color name="lightBLue">#2196F3</color>
     <color name="white">#FDFDFD</color>
+
+
+    <color name="ok">#4CAF50</color>
+    <color name="error">#F44336</color>
 </resources>

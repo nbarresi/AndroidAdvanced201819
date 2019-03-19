@@ -19,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,7 +37,8 @@ public class LoginActivity extends AppCompatActivity {
 
         final ImageView image = findViewById(R.id.image);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(getString(R.string.base_url)).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(getString(R.string.base_url))
+                .addConverterFactory(GsonConverterFactory.create()).build();
 
 
         final LoginService service = retrofit.create(LoginService.class);
@@ -50,7 +52,15 @@ public class LoginActivity extends AppCompatActivity {
                 responseLogin.enqueue(new Callback<LoginResponse>() {
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        System.out.println("status code = " + response.body().getStatusCode());
+                        LoginResponse result = response.body();
+                        if (result.getStatusCode() == 200) {
+                            image.setBackgroundColor(getResources().getColor(R.color.ok));
+                            error.setVisibility(TextView.INVISIBLE);
+                        } else {
+                            image.setBackgroundColor(getResources().getColor(R.color.error));
+                            error.setVisibility(TextView.VISIBLE);
+                            error.setText("errore durante il login");
+                        }
                     }
 
                     @Override
