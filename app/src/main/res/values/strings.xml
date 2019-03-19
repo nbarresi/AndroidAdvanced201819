@@ -16,4 +16,6 @@
     <string name="volume">Volume</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="conferma">Conferma</string>
+    <string name="aggiungi_profilo">Aggiungi Profilo</string>
+    <string name="title_activity_list_profile">Lista Profili</string>
 </resources>
