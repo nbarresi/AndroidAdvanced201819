@@ -1,6 +1,7 @@
 package org.its.Activity;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -50,14 +51,15 @@ public class LoginActivity extends AppCompatActivity {
                 Call<LoginResponse> responseLogin = service.login(new Login(String.valueOf(username.getText()), String.valueOf(password.getText())));
 
                 responseLogin.enqueue(new Callback<LoginResponse>() {
+                    @SuppressLint("NewApi")
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                         LoginResponse result = response.body();
                         if (result.getStatusCode() == 200) {
-                            image.setBackgroundColor(getResources().getColor(R.color.ok));
+                            image.setBackground(getResources().getDrawable(R.drawable.succes));
                             error.setVisibility(TextView.INVISIBLE);
                         } else {
-                            image.setBackgroundColor(getResources().getColor(R.color.error));
+                            image.setBackground(getResources().getDrawable(R.drawable.error));
                             error.setVisibility(TextView.VISIBLE);
                             error.setText("errore durante il login");
                         }
