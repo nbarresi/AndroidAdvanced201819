@@ -5,4 +5,15 @@
     <string name="password">Password</string>
     <string name="accedi">ACCEDI</string>
     <string name="title_activity_lista_profili">ListaProfiliActivity</string>
+    <string name="nome_profilo">Nome Profilo</string>
+    <string name="metodo_di_rilevamento">Metodo di rilevamento</string>
+    <string name="gps">GPS</string>
+    <string name="wifi">WIFI</string>
+    <string name="nfc">NFC</string>
+    <string name="beacon">Beacon</string>
+    <string name="luminosit">Luminosità</string>
+    <string name="auto">Auto</string>
+    <string name="volume">Volume</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="conferma">Conferma</string>
 </resources>

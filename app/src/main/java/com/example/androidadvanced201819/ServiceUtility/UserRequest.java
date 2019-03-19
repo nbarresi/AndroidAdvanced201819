@@ -1,6 +1,6 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.ServiceUtility;
 
-class UserRequest {
+public class UserRequest {
     private String user;
     private String pass;
 

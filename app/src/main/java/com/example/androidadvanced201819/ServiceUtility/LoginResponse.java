@@ -1,6 +1,6 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.ServiceUtility;
 
-class LoginResponse {
+public class LoginResponse {
     private String statusCode;
     private String body;
 

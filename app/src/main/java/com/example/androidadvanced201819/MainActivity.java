@@ -1,5 +1,6 @@
 package com.example.androidadvanced201819;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -7,6 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.androidadvanced201819.ServiceUtility.LoginResponse;
+import com.example.androidadvanced201819.ServiceUtility.LoginService;
+import com.example.androidadvanced201819.ServiceUtility.UserRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
                         if(response.body().getBody().equals("OK") && response.body().getStatusCode().equals("200")) {
                             Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.ok);
+
+
+                            Intent listIntent = new Intent(getApplicationContext(),ListaProfiliActivity.class);
+                            startActivity(listIntent);
 
                         }else{
                             Toast.makeText(MainActivity.this, "Login non effettuato", Toast.LENGTH_LONG).show();
