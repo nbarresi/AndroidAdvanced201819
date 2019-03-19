@@ -1,5 +1,6 @@
 package org.its.login.activities;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,7 @@ public class LoginActivity extends AppCompatActivity{
 
                 EditText usernameEdit = (EditText) findViewById(R.id.username);
                 EditText passwordEdit = (EditText) findViewById(R.id.password);
-                String username = usernameEdit.getText().toString();
+                final String username = usernameEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
 
                 LoginRequest request = new LoginRequest(username,password);
@@ -54,6 +55,11 @@ public class LoginActivity extends AppCompatActivity{
                         if(response.body().getStatusCode() == 200){
                             Drawable image = getResources().getDrawable(R.drawable.successicon);
                             loginImage.setImageDrawable(image);
+;
+                                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
+
                         }
                         else{
                             Drawable image = getResources().getDrawable(R.drawable.erroricon);
