@@ -2,6 +2,7 @@ package org.its.Activity;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
-
 import org.its.login.entity.Login;
 import org.its.login.entity.LoginResponse;
 import org.its.login.interfaces.LoginService;
@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (result.getStatusCode() == 200) {
                             image.setBackground(getResources().getDrawable(R.drawable.succes));
                             error.setVisibility(TextView.INVISIBLE);
+                            Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                            startActivity(intent);
                         } else {
                             image.setBackground(getResources().getDrawable(R.drawable.error));
                             error.setVisibility(TextView.VISIBLE);
@@ -74,5 +76,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 }

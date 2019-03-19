@@ -11,11 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="org.its.Activity.LoginActivity">
+        <activity android:name="org.its.Activity.LoginActivity" android:label="@string/login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name="org.its.Activity.ListActivity" android:label="gestisci profilo">
+        </activity>
+
+        <activity android:name="org.its.Activity.DetailActivity" android:label="dettaglio profilo">
+        </activity>
+
     </application>
 </manifest>
