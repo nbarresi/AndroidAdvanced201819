@@ -14,11 +14,11 @@ import org.its.db.entities.Profile;
 import java.util.List;
 
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ListViewHolder> {
+public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileListRecyclerAdapter.ListViewHolder> {
     List<Profile> profiles;
 
 
-    public RecyclerAdapter(List<Profile> profiles) {
+    public ProfileListRecyclerAdapter(List<Profile> profiles) {
        this.profiles =  profiles;
     }
 
@@ -30,23 +30,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ListVi
 
         public ListViewHolder(View view) {
             super(view);
-            cardView = itemView.findViewById(R.id.card_view);
-            profileName = (TextView) itemView.findViewById(R.id.info_text);
+            cardView = itemView.findViewById(R.id.card_view_profile);
+            profileName = (TextView) itemView.findViewById(R.id.profile_cv_name);
 
         }
     }
 
     @Override
-    public RecyclerAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProfileListRecyclerAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_layout, parent, false);
+                    .inflate(R.layout.profile_card_view, parent, false);
         return new ListViewHolder(itemView);
     }
 
 
-     public void onBindViewHolder(RecyclerAdapter.ListViewHolder holder, int position) {
-        holder.profileName.setText("Elemento n°" + profiles.get(position).getName());
-    }
+     public void onBindViewHolder(ProfileListRecyclerAdapter.ListViewHolder holder, int position) {
+        holder.profileName.setText(profiles.get(position).getName());
+         //TODO Listener
+     }
 
     @Override
     public int getItemCount() {

@@ -2,30 +2,20 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listlayout"
+    android:id="@+id/profile_list_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="60dp"
     android:paddingRight="60dp"
     android:paddingTop="60dp"
     android:paddingBottom="60dp"
-    tools:context="org.its.login.activities.ListActivity">
+    tools:context="org.its.login.activities.AddAppListActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+        android:id="@+id/rv_app"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="item"/>
 
-    <Button
-        android:id="@+id/aggiungi_profilo"
-        android:background="@android:color/holo_blue_dark"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="AGGIUNGI PROFILO"
-        android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        android:layout_alignParentBottom="true"
-        />
 
 </RelativeLayout>

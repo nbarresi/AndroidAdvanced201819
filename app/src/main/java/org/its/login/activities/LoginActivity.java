@@ -25,11 +25,11 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loginlayout);
+        setContentView(R.layout.activity_login_layout);
 
         Button myButton = (Button) findViewById(R.id.accedi);
-        myButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            myButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
                 Retrofit retrofit= new Retrofit.Builder()
                         .baseUrl("https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/")
                         .addConverterFactory(GsonConverterFactory.create())
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity{
                             Drawable image = getResources().getDrawable(R.drawable.successicon);
                             loginImage.setImageDrawable(image);
 ;
-                                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, ProfileListActivity.class);
                                 intent.putExtra("username", username);
                                 startActivity(intent);
 
