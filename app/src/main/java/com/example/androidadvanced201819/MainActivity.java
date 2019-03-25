@@ -1,5 +1,6 @@
 package com.example.androidadvanced201819;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                         if(response.body().getBody().equals("OK") && response.body().getStatusCode().equals("200")) {
                             Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.verde);
+                            Intent intent=new Intent(getApplicationContext(),Lista_profili.class);
+                            startActivity(intent);
 
                         }else{
                             Toast.makeText(MainActivity.this, "Login non effettuato", Toast.LENGTH_LONG).show();

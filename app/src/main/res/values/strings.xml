@@ -5,4 +5,12 @@
     <string name="appbar_scrolling_view_behavior">hello world</string>
     <string name="Password">Password</string>
     <string name="login_Button">Login</string>
+    <string name="AggiungiProfilo">Aggiungi Profilo</string>
+    <string name="nome_profilo">nome del profilo</string>
+    <string name="profilo_rilevamento">metodo di rilevamento</string>
+    <string name="GPS">GPS</string>
+    <string name="WIFI">WIFI</string>
+    <string name="NFC">NFC</string>
+    <string name="BACON">BACON</string>
+
 </resources>
