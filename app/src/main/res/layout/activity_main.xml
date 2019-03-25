@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -18,8 +18,8 @@
       android:layout_height="wrap_content"
       android:src="@mipmap/p"
       android:id="@+id/loginImage"
+      android:layout_marginTop="25px"
       />
-
 
     <EditText
         android:id="@+id/editTextUser"
@@ -29,8 +29,6 @@
         android:layout_marginStart="60dp"
         android:hint="@string/Username"/>
 
-
-
     <EditText
         android:id="@+id/editTextPsw"
         android:layout_width="match_parent"
@@ -38,8 +36,7 @@
         android:layout_marginEnd="60dp"
         android:inputType="textPassword"
         android:layout_marginStart="60dp"
-        android:hint="@string/Password"
-         />
+        android:hint="@string/Password"/>
 
         <Button
             android:id="@+id/loginButton"
@@ -50,10 +47,8 @@
             android:backgroundTint="@color/blueLight"
             android:text="@string/login_Button"
             android:textSize="17dp"
-            android:textColor="@color/white"
-           android:layout_marginTop="200dp"/>
+            android:textColor="@color/white"/>
 
     </LinearLayout>
-
 
 </LinearLayout>
