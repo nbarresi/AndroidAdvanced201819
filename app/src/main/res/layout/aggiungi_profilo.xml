@@ -211,7 +211,13 @@
         </LinearLayout>
 
     </LinearLayout>
-
+<TextView
+    android:id="@+id/App"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8px"
+    android:layout_marginTop="15px"
+    android:text="App"/>
 <RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">

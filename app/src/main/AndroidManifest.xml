@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".AggiungiProfilo"></activity>
         <activity android:name=".Lista_profili"></activity>
+        <activity android:name=".Lista_applicazioni"></activity>
 
     </application>
 
