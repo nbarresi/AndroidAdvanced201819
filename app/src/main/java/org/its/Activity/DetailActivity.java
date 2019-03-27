@@ -40,7 +40,7 @@ public class DetailActivity extends Activity {
         final CheckBox autoLuminosita = findViewById(R.id.autoLuminosita);
 
         Intent intent = getIntent();
-        if (intent != null) {
+        if (intent.getSerializableExtra(ListActivity.PROFILE) != null) {
             Profilo profilo = (Profilo) intent.getSerializableExtra(ListActivity.PROFILE);
             name.setText(profilo.getNome());
             luminosita.setProgress(profilo.getLuminosita());
@@ -49,14 +49,44 @@ public class DetailActivity extends Activity {
             bluetooth.setChecked(profilo.isBluetooth());
             autoLuminosita.setChecked(profilo.isAutoLuminosita());
             switch (profilo.getMetodo().getValue()) {
-                case 0: radioGroup.check(R.id.detailWIFI); break;
-                case 1: radioGroup.check(R.id.detailBeacon); break;
-                case 2: radioGroup.check(R.id.detailNFC); break;
-                case 3: radioGroup.check(R.id.detailGPS); break;
+                case 0:
+                    radioGroup.check(R.id.detailWIFI);
+                    break;
+                case 1:
+                    radioGroup.check(R.id.detailBeacon);
+                    break;
+                case 2:
+                    radioGroup.check(R.id.detailNFC);
+                    break;
+                case 3:
+                    radioGroup.check(R.id.detailGPS);
+                    break;
             }
             this.update = profilo.getId();
         }
 
+        
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Intent intentRadio = new Intent(DetailActivity.this, ListActivity.class);
+
+                switch (checkedId) {
+                    case R.id.detailGPS:
+                        System.out.println("premuto radiobutton 1");
+                        break;
+                    case R.id.detailWIFI:
+                        System.out.println("premuto radiobutton 2");
+                        break;
+                    case R.id.detailNFC:
+                        System.out.println("premuto radiobutton 3");
+                        break;
+                    case R.id.detailBeacon:
+                        System.out.println("premuto radiobutton 4");
+                        break;
+                }
+            }
+        });
 
         Button save = findViewById(R.id.saveProfile);
         save.setOnClickListener(new View.OnClickListener() {

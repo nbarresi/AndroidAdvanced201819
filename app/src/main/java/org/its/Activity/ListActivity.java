@@ -36,14 +36,13 @@ public class ListActivity extends Activity {
 
         adapter = new CustomArrayAdapter(this, list);
 
-        ListView listView = (ListView) findViewById(R.id.profileList);
+        final ListView listView = (ListView) findViewById(R.id.profileList);
         listView.setAdapter(adapter);
         listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
                 Intent updateIntent = new Intent(ListActivity.this, DetailActivity.class);
                 Profilo profile = adapter.getItem(position);
                 updateIntent.putExtra(PROFILE, profile);
@@ -51,23 +50,16 @@ public class ListActivity extends Activity {
             }
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
-            }
-        });
-
        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
            @Override
            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
-               AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+               AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ListActivity.this);
                alertDialogBuilder.setTitle(R.string.alertTitolo).setMessage(R.string.alertMessage).setPositiveButton(R.string.alertCancella, new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int which) {
                        db.openConn(getApplicationContext());
                        if(db.deleteProfile(list.get(i).getId())){
                            list.remove(i);
-                           //aggiungere notifyDataSetChanged
+                           adapter.notifyDataSetChanged();
                        }
                        db.closeConn();
                    }
@@ -76,7 +68,7 @@ public class ListActivity extends Activity {
                        dialog.cancel();
                    }
                }).show();
-               return false;
+               return true;
            }
        });
 
