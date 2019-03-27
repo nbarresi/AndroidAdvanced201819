@@ -44,7 +44,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private AudioManager audioManager;
     private Switch switchBluetooth;
     private TextView textViewAppList;
-
+    private Boolean isEditUser = false;
 
     private final int ADD_APP_REQUEST_CODE = 0;
 
@@ -52,9 +52,14 @@ public class NewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_profile);
+        Intent editProfile = getIntent();
 
+        isEditUser = editProfile.getSerializableExtra("editedProfile") != null;
+        if (isEditUser) {
+            profile = (Profile) editProfile.getSerializableExtra("editedProfile");
+        }
         //add all listeners
-        setCreateUserButtonListener();
+        setCreateUserButtonListener(isEditUser);
         setNameProfileEditTextListener();
         setListenerOnRadioButton();
         setOnBarBrightnessChangeListener();
@@ -64,23 +69,43 @@ public class NewProfileActivity extends AppCompatActivity {
         onClickAppListText();
     }
 
+    //nome profilo (Obbligatorio)
     private void setNameProfileEditTextListener() {
         editTextNameProfile = (EditText) findViewById(R.id.profile_name);
+        if (isEditUser) editTextNameProfile.setText(profile.getName());
     }
 
 
     //metodo rilevamento
     private void setListenerOnRadioButton() {
         radioConnectivityGroup = (RadioGroup) findViewById(R.id.radioConnectivity);
-    }
+        if (isEditUser) {
+            switch (profile.getMetodoRilevamento().toLowerCase()) {
+                case "gps":
+                    radioConnectivityButton = (RadioButton) findViewById(R.id.gps);
+                    break;
+                case "wifi":
+                    radioConnectivityButton = (RadioButton) findViewById(R.id.wifi);
+                    break;
+                case "nfc":
+                    radioConnectivityButton = (RadioButton) findViewById(R.id.nfc);
+                    break;
+                case "beacon":
+                    radioConnectivityButton = (RadioButton) findViewById(R.id.beacon);
+                    break;
+            }
+            radioConnectivityButton.setChecked(true);
+        }
 
+    }
 
 
     //luminosità
     private void setOnBarBrightnessChangeListener() {
         barBrightness = (SeekBar) findViewById(R.id.brightness);
 
-
+        if (isEditUser) barBrightness.setProgress(profile.getLuminosita());
+        else barBrightness.setProgress(1);
 
         barBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -114,6 +139,8 @@ public class NewProfileActivity extends AppCompatActivity {
     //luminosità auto
     private void setAutoBrightnessCheckboxListener() {
         brightnessCheckbox = (CheckBox) findViewById(R.id.auto_brightness);
+                            if (isEditUser && profile.getLuminosita() == 0 ) brightnessCheckbox.setChecked(true); //temp valore arbitrario
+
     }
 
     //volume
@@ -126,6 +153,8 @@ public class NewProfileActivity extends AppCompatActivity {
                 .getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         barVolume.setProgress(audioManager
                 .getStreamVolume(AudioManager.STREAM_MUSIC));
+
+                            if (isEditUser) barVolume.setProgress(profile.getVolume());
 
 
         barVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -149,28 +178,32 @@ public class NewProfileActivity extends AppCompatActivity {
     //switch bluetooth
     private void setBluetoothSwitchListener() {
         switchBluetooth = (Switch) findViewById(R.id.bluetooth);
+                            if (isEditUser) switchBluetooth.setChecked(profile.isBluetooth());
+
     }
 
     //lista di app
     private void onClickAppListText() {
         textViewAppList = (TextView) findViewById(R.id.app_list_text);
+        if (isEditUser) textViewAppList.setText(setLabelAppName());
+
         textViewAppList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setProfileValue();
                 Intent intentAddAppList = new Intent(NewProfileActivity.this, AddAppListActivity.class);
                 startActivityForResult(intentAddAppList, ADD_APP_REQUEST_CODE);
-
             }
         });
-
     }
 
 
     //create User
-    private void setCreateUserButtonListener() {
+    private void setCreateUserButtonListener(final Boolean isEditUser) {
         dbHelper = new DBHelper(getApplicationContext());
         btnDisplay = (Button) findViewById(R.id.crea_profilo);
+        if (isEditUser) btnDisplay.setText("MODIFICA");
+
         btnDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,13 +211,14 @@ public class NewProfileActivity extends AppCompatActivity {
                 if (profile.getName().isEmpty()) {
                     Toast.makeText(NewProfileActivity.this,
                             "PROFILE NAME VALUE IS NOT DEFINED", Toast.LENGTH_SHORT).show();
-                } else if (profile.getApp() == null) { //TEMP
-                    Toast.makeText(NewProfileActivity.this,
-                            "APP VALUE IS NOT DEFINED", Toast.LENGTH_SHORT).show();
                 } else {
                     profile.setApp(setPackageAppName());
-                    dbHelper.insertProfile(profile);
-                    Intent intentGoToProfileList = new Intent(NewProfileActivity.this, ProfileListActivity.class );
+
+                    if (isEditUser) {
+                        dbHelper.updateProfile(profile);
+                    } else dbHelper.insertProfile(profile);
+
+                    Intent intentGoToProfileList = new Intent(NewProfileActivity.this, ProfileListActivity.class);
                     startActivity(intentGoToProfileList);
                 }
             }
@@ -212,57 +246,47 @@ public class NewProfileActivity extends AppCompatActivity {
         PackageManager pm = getPackageManager();
         List<ApplicationInfo> appList = pm.getInstalledApplications(0);
         for (ApplicationInfo applicationInfo : appList) {
-            String temps = applicationInfo.loadLabel(pm).toString();
-            if (temps.equals(profile.getApp())){
+            String label = applicationInfo.loadLabel(pm).toString();
+            if (label.equals(profile.getApp())) {
                 return applicationInfo.packageName;
             }
         }
         return result;
     }
 
+    private String setLabelAppName() {
+        String result = profile.getApp();
+        PackageManager pm = getPackageManager();
+        List<ApplicationInfo> appList = pm.getInstalledApplications(0);
+        for (ApplicationInfo applicationInfo : appList) {
+            String packageName = applicationInfo.packageName;
+            if (packageName.equals(profile.getApp())) {
+                return applicationInfo.loadLabel(pm).toString();
+            }
+        }
+        return result;
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
-            if (resultCode == RESULT_OK){
-                switch (requestCode){
-                    case ADD_APP_REQUEST_CODE:
-                        profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ADD_APP_REQUEST_CODE:
+                    profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
                         textViewAppList.setText(profile.getApp());
-                        break;
+                    break;
 
-                        //TODO
-                    //        if (fromAppList) editTextNameProfile.setText(profile.getName());
-
-//                    if (fromAppList){
-//                        switch (profile.getMetodoRilevamento().toLowerCase()){
-//                            case "gps":
-//                                radioConnectivityButton = (RadioButton) findViewById(R.id.gps);
-//                                break;
-//                            case "wifi":
-//                                radioConnectivityButton = (RadioButton) findViewById(R.id.wifi);
-//                                break;
-//                            case "nfc":
-//                                radioConnectivityButton = (RadioButton) findViewById(R.id.nfc);
-//                                break;
-//                            case "beacon":
-//                                radioConnectivityButton = (RadioButton) findViewById(R.id.beacon);
-//                                break;
-//                        }
-//                        radioConnectivityButton.setChecked(true);
-//                    }
-
-//                    if (fromAppList) barBrightness.setProgress(profile.getLuminosita());
-//                    else barBrightness.setProgress(1);
-
-//                    if (fromAppList && profile.getLuminosita() == 0 ) brightnessCheckbox.setChecked(true); //temp valore arbitrario
-
-//                    if (fromAppList) barVolume.setProgress(profile.getVolume());
-
-//                    if (fromAppList) switchBluetooth.setChecked(profile.isBluetooth());
+                //TODO
 
 
-                }
+
+
+
+
+            }
         }
 
     }
