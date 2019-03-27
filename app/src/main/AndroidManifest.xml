@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +23,12 @@
 
 
         <activity
-            android:name=".ListaProfiliActivity"
+            android:name=".activities.ListaProfiliActivity"
             android:label="@string/title_activity_list_profile"
             android:theme="@style/AppThemeWithTitle"></activity>
 
         <activity
-            android:name=".CreateProfileActivity"
+            android:name=".activities.CreateProfileActivity"
             android:label="@string/title_activity_create_profile"
             android:theme="@style/AppThemeWithTitle"></activity>
     </application>

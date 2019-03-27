@@ -20,7 +20,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginRight="20dp"
         android:hint="@string/nome_utente_hint"
-        android:layout_below="@+id/loginImage"/>
+        android:layout_below="@+id/loginImage"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/password"
@@ -31,7 +32,8 @@
         android:layout_marginLeft="20dp"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:layout_below="@+id/username"/>
+        android:layout_below="@+id/username"
+        android:singleLine="true"/>
 
     <Button
         android:layout_width="match_parent"

@@ -2,12 +2,13 @@ package com.example.androidadvanced201819.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.androidadvanced201819.UserProfile;
+import com.example.androidadvanced201819.DB.Entities.UserProfile;
 
-import java.util.HashMap;
+import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -21,6 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String GENERIC_COLUMN_ID = "id";
 
     public static final String PROFILE_COLUMN_UTENTE = "utente";
+    public static final String PROFILE_COLUMN_NOME = "nome";
     public static final String PROFILE_COLUMN_LUMINOSITA = "luminosita";
     public static final String PROFILE_COLUMN_VOLUME = "volume";
     public static final String PROFILE_COLUMN_BLUETOOTH = "bluetooth";
@@ -31,7 +33,8 @@ public class DbHelper extends SQLiteOpenHelper {
 //    public static final String METODO_RILEVAMENTO_COLUMN_ID_PROFILO = "id_profilo";
 
     private static final String CREATE_TABLE_PROFILO = "CREATE TABLE " + PROFILE_TABLE_NAME + "(" +
-            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY," +
+            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            PROFILE_COLUMN_NOME+ " TEXT," +
             PROFILE_COLUMN_LUMINOSITA + " INTEGER," +
             PROFILE_COLUMN_VOLUME + " INTEGER," +
             PROFILE_COLUMN_BLUETOOTH + " INTEGER," +
@@ -39,7 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
             PROFILE_COLUMN_UTENTE+ " TEXT )";
 
 //    private static final String CREATE_TABLE_METODO_RILEVAMENTO = "CREATE TABLE " + METODO_RILEVAMENTO_TABLE + "(" +
-//            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY," +
+//            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 //            METODO_RILEVAMENTO_COLUMN_TIPO + " TEXT," +
 //            METODO_RILEVAMENTO_COLUMN_VALORE + " TEXT,"+
 //            METODO_RILEVAMENTO_COLUMN_ID_PROFILO+" INTEGER, " +
@@ -65,12 +68,23 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void insertProfile (UserProfile profile) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");//da cambiare se si inserisce la register
+        contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());//da cambiare se si inserisce la register
         contentValues.put(PROFILE_COLUMN_LUMINOSITA, profile.getLuminosita());
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
         contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi()? 1 : 0);
-        db.insert(PROFILE_TABLE_NAME, null, contentValues);
+        long bho = db.insert(PROFILE_TABLE_NAME, null, contentValues);
+        db.endTransaction();
+    }
+
+    public List<UserProfile> getProfiles(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        Cursor profili = db.query(PROFILE_TABLE_NAME,null,null,null,null,null,null);
+        db.endTransaction();
+        return null;
     }
 }

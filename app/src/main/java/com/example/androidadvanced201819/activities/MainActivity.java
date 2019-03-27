@@ -1,4 +1,4 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.ServiceUtility.LoginResponse;
 import com.example.androidadvanced201819.ServiceUtility.LoginService;
 import com.example.androidadvanced201819.ServiceUtility.UserRequest;

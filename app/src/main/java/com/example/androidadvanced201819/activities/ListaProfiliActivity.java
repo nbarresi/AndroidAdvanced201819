@@ -1,11 +1,12 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.androidadvanced201819.R;
 
 public class ListaProfiliActivity extends AppCompatActivity {
 

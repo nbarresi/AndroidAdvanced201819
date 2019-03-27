@@ -1,4 +1,4 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.DB.Entities;
 
 public class UserProfile {
     private int id;
@@ -7,14 +7,15 @@ public class UserProfile {
     private int volume;
     private boolean bluetooth;
     private boolean wifi;
+    private String nome;
 
-    public UserProfile(int id/*,MetodoRilevamento metodoDiRilevamento*/, int luminosita, int volume, boolean bluetooth, boolean wifi) {
-        this.id = id;
+    public UserProfile(/*MetodoRilevamento metodoDiRilevamento ,*/String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
 //        this.metodoDiRilevamento = metodoDiRilevamento;
         this.luminosita = luminosita;
         this.volume = volume;
         this.bluetooth = bluetooth;
         this.wifi = wifi;
+        this.nome=nome;
     }
 
     public int getId() {
@@ -39,5 +40,9 @@ public class UserProfile {
 
     public boolean isWifi() {
         return wifi;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }
