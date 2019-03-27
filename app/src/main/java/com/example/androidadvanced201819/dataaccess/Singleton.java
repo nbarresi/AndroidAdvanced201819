@@ -1,4 +1,4 @@
-package com.example.androidadvanced201819.DataAccess;
+package com.example.androidadvanced201819.dataaccess;
 
 import com.example.androidadvanced201819.model.Profile;
 

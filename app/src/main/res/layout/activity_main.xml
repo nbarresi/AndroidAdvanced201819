@@ -25,7 +25,8 @@
             android:layout_marginBottom="@dimen/textsize"
             android:background="@color/blue"
             android:text="@string/addProfile"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:onClick="goToCreateProfile"/>
     </RelativeLayout>
 </RelativeLayout>
 

@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.androidadvanced201819.DataAccess.DataAccessUtils;
-import com.example.androidadvanced201819.DataAccess.Singleton;
+import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
+import com.example.androidadvanced201819.dataaccess.Singleton;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 import com.example.androidadvanced201819.model.Profile;
@@ -60,7 +60,7 @@ public class AdapterActivity extends ArrayAdapter<Profile> {
 
         profileDatabaseManager = new ProfileDatabaseManager(context);
         profileDatabaseManager.open();
-        Cursor cursor = profileDatabaseManager.fetchAllProfileName();
+        Cursor cursor = profileDatabaseManager.fetchAllProfile();
         cursor.moveToFirst();
         int index = cursor.getCount();
 
@@ -68,7 +68,13 @@ public class AdapterActivity extends ArrayAdapter<Profile> {
             int i = 0;
             do {
                 Profile profile = new Profile(
-                        cursor.getString(cursor.getColumnIndex(profileDatabaseManager.KEY_PROFILE_NAME))
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_PROFILE_NAME)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_OPTION_SELECTED)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_BRIGHTNESS)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_VOLUME)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_BLUETHOOTH)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_WIFI)),
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION))
                 );
                 i++;
                 DataAccessUtils.addItem(profile, context);

@@ -19,10 +19,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProfileDatabaseManager.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ProfileDatabaseManager.KEY_PROFILE_NAME + " TEXT, " +
                     ProfileDatabaseManager.KEY_OPTION_SELECTED + " INTEGER, " +
-                    ProfileDatabaseManager.KEY_LUMINOSITY + " INTEGER, " +
+                    ProfileDatabaseManager.KEY_BRIGHTNESS + " INTEGER, " +
                     ProfileDatabaseManager.KEY_VOLUME + " INTEGER, " +
                     ProfileDatabaseManager.KEY_BLUETHOOTH + " INTEGER, " +
-                    ProfileDatabaseManager.KEY_WIFI + " INTEGER " +
+                    ProfileDatabaseManager.KEY_WIFI + " INTEGER, " +
+                    ProfileDatabaseManager.KEY_APPLICATION + " TEXT " +
                     ");";
 
     @Override

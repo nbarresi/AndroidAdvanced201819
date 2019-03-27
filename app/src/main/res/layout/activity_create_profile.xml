@@ -7,7 +7,7 @@
     android:padding="20dp"
     android:orientation="vertical"
 
-    tools:context=".activities.CreateProfile">
+    tools:context=".activities.profile.CreateProfile">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,25 +34,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gps"
-            android:onClick="onRadioDetectionMerhod"/>
+            android:onClick="onRadioDetectionMethod"/>
 
         <RadioButton android:id="@+id/wifiRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/wifi"
-            android:onClick="onRadioDetectionMerhod"/>
+            android:onClick="onRadioDetectionMethod"/>
 
         <RadioButton android:id="@+id/nfcRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nfc"
-            android:onClick="onRadioDetectionMerhod"/>
+            android:onClick="onRadioDetectionMethod"/>
 
         <RadioButton android:id="@+id/beaconRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/beacon"
-            android:onClick="onRadioDetectionMerhod"/>
+            android:onClick="onRadioDetectionMethod"/>
     </RadioGroup>
 
     <LinearLayout
@@ -152,7 +152,7 @@
         android:layout_height="65dp"
         android:text="@string/create"
         android:layout_gravity="bottom"
-        android:layout_weight=""/>
+        android:onClick="createProfile"/>
 
 
 </LinearLayout>

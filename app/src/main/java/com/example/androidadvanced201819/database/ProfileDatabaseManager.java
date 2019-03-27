@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.androidadvanced201819.model.Profile;
+
 public class ProfileDatabaseManager {
 
     private SQLiteDatabase database;
@@ -16,7 +18,7 @@ public class ProfileDatabaseManager {
     public static final String KEY_ID = "id";
     public static final String KEY_PROFILE_NAME = "name";
     public static final String KEY_OPTION_SELECTED = "option";
-    public static final String KEY_LUMINOSITY = "luminosita";
+    public static final String KEY_BRIGHTNESS = "luminosita";
     public static final String KEY_VOLUME = "volume";
     public static final String KEY_BLUETHOOTH = "bluethoot";
     public static final String KEY_WIFI = "wifi";
@@ -37,11 +39,11 @@ public class ProfileDatabaseManager {
     }
 
 
-    private ContentValues createContentValues(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi, String application) {
+    private ContentValues createContentValues(String profile_name, int option, int brightness, int volume, int bluethoot, int wifi, String application) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_PROFILE_NAME, profile_name);
         contentValues.put(KEY_OPTION_SELECTED, option);
-        contentValues.put(KEY_LUMINOSITY, luminosity);
+        contentValues.put(KEY_BRIGHTNESS, brightness);
         contentValues.put(KEY_VOLUME, volume);
         contentValues.put(KEY_BLUETHOOTH, bluethoot);
         contentValues.put(KEY_WIFI, wifi);
@@ -50,13 +52,13 @@ public class ProfileDatabaseManager {
         return contentValues;
     }
 
-    public long createItem(String profile_name, int option, int luminosity, int volume, int bluethoot, int wifi, String application) {
-        ContentValues initialValues = createContentValues(profile_name, option, luminosity, volume, bluethoot, wifi, application);
+    public long createProfile(Profile profile) {
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication());
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 
     public Cursor fetchAllProfile() {
-        return database.rawQuery("select * from " + DATABASE_TABLE, null);
+        return database.query(DATABASE_TABLE, null, null, null, null, null, null);
     }
 
     public Cursor fetchAllProfileName() {
