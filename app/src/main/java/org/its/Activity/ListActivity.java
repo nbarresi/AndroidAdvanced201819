@@ -46,26 +46,27 @@ public class ListActivity extends Activity {
             }
         });
 
-        listView.setOnLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                alertDialogBuilder.setTitle(R.string.alertTitolo).setMessage(R.string.alertMessage).setPositiveButton(R.string.alertCancella, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        db.openConn(getApplicationContext());
-                        if(db.deleteProfile(list.get(i).getId())){
-                            list.remove(i);
-                        }
-                        db.closeConn();
-                    }
-                }).setNegativeButton(R.string.alertDismiss, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).show();
-            }
-        });
+       listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+               AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+               alertDialogBuilder.setTitle(R.string.alertTitolo).setMessage(R.string.alertMessage).setPositiveButton(R.string.alertCancella, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       db.openConn(getApplicationContext());
+                       if(db.deleteProfile(list.get(i).getId())){
+                           list.remove(i);
+                           //aggiungere notifyDataSetChanged
+                       }
+                       db.closeConn();
+                   }
+               }).setNegativeButton(R.string.alertDismiss, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.cancel();
+                   }
+               }).show();
+               return false;
+           }
+       });
 
         Button aggiungi = (Button) findViewById(R.id.aggiungi);
         aggiungi.setOnClickListener(new View.OnClickListener() {
