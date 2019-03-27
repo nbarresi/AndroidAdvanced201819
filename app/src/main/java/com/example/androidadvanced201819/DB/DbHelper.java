@@ -84,19 +84,15 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(PROFILE_TABLE_NAME,null,null,null,null,null,null);
         List<UserProfile> profiles = new ArrayList<>();
         if (cursor != null) {
-            // move cursor to first row
             if (cursor.moveToFirst()) {
                 do {
-                    // Get version from Cursor
                     int id = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID));
                     String nome = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_NOME));
                     int luminosita = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_LUMINOSITA));
                     int volume = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_VOLUME));
                     boolean bluetooth = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_BLUETOOTH))==1;
                     boolean wifi = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_WIFI))==1;
-                    // add the bookName into the bookTitles ArrayList
                     profiles.add(new UserProfile(id,nome,luminosita,volume,bluetooth,wifi));
-                    // move to next row
                 } while (cursor.moveToNext());
             }
         }
