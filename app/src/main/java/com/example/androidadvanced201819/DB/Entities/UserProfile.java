@@ -1,6 +1,8 @@
 package com.example.androidadvanced201819.DB.Entities;
 
-public class UserProfile {
+import java.io.Serializable;
+
+public class UserProfile implements Serializable {
     private int id;
     private String metodoDiRilevamento;
     private String valoreMetodo;

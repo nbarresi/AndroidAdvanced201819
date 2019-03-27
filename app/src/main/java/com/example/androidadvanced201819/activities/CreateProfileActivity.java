@@ -26,6 +26,8 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         dbHelper = new DbHelper(getApplicationContext());
 
+        final Intent intent= getIntent();
+
         final EditText textName = (EditText) findViewById(R.id.name);
         final RadioButton gpsButton = (RadioButton) findViewById(R.id.gps);
         final RadioButton nfcButton = (RadioButton) findViewById(R.id.nfc);
@@ -37,20 +39,45 @@ public class CreateProfileActivity extends AppCompatActivity {
         final Switch wifiSwitch = (Switch) findViewById(R.id.wifiSwitch);
 
         Button addProfileButton = (Button) findViewById(R.id.confirmProfile);
-
+        if(intent.hasExtra("PROFILE")){
+            addProfileButton.setText("MODIFICA");
+            UserProfile profilo = (UserProfile) intent.getSerializableExtra("PROFILE");
+            textName.setText(profilo.getNome());
+            luminosita.setProgress(profilo.getLuminosita());
+            volume.setProgress(profilo.getVolume());
+            bluetoothSwitch.setChecked(profilo.isBluetooth());
+            wifiSwitch.setChecked(profilo.isWifi());
+            switch(profilo.getMetodoDiRilevamento()){
+                case "nfc": nfcButton.setChecked(true);break;
+                case "wifi": wifiButton.setChecked(true);break;
+                case "beacon": beaconButton.setChecked(true);break;
+                case "gps": gpsButton.setChecked(true);break;
+            }
+        }
         addProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = textName.getText().toString();
-                boolean bluetooth = bluetoothSwitch.isChecked();
-                boolean wifi = wifiSwitch.isChecked();
+                if(intent.hasExtra("PROFILE")){
+                    String name = textName.getText().toString();
+                    boolean bluetooth = bluetoothSwitch.isChecked();
+                    boolean wifi = wifiSwitch.isChecked();
 
-                UserProfile profile = new UserProfile(name,selectedMethod,"",luminosita.getProgress(),volume.getProgress(),bluetooth,wifi,"");
+                    UserProfile profile = new UserProfile(name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, "");
 
-                dbHelper.insertProfile(profile);
+//                    dbHelper.updateProfile(profile);
 
-                Intent back = new Intent(getApplicationContext(),ListaProfiliActivity.class);
-                startActivity(back);
+                    onBackPressed();
+                }else {
+                    String name = textName.getText().toString();
+                    boolean bluetooth = bluetoothSwitch.isChecked();
+                    boolean wifi = wifiSwitch.isChecked();
+
+                    UserProfile profile = new UserProfile(name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, "");
+
+                    dbHelper.insertProfile(profile);
+
+                    onBackPressed();
+                }
             }
         });
         gpsButton.setOnClickListener(new View.OnClickListener() {

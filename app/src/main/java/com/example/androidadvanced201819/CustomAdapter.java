@@ -1,6 +1,7 @@
 package com.example.androidadvanced201819;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
+import com.example.androidadvanced201819.activities.CreateProfileActivity;
 
 import java.util.List;
 
@@ -38,6 +40,15 @@ public class CustomAdapter extends ArrayAdapter<UserProfile> {
 
 
         final UserProfile profile = profiles.get(position);
+
+        listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCreateProfile = new Intent(context,CreateProfileActivity.class);
+                intentCreateProfile.putExtra("PROFILE",profile);
+                context.startActivity(intentCreateProfile);
+            }
+        });
 
         listItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
