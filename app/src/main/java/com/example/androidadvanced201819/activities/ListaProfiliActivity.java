@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.androidadvanced201819.CustomAdapter;
+import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.R;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class ListaProfiliActivity extends AppCompatActivity {
 
     private CustomAdapter customAdapter;
+    private DbHelper dbHelper;
 
     @Override
     public void onBackPressed() { }
@@ -27,7 +29,9 @@ public class ListaProfiliActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_list);
 
-        List<UserProfile> profileList = new ArrayList<UserProfile>();
+        dbHelper = new DbHelper(this);
+
+        List<UserProfile> profileList = dbHelper.getProfiles();
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
