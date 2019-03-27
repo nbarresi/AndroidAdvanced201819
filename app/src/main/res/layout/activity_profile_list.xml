@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#3C46C5"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
-        android:hint="@string/aggiungi_profilo"/>
+        android:text="@string/aggiungi_profilo"/>
 
 </RelativeLayout>

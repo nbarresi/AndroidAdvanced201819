@@ -11,148 +11,166 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical">
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:hint="@string/nome_profilo"
-        android:inputType="text" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/metodo_di_rilevamento" />
-
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp">
-
-        <RadioButton
-            android:id="@+id/gps"
+        <EditText
+            android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/gps" />
-
-        <RadioButton
-            android:id="@+id/wifi"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/wifi" />
-
-        <RadioButton
-            android:id="@+id/nfc"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/nfc" />
-
-        <RadioButton
-            android:id="@+id/beacon"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/beacon" />
-
-    </RadioGroup>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:weightSum="6">
-
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/nome_profilo"
+            android:inputType="text" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/metodo_di_rilevamento" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/gps"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/gps" />
+
+            <RadioButton
+                android:id="@+id/wifi"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/wifi" />
+
+            <RadioButton
+                android:id="@+id/nfc"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/nfc" />
+
+            <RadioButton
+                android:id="@+id/beacon"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/beacon" />
+
+        </RadioGroup>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:gravity="center|start"
+                android:text="@string/luminosit" />
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="5" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="@string/auto" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:gravity="center|start"
+                android:text="@string/volume" />
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:gravity="center|start"
+                android:text="@string/bluetooth" />
+
+            <Switch
+                android:id="@+id/bluetoothSwitch"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:gravity="center|left"
+                android:text="@string/wifi" />
+
+            <Switch
+                android:id="@+id/wifiSwitch"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:gravity="center|left"
+                android:text="@string/app" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="right"
+                android:visibility="invisible" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/confirmProfile"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:gravity="center|start"
-            android:text="@string/luminosit" />
-
-        <SeekBar
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="5" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@string/auto" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:weightSum="6">
-
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:gravity="center|start"
-            android:text="@string/volume"/>
-
-        <SeekBar
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="6" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:gravity="center|start"
-            android:text="@string/bluetooth"/>
-        
-        <Switch
-            android:id="@+id/bluetoothSwitch"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:gravity="right"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:gravity="center|left"
-            android:text="@string/wifi"/>
-
-        <Switch
-            android:id="@+id/wifiSwitch"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:gravity="right"/>
-
-    </LinearLayout>
-    
-    <Button
-        android:id="@+id/confirmProfile"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/conferma"
-        android:background="#3C46C5"
-        android:textColor="#FFFFFF"/>
+            android:layout_marginTop="20dp"
+            android:background="#3C46C5"
+            android:text="@string/conferma"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>
