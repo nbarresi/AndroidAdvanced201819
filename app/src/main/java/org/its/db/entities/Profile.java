@@ -2,10 +2,11 @@ package org.its.db.entities;
 
 import android.provider.BaseColumns;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class Profile {
+public class Profile implements Serializable {
 
     private long id;
 
