@@ -1,6 +1,8 @@
 package org.its.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,20 +16,19 @@ import org.its.UI.CustomArrayAdapter;
 import org.its.db.dao.ProfiloDao;
 import org.its.db.entities.Profilo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends Activity {
 
     CustomArrayAdapter adapter;
     List<Profilo> list;
-    private ProfiloDao db;
+    private ProfiloDao db = new ProfiloDao();
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
-        db = new ProfiloDao(getApplicationContext());
-        db.openConn();
+        db.openConn(getApplicationContext());
         list = db.getAllProfiles();
         db.closeConn();
 
@@ -45,8 +46,29 @@ public class ListActivity extends Activity {
             }
         });
 
+        listView.setOnLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+                alertDialogBuilder.setTitle(R.string.alertTitolo).setMessage(R.string.alertMessage).setPositiveButton(R.string.alertCancella, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.openConn(getApplicationContext());
+                        if(db.deleteProfile(list.get(i).getId())){
+                            list.remove(i);
+                        }
+                        db.closeConn();
+                    }
+                }).setNegativeButton(R.string.alertDismiss, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).show();
+            }
+        });
+
         Button aggiungi = (Button) findViewById(R.id.aggiungi);
-        aggiungi.setOnClickListener(new View.OnClickListener(){
+        aggiungi.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

@@ -1,11 +1,9 @@
 package org.its.db.dao;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import org.its.db.DbHelper;
 import org.its.db.entities.Profilo;
 import org.its.utilities.Converters;
 import org.its.utilities.ProfileTypeEnum;
@@ -18,8 +16,8 @@ public class ProfiloDao extends GenericDao {
 
     private static final String TABLE_NAME = "profilo";
 
-    public ProfiloDao(Context context) {
-        super(context);
+    public ProfiloDao() {
+        super();
     }
 
     public Profilo insertProfile(Profilo profile) throws Exception {
@@ -117,19 +115,15 @@ public class ProfiloDao extends GenericDao {
         database.update(
                 TABLE_NAME,
                 contentValues,
-                StringCollection.columnID + "=" + profilo.getId(),
-                null);
+                StringCollection.columnID + "=?",
+                new String[]{"" + profilo.getId()});
 
     }
 
-
-    @Override
-    public void openConn() {
-        database = dbHelper.getWritableDatabase();
+    public boolean deleteProfile(int id) {
+        return database.delete(TABLE_NAME, StringCollection.columnID + "=?", new String[]{"" + id}) > 0;
     }
 
-    @Override
-    public void closeConn() {
-        dbHelper.close();
-    }
+
+
 }

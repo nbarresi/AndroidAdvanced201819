@@ -20,7 +20,7 @@ import org.its.utilities.ProfileTypeEnum;
 public class DetailActivity extends Activity {
 
 
-    private ProfiloDao db;
+    private ProfiloDao db = new ProfiloDao();
 
     @Override
     protected void onCreate(Bundle saBundle) {
@@ -39,7 +39,6 @@ public class DetailActivity extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db = new ProfiloDao(getApplicationContext());
 
                 Profilo profiloDaSalvare = new Profilo();
                 profiloDaSalvare.setNome(String.valueOf(name.getText()));
@@ -68,7 +67,7 @@ public class DetailActivity extends Activity {
                 profiloDaSalvare.setAutoLuminosita(autoLuminosita.isChecked());
 
                 try {
-                    db.openConn();
+                    db.openConn(getApplicationContext());
                     db.insertProfile(profiloDaSalvare);
                     db.closeConn();
                 } catch (Exception e) {

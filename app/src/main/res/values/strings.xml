@@ -12,4 +12,9 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="wifi">Wifi</string>
     <string name="confermaDetail">Conferma</string>
+
+    <string name="alertCancella">Elimina</string>
+    <string name="alertTitolo">Eliminazione profilo</string>
+    <string name="alertMessage">Vuoi veramente eliminare il profilo?</string>
+    <string name="alertDismiss">Annulla</string>
 </resources>

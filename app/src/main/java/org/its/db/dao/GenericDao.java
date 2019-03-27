@@ -5,17 +5,21 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.its.db.DbHelper;
 
-public abstract class GenericDao {
-     Context context;
-     DbHelper dbHelper;
-     SQLiteDatabase database;
+public class GenericDao {
+    protected DbHelper dbHelper;
+    protected SQLiteDatabase database;
 
-     GenericDao(Context context) {
-        dbHelper = new DbHelper(context);
-        this.context = context;
+    GenericDao() {
+
     }
 
-    public abstract void openConn();
+    public void openConn(Context context) {
+        dbHelper = new DbHelper(context);
+        database= dbHelper.getWritableDatabase();
+    }
 
-    public abstract void closeConn();
+    public void closeConn() {
+        if (dbHelper != null)
+            dbHelper.close();
+    }
 }
