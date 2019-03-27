@@ -1,103 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:layout_margin="5dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
 
     <EditText
+        android:id="@+id/editProfileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editProfileName"
-        android:textSize="20dp"
+        android:layout_margin="5dp"
         android:hint="profile name"
-        android:layout_margin="5dp" />
+        android:textSize="20dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/detailRadio"
         android:layout_marginTop="30dp"
-        android:textSize="20dp"/>
+        android:text="@string/detailRadio"
+        android:textSize="20dp" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RadioButton
             android:id="@+id/detailGPS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/detailGPS"
-            />
+            android:text="@string/detailGPS" />
+
         <RadioButton
             android:id="@+id/detailWIFI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/detailWIFI"
-            />
+            android:text="@string/detailWIFI" />
+
         <RadioButton
             android:id="@+id/detailNFC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/detailNFC"
-            />
+            android:text="@string/detailNFC" />
+
         <RadioButton
             android:id="@+id/detailBeacon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/detailBEACON"
-            />
+            android:text="@string/detailBEACON" />
     </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/luminosita"
-            android:layout_weight="0"
             android:layout_marginRight="10dp"
-            android:textSize="18dp"
-            android:gravity="center"/>
+            android:layout_weight="0"
+            android:gravity="center"
+            android:text="@string/luminosita"
+            android:textSize="18dp" />
 
         <SeekBar
             android:id="@+id/detailLuminosita"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1" />
 
         <CheckBox
+            android:id="@+id/autoLuminosita"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:layout_marginLeft="10dp"
-            android:text="@string/auto"/>
+            android:layout_weight="0"
+            android:text="@string/auto" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/volume"
-            android:textSize="18dp"
-            android:layout_weight="0"
             android:layout_marginRight="35dp"
-            android:gravity="center"/>
+            android:layout_weight="0"
+            android:gravity="center"
+            android:text="@string/volume"
+            android:textSize="18dp" />
 
         <SeekBar
             android:id="@+id/detailVolume"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -110,18 +115,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bluetooth"
-            android:textSize="18dp"
-            android:layout_weight="0"
             android:layout_marginRight="35dp"
-            android:gravity="center"/>
+            android:layout_weight="0"
+            android:gravity="center"
+            android:text="@string/bluetooth"
+            android:textSize="18dp" />
 
         <Switch
             android:id="@+id/detailBluetooth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -133,26 +138,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wifi"
-            android:textSize="18dp"
-            android:layout_weight="0"
             android:layout_marginRight="35dp"
-            android:gravity="center"/>
+            android:layout_weight="0"
+            android:gravity="center"
+            android:text="@string/wifi"
+            android:textSize="18dp" />
 
         <Switch
             android:id="@+id/detailWifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
+    
 
     <Button
         android:id="@+id/saveProfile"
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_weight="0"
         android:background="@color/lightBLue"
         android:text="@string/confermaDetail"

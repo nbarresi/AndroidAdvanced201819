@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.androidadvanced201819.R;
 
 import org.its.UI.CustomArrayAdapter;
+import org.its.db.dao.ProfiloDao;
 import org.its.db.entities.Profilo;
 
 import java.util.ArrayList;
@@ -20,11 +21,16 @@ public class ListActivity extends Activity {
 
     CustomArrayAdapter adapter;
     List<Profilo> list;
+    private ProfiloDao db;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
-        list = new ArrayList<>();
+        db = new ProfiloDao(getApplicationContext());
+        db.openConn();
+        list = db.getAllProfiles();
+        db.closeConn();
+
 
         adapter = new CustomArrayAdapter(this, list);
 

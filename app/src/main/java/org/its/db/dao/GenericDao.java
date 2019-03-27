@@ -12,6 +12,7 @@ public abstract class GenericDao {
 
      GenericDao(Context context) {
         dbHelper = new DbHelper(context);
+        this.context = context;
     }
 
     public abstract void openConn();
