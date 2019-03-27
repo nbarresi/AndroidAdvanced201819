@@ -1,6 +1,7 @@
 package com.example.androidadvanced201819.model;
 
 public class Profile {
+    private int id;
     private String nome;
     private int option;
     private int brightness;
@@ -18,7 +19,8 @@ public class Profile {
 
     }
 
-    public Profile(String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, int auto_brightness) {
+    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, int auto_brightness) {
+        this.id = id;
         this.nome = nome;
         this.option = option;
         this.brightness = brightness;
@@ -91,5 +93,13 @@ public class Profile {
 
     public void setAuto_birghtness(int auto_birghtness) {
         this.auto_birghtness = auto_birghtness;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -68,6 +68,7 @@ public class AdapterActivity extends ArrayAdapter<Profile> {
             int i = 0;
             do {
                 Profile profile = new Profile(
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_ID)),
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_PROFILE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_OPTION_SELECTED)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_BRIGHTNESS)),

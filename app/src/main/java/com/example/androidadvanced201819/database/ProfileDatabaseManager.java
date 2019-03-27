@@ -64,7 +64,9 @@ public class ProfileDatabaseManager {
         return database.query(DATABASE_TABLE, null, null, null, null, null, null);
     }
 
-    public Cursor fetchAllProfileName() {
-        return database.rawQuery("select name from " + DATABASE_TABLE, null);
+    public void editProfile(Profile profile) {
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getAuto_birghtness());
+        database.update(DATABASE_TABLE, initialValues, "id=" + profile.getId(), null);
     }
 }
+

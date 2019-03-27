@@ -1,33 +1,40 @@
 package com.example.androidadvanced201819.model;
 
+import android.graphics.Path;
+
 public enum Option {
+    DEFAULT(0),
+    GPS(1),
+    WIFI(2),
+    NFC(3),
+    BEACON(4);
 
-    GPS("gps", 1),
-    WIFI("wifi", 2),
-    NFC("nfc", 3),
-    BEACON("beacon", 4);
+    private final int option;
 
-    private String name;
-    private int value;
-
-    private Option(String name, int value) {
-        this.name = name;
-        this.value = value;
+    private Option(int i) {
+        this.option = i;
     }
 
-    public String getName() {
-        return name;
+    public int getOption() {
+        return option;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
+    public static Option getEnumfromValue(int option) {
+        Option optionSelectd = Option.DEFAULT;
+        switch (option) {
+            case 1:
+                optionSelectd = Option.GPS;
+                break;
+            case 2:
+                optionSelectd = Option.WIFI;
+                break;
+            case 3:
+                optionSelectd = Option.NFC;
+                break;
+            case 4:
+                optionSelectd = Option.BEACON;
+                break;
+        }
+        return optionSelectd;
     }
 }

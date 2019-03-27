@@ -16,5 +16,6 @@
     <string name="volume">Volume</string>
     <string name="bluethoot">Bluethoot</string>
     <string name="create">Crea Profilo</string>
+    <string name="edit">Modifica Profilo</string>
     <string name="app">App</string>
 </resources>
