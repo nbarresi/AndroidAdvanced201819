@@ -35,7 +35,7 @@ public class ListaProfiliActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
-        customAdapter = new CustomAdapter(this,profileList);
+        customAdapter = new CustomAdapter(this,profileList,dbHelper);
 
         listView.setAdapter(customAdapter);
 

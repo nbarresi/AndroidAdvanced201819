@@ -116,9 +116,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
-    public boolean removeProfile(UserProfile profile){
+    public boolean removeProfile(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(PROFILE_TABLE_NAME,GENERIC_COLUMN_ID + "=?", new String[]{profile.getId()+""})!=-1;
+        return db.delete(PROFILE_TABLE_NAME,GENERIC_COLUMN_ID + "=?", new String[]{id+""})!=-1;
     }
 
 }
