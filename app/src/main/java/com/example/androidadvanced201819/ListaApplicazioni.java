@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class Lista_applicazioni extends AppCompatActivity {
+public class ListaApplicazioni extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AggiungiProfilo"></activity>
-        <activity android:name=".Lista_profili"></activity>
-        <activity android:name=".Lista_applicazioni"></activity>
+        <activity android:name=".ListaProfili"></activity>
+        <activity android:name=".ListaApplicazioni"></activity>
 
     </application>
 

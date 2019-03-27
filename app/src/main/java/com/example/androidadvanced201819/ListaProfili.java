@@ -14,7 +14,7 @@ import android.widget.QuickContactBadge;
 
 import java.util.ArrayList;
 
-public class Lista_profili extends AppCompatActivity {
+public class ListaProfili extends AppCompatActivity {
 
     DB db;
     ListView listView;

@@ -28,7 +28,7 @@ public class AggiungiProfilo extends AppCompatActivity {
         app.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Lista_applicazioni.class);
+                Intent intent=new Intent(getApplicationContext(), ListaApplicazioni.class);
                 startActivity(intent);
             }
         });
@@ -40,7 +40,7 @@ public class AggiungiProfilo extends AppCompatActivity {
                 if (nome_profilo.length()!=0){
                     addData(dato);
                     nome_profilo.setText("");
-                    Intent intent=new Intent(getApplicationContext(),Lista_profili.class);
+                    Intent intent=new Intent(getApplicationContext(), ListaProfili.class);
                     startActivity(intent);
 
                 }else{
