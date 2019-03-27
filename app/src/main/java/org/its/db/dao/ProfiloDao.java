@@ -18,7 +18,7 @@ public class ProfiloDao extends GenericDao {
 
     private static final String TABLE_NAME = "profilo";
 
-    protected ProfiloDao(Context context) {
+    public ProfiloDao(Context context) {
         super(context);
     }
 
@@ -125,7 +125,6 @@ public class ProfiloDao extends GenericDao {
 
     @Override
     public void openConn() {
-        dbHelper = new DbHelper(context);
         database = dbHelper.getWritableDatabase();
     }
 

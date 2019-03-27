@@ -31,6 +31,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:hint="username"
+        android:inputType="textPersonName"
         android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorPrimaryDark" />
 
