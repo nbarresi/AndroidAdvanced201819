@@ -21,6 +21,15 @@ public class UserProfile {
         this.appPackage=appPackage;
     }
 
+    public UserProfile(String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
+//        this.metodoDiRilevamento = metodoDiRilevamento;
+        this.luminosita = luminosita;
+        this.volume = volume;
+        this.bluetooth = bluetooth;
+        this.wifi = wifi;
+        this.nome=nome;
+    }
+
     public int getId() {
         return id;
     }
