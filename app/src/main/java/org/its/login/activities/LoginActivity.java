@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity{
         }
         else {
 
-            setContentView(R.layout.loginlayout);
+            setContentView(R.layout.activity_login_layout);
 
             Button myButton = (Button) findViewById(R.id.accedi);
             myButton.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity{
                                 loginImage.setImageDrawable(image);
                                 LoginManager.setLoggedStatus(getContext(), true, username);
                                 startApp(getContext());
+                                finish();
                             } else {
                                 Drawable image = getResources().getDrawable(R.drawable.erroricon);
                                 loginImage.setImageDrawable(image);
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void startApp(Context context){
-        Intent intent = new Intent(context, ListActivity.class);
+        Intent intent = new Intent(context, ProfileListActivity.class);
         startActivity(intent);
     }
 }

@@ -19,7 +19,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="username"/>
+        android:hint="username"
+        android:singleLine="true"/>
 
 
     <EditText
@@ -27,7 +28,9 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="password"/>
+        android:hint="password"
+        android:singleLine="true"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/accedi"

@@ -17,11 +17,7 @@
         <activity android:name="org.its.login.activities.AddAppListActivity"></activity>
         <activity android:name="org.its.login.activities.NewProfileActivity" />
         <activity android:name="org.its.login.activities.ProfileListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="org.its.login.activities.LoginActivity">
             <intent-filter>
