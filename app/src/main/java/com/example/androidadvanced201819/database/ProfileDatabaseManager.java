@@ -23,6 +23,8 @@ public class ProfileDatabaseManager {
     public static final String KEY_BLUETHOOTH = "bluethoot";
     public static final String KEY_WIFI = "wifi";
     public static final String KEY_APPLICATION = "application";
+    public static final String KEY_AUTOBRIGHTNESS = "autobrightness";
+
 
     public ProfileDatabaseManager(Context context) {
         this.context = context;
@@ -39,7 +41,7 @@ public class ProfileDatabaseManager {
     }
 
 
-    private ContentValues createContentValues(String profile_name, int option, int brightness, int volume, int bluethoot, int wifi, String application) {
+    private ContentValues createContentValues(String profile_name, int option, int brightness, int volume, int bluethoot, int wifi, String application, int autoBrightness) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_PROFILE_NAME, profile_name);
         contentValues.put(KEY_OPTION_SELECTED, option);
@@ -48,12 +50,13 @@ public class ProfileDatabaseManager {
         contentValues.put(KEY_BLUETHOOTH, bluethoot);
         contentValues.put(KEY_WIFI, wifi);
         contentValues.put(KEY_APPLICATION, application);
+        contentValues.put(KEY_AUTOBRIGHTNESS, autoBrightness);
 
         return contentValues;
     }
 
     public long createProfile(Profile profile) {
-        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication());
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getAuto_birghtness());
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 

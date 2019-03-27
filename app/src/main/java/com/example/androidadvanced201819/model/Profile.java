@@ -8,6 +8,7 @@ public class Profile {
     private int bluethoot;
     private int wifi;
     private String application;
+    private int auto_birghtness;
 
     public Profile() {
         
@@ -17,7 +18,7 @@ public class Profile {
 
     }
 
-    public Profile(String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application) {
+    public Profile(String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, int auto_brightness) {
         this.nome = nome;
         this.option = option;
         this.brightness = brightness;
@@ -25,6 +26,7 @@ public class Profile {
         this.bluethoot = bluethoot;
         this.wifi = wifi;
         this.application = application;
+        this.auto_birghtness = auto_brightness;
     }
 
     public String getNome() {
@@ -81,5 +83,13 @@ public class Profile {
 
     public void setApplication(String application) {
         this.application = application;
+    }
+
+    public int getAuto_birghtness() {
+        return auto_birghtness;
+    }
+
+    public void setAuto_birghtness(int auto_birghtness) {
+        this.auto_birghtness = auto_birghtness;
     }
 }

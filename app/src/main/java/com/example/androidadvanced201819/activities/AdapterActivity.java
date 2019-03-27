@@ -74,7 +74,8 @@ public class AdapterActivity extends ArrayAdapter<Profile> {
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_VOLUME)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_BLUETHOOTH)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_WIFI)),
-                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION))
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION)),
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS))
                 );
                 i++;
                 DataAccessUtils.addItem(profile, context);

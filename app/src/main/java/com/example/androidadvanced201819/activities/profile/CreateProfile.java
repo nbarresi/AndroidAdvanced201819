@@ -22,6 +22,7 @@ public class CreateProfile extends AppCompatActivity {
     SeekBar brightness, volume;
     Switch bluethoot, wifi;
     Option option;
+    CheckBox auto_brightness;
     private int brightnessValue;
     private int volumeValue;
 
@@ -36,7 +37,7 @@ public class CreateProfile extends AppCompatActivity {
         volume = (SeekBar) findViewById(R.id.seekBarVolume);
         bluethoot = findViewById(R.id.switchBluethoot);
         wifi = findViewById(R.id.switchWifi);
-
+        auto_brightness = findViewById(R.id.checkbox_autoBrightness);
 
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -139,6 +140,12 @@ public class CreateProfile extends AppCompatActivity {
             profile.setWifi(1);
         } else {
             profile.setWifi(0);
+        }
+
+        if (auto_brightness.isChecked()) {
+            profile.setAuto_birghtness(1);
+        } else {
+            profile.setAuto_birghtness(0);
         }
 
         profile.setApplication("application");

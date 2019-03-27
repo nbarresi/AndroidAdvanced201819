@@ -23,7 +23,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProfileDatabaseManager.KEY_VOLUME + " INTEGER, " +
                     ProfileDatabaseManager.KEY_BLUETHOOTH + " INTEGER, " +
                     ProfileDatabaseManager.KEY_WIFI + " INTEGER, " +
-                    ProfileDatabaseManager.KEY_APPLICATION + " TEXT " +
+                    ProfileDatabaseManager.KEY_APPLICATION + " TEXT, " +
+                    ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER "+
                     ");";
 
     @Override
