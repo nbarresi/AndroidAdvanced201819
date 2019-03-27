@@ -18,10 +18,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.its.Activity.ListActivity" android:label="gestisci profilo">
+        <activity android:name="org.its.Activity.ListActivity" android:label="@string/profili">
         </activity>
 
-        <activity android:name="org.its.Activity.DetailActivity" android:label="dettaglio profilo">
+        <activity android:name="org.its.Activity.DetailActivity" android:label="@string/detail">
         </activity>
 
     </application>

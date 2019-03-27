@@ -2,9 +2,10 @@ package org.its.db.entities;
 
 import org.its.utilities.ProfileTypeEnum;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Profilo {
+public class Profilo implements Serializable {
     private Integer id;
     private String nome;
     private Integer volume;

@@ -1,6 +1,7 @@
 package org.its.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,9 @@ import org.its.utilities.ProfileTypeEnum;
 
 public class DetailActivity extends Activity {
 
+    private final int REFRESH_REQUESTCODE = 123;
+    private int update = -1;
+
 
     private ProfiloDao db;
 
@@ -35,6 +39,25 @@ public class DetailActivity extends Activity {
         final Switch wifi = findViewById(R.id.detailWifi);
         final CheckBox autoLuminosita = findViewById(R.id.autoLuminosita);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            Profilo profilo = (Profilo) intent.getSerializableExtra(ListActivity.PROFILE);
+            name.setText(profilo.getNome());
+            luminosita.setProgress(profilo.getLuminosita());
+            volume.setProgress(profilo.getVolume());
+            wifi.setChecked(profilo.isWifi());
+            bluetooth.setChecked(profilo.isBluetooth());
+            autoLuminosita.setChecked(profilo.isAutoLuminosita());
+            switch (profilo.getMetodo().getValue()) {
+                case 0: radioGroup.check(R.id.detailWIFI); break;
+                case 1: radioGroup.check(R.id.detailBeacon); break;
+                case 2: radioGroup.check(R.id.detailNFC); break;
+                case 3: radioGroup.check(R.id.detailGPS); break;
+            }
+            this.update = profilo.getId();
+        }
+
+
         Button save = findViewById(R.id.saveProfile);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +65,7 @@ public class DetailActivity extends Activity {
                 db = new ProfiloDao(getApplicationContext());
 
                 Profilo profiloDaSalvare = new Profilo();
+                profiloDaSalvare.setId(update);
                 profiloDaSalvare.setNome(String.valueOf(name.getText()));
                 profiloDaSalvare.setVolume(volume.getProgress());
                 profiloDaSalvare.setLuminosita(luminosita.getProgress());
@@ -69,11 +93,18 @@ public class DetailActivity extends Activity {
 
                 try {
                     db.openConn();
-                    db.insertProfile(profiloDaSalvare);
+                    if (update != -1) {
+                        db.updateProfilo(profiloDaSalvare);
+                        update = -1;
+                    } else {
+                        db.insertProfile(profiloDaSalvare);
+                    }
                     db.closeConn();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Intent intent = new Intent(DetailActivity.this, ListActivity.class);
+                startActivityForResult(intent, REFRESH_REQUESTCODE);
             }
         });
 

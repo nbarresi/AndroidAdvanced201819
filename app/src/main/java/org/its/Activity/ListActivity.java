@@ -13,11 +13,11 @@ import com.example.androidadvanced201819.R;
 import org.its.UI.CustomArrayAdapter;
 import org.its.db.dao.ProfiloDao;
 import org.its.db.entities.Profilo;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends Activity {
+
+    public final static String PROFILE = "accademia.lynxspa.com.PROFILE";
 
     CustomArrayAdapter adapter;
     List<Profilo> list;
@@ -27,10 +27,10 @@ public class ListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
         db = new ProfiloDao(getApplicationContext());
+
         db.openConn();
         list = db.getAllProfiles();
         db.closeConn();
-
 
         adapter = new CustomArrayAdapter(this, list);
 
@@ -42,6 +42,17 @@ public class ListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
+                Intent updateIntent = new Intent(ListActivity.this, DetailActivity.class);
+                Profilo profile = adapter.getItem(position);
+                updateIntent.putExtra(PROFILE, profile);
+                startActivity(updateIntent);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
             }
         });
 
@@ -56,11 +67,15 @@ public class ListActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-
     }
 
 }
