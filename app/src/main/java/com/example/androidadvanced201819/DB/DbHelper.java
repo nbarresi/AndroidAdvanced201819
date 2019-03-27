@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "AndroidAndvanced.db";
 
@@ -24,6 +24,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String PROFILE_COLUMN_UTENTE = "utente";
     public static final String PROFILE_COLUMN_NOME = "nome";
+    public static final String PROFILE_COLUMN_METODO = "metodo";
+    public static final String PROFILE_COLUMN_APP = "app";
     public static final String PROFILE_COLUMN_LUMINOSITA = "luminosita";
     public static final String PROFILE_COLUMN_VOLUME = "volume";
     public static final String PROFILE_COLUMN_BLUETOOTH = "bluetooth";
@@ -36,12 +38,14 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_PROFILO = "CREATE TABLE " + PROFILE_TABLE_NAME + "(" +
             GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PROFILE_COLUMN_NOME+ " TEXT," +
+            PROFILE_COLUMN_METODO+ " TEXT," +
+            PROFILE_COLUMN_APP+ " TEXT," +
             PROFILE_COLUMN_LUMINOSITA + " INTEGER," +
             PROFILE_COLUMN_VOLUME + " INTEGER," +
             PROFILE_COLUMN_BLUETOOTH + " INTEGER," +
             PROFILE_COLUMN_WIFI + " INTEGER," +
-            PROFILE_COLUMN_UTENTE+ " TEXT )";
-
+            PROFILE_COLUMN_UTENTE+ " TEXT)";
+//
 //    private static final String CREATE_TABLE_METODO_RILEVAMENTO = "CREATE TABLE " + METODO_RILEVAMENTO_TABLE + "(" +
 //            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 //            METODO_RILEVAMENTO_COLUMN_TIPO + " TEXT," +
@@ -63,7 +67,10 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion < 2){
-
+            String ADD_METODO="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_METODO+" TEXT;";
+            String ADD_APP="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_APP+" TEXT;";
+            db.execSQL(ADD_METODO);
+            db.execSQL(ADD_APP);
         }
     }
 
@@ -72,11 +79,13 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");//da cambiare se si inserisce la register
         contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());//da cambiare se si inserisce la register
+        contentValues.put(PROFILE_COLUMN_METODO, profile.getMetodoDiRilevamento());//da cambiare se si inserisce la register
+        contentValues.put(PROFILE_COLUMN_APP, profile.getAppPackage());//da cambiare se si inserisce la register
         contentValues.put(PROFILE_COLUMN_LUMINOSITA, profile.getLuminosita());
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
         contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi()? 1 : 0);
-        db.insertOrThrow(PROFILE_TABLE_NAME, null, contentValues);
+        long idProfilo= db.insertOrThrow(PROFILE_TABLE_NAME, null, contentValues);
     }
 
     public List<UserProfile> getProfiles(){
@@ -88,14 +97,22 @@ public class DbHelper extends SQLiteOpenHelper {
                 do {
                     int id = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID));
                     String nome = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_NOME));
+                    String metodo = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_METODO));
+                    String app = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_APP));
                     int luminosita = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_LUMINOSITA));
                     int volume = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_VOLUME));
                     boolean bluetooth = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_BLUETOOTH))==1;
                     boolean wifi = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_WIFI))==1;
-                    profiles.add(new UserProfile(id,nome,luminosita,volume,bluetooth,wifi));
+                    profiles.add(new UserProfile(id,nome,metodo,luminosita,volume,bluetooth,wifi,app));
                 } while (cursor.moveToNext());
             }
         }
         return profiles;
     }
+
+    public boolean removeProfile(UserProfile profile){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(PROFILE_TABLE_NAME,GENERIC_COLUMN_ID + "=?", new String[]{profile.getId()+""})!=-1;
+    }
+
 }
