@@ -74,7 +74,7 @@ public class CreateProfile extends AppCompatActivity {
         });
     }
 
-    protected void onRadioDetectionMethod(View view) {
+    public void onRadioDetectionMethod(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
@@ -100,7 +100,7 @@ public class CreateProfile extends AppCompatActivity {
         }
     }
 
-    protected void onCheckboxAutoBrightness(View view) {
+    public void onCheckboxAutoBrightness(View view) {
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
 
