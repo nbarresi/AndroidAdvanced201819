@@ -47,6 +47,11 @@ public class Lista_profili extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private void creazioneListView() {
         Cursor data=db.getData();
         ArrayList<String> lista=new ArrayList<>();
@@ -56,4 +61,5 @@ public class Lista_profili extends AppCompatActivity {
         ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
         listView.setAdapter(adapter);
     }
+
 }
