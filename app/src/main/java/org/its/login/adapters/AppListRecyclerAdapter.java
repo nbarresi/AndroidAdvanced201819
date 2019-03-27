@@ -1,7 +1,10 @@
 package org.its.login.adapters;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,15 +22,20 @@ import org.its.login.activities.NewProfileActivity;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+import static java.security.AccessController.getContext;
+
 
 public class AppListRecyclerAdapter extends RecyclerView.Adapter<AppListRecyclerAdapter.AppListViewHolder> {
-    //TEMP  String fino a decisione entità "app"
-    private List<String> appList;
+    private List<ApplicationInfo> appList;
     private AdapterView.OnItemClickListener listener;
-    private Profile profile;
+    private PackageManager pm;
+    private Activity mActivity;
 
-    public AppListRecyclerAdapter(List<String> appList) {
+
+    public AppListRecyclerAdapter(List<ApplicationInfo> appList, Activity activity ) {
        this.appList = appList;
+        this.mActivity = activity;
     }
 
     public static class AppListViewHolder extends RecyclerView.ViewHolder {
@@ -53,15 +61,22 @@ public class AppListRecyclerAdapter extends RecyclerView.Adapter<AppListRecycler
 
 
      public void onBindViewHolder(final AppListViewHolder holder, final int position) {
-        holder.appName.setText(appList.get(position));
+        ApplicationInfo applicationInfo = (ApplicationInfo) appList.get(position);
+
+
+        holder.appName.setText(applicationInfo.loadLabel(pm));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profile.setApp(appList.get(position));
-                Intent intentAddApp = new Intent(v.getContext(), NewProfileActivity.class);
-                intentAddApp.putExtra("tempProfileWithApp", profile);
-                v.getContext().startActivity(intentAddApp);
+//                profile.setApp(holder.appName.getText().toString());
+//                Intent intentAddApp = new Intent(v.getContext(), NewProfileActivity.class);
+//                intentAddApp.putExtra("tempProfileWithApp", profile);
+//                v.getContext().startActivity(intentAddApp);
 
+                Intent returnAppIntent = new Intent();
+                returnAppIntent.putExtra("ADD_APP_REQUEST_CODE", holder.appName.getText().toString());
+                mActivity.setResult(RESULT_OK, returnAppIntent);
+                mActivity.finish();
             }
         });
     }
@@ -71,13 +86,14 @@ public class AppListRecyclerAdapter extends RecyclerView.Adapter<AppListRecycler
         return appList.size();
     }
 
+    public void setPackageManager(PackageManager packageManager){
+        pm = packageManager;
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setProfile(Profile profile){
-        this.profile = profile;
-    }
 }
 
