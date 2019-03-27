@@ -20,4 +20,6 @@
     <string name="alertTitolo">Eliminazione profilo</string>
     <string name="alertMessage">Vuoi veramente eliminare il profilo?</string>
     <string name="alertDismiss">Annulla</string>
+
+    <string name="raggio">Raggio</string>
 </resources>
