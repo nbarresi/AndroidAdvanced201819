@@ -73,6 +73,37 @@ public class ProfiloDao extends GenericDao {
         return profili;
     }
 
+    public Profilo getById(int id) {
+        Profilo profilo = null;
+        Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
+                        StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI},
+                StringCollection.columnID + "=?", new String[]{"" + id}, null, null, null);
+
+        try {
+            if (result.getCount() > 0) {
+                result.moveToFirst();
+                do {
+                    profilo = new Profilo(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnID)),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnNome)),
+                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnVolume)),
+                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnLuminosita)),
+                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnAutoLuminosita))),
+                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
+                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
+                            ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)));
+                } while (result.moveToNext());
+
+            }
+        } catch (Exception e) {
+            Log.d("getAllProfilesError", e.getMessage());
+        } finally {
+            result.close();
+        }
+        return profilo;
+    }
+
     public void updateProfilo(Profilo profilo) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(StringCollection.columnLuminosita, profilo.getLuminosita());
@@ -90,6 +121,7 @@ public class ProfiloDao extends GenericDao {
                 null);
 
     }
+
 
     @Override
     public void openConn() {
