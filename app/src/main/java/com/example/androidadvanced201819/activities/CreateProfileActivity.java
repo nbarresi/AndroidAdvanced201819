@@ -1,5 +1,6 @@
 package com.example.androidadvanced201819.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,7 +27,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         final Switch bluetoothSwitch = (Switch) findViewById(R.id.bluetoothSwitch);
         final Switch wifiSwitch = (Switch) findViewById(R.id.wifiSwitch);
 
-        Button addProfileButton = (Button) findViewById(R.id.createProfile);
+        Button addProfileButton = (Button) findViewById(R.id.confirmProfile);
 
         addProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +39,9 @@ public class CreateProfileActivity extends AppCompatActivity {
                 UserProfile profile = new UserProfile(name,0,0,bluetooth,wifi);
 
                 dbHelper.insertProfile(profile);
+
+                Intent back = new Intent(getApplicationContext(),ListaProfiliActivity.class);
+                startActivity(back);
             }
         });
     }

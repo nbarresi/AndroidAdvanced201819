@@ -9,7 +9,17 @@ public class UserProfile {
     private boolean wifi;
     private String nome;
 
-    public UserProfile(/*MetodoRilevamento metodoDiRilevamento ,*/String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
+    public UserProfile(/*MetodoRilevamento metodoDiRilevamento ,*/int id,String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
+//        this.metodoDiRilevamento = metodoDiRilevamento;
+        this.id = id;
+        this.luminosita = luminosita;
+        this.volume = volume;
+        this.bluetooth = bluetooth;
+        this.wifi = wifi;
+        this.nome=nome;
+    }
+
+    public UserProfile(String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
 //        this.metodoDiRilevamento = metodoDiRilevamento;
         this.luminosita = luminosita;
         this.volume = volume;
