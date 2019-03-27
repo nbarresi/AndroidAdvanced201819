@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -75,14 +76,30 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
         contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi()? 1 : 0);
-        long bho = db.insertOrThrow(PROFILE_TABLE_NAME, null, contentValues);
+        db.insertOrThrow(PROFILE_TABLE_NAME, null, contentValues);
     }
 
     public List<UserProfile> getProfiles(){
         SQLiteDatabase db = this.getReadableDatabase();
-        db.beginTransaction();
-        Cursor profili = db.query(PROFILE_TABLE_NAME,null,null,null,null,null,null);
-        db.endTransaction();
-        return null;
+        Cursor cursor = db.query(PROFILE_TABLE_NAME,null,null,null,null,null,null);
+        List<UserProfile> profiles = new ArrayList<>();
+        if (cursor != null) {
+            // move cursor to first row
+            if (cursor.moveToFirst()) {
+                do {
+                    // Get version from Cursor
+                    int id = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID));
+                    String nome = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_NOME));
+                    int luminosita = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_LUMINOSITA));
+                    int volume = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_VOLUME));
+                    boolean bluetooth = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_BLUETOOTH))==1;
+                    boolean wifi = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_WIFI))==1;
+                    // add the bookName into the bookTitles ArrayList
+                    profiles.add(new UserProfile(id,nome,luminosita,volume,bluetooth,wifi));
+                    // move to next row
+                } while (cursor.moveToNext());
+            }
+        }
+        return profiles;
     }
 }
