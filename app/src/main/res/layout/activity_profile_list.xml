@@ -17,9 +17,9 @@
         android:id="@+id/createProfile"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:textColor="#FFFFFF"
         android:background="#3C46C5"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
         android:hint="@string/aggiungi_profilo"/>
 
 </RelativeLayout>
