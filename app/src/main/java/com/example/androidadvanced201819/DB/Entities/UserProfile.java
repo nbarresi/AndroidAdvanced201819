@@ -23,13 +23,15 @@ public class UserProfile {
         this.valoreMetodo=valoreMetodo;
     }
 
-    public UserProfile(String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
-//        this.metodoDiRilevamento = metodoDiRilevamento;
+    public UserProfile( String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage) {
+        this.metodoDiRilevamento = metodoDiRilevamento;
         this.luminosita = luminosita;
         this.volume = volume;
         this.bluetooth = bluetooth;
         this.wifi = wifi;
         this.nome=nome;
+        this.appPackage=appPackage;
+        this.valoreMetodo=valoreMetodo;
     }
 
     public int getId() {

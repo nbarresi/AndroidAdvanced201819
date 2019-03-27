@@ -73,6 +73,7 @@
                 android:text="@string/luminosit" />
 
             <SeekBar
+                android:id="@+id/luminosita"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="5" />
@@ -99,6 +100,7 @@
                 android:text="@string/volume" />
 
             <SeekBar
+                android:id="@+id/volume"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="6" />
