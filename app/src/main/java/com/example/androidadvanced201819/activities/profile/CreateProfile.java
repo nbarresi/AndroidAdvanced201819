@@ -43,7 +43,7 @@ public class CreateProfile extends AppCompatActivity {
         bluethoot = findViewById(R.id.switchBluethoot);
         wifi = findViewById(R.id.switchWifi);
         auto_brightness = findViewById(R.id.checkbox_autoBrightness);
-        optionRadio = findViewById(R.id.optionRadioGroup);
+        optionRadio = findViewById(R.id.optionRadio);
 
         Intent det = getIntent();
         if (det.hasExtra("position")) {

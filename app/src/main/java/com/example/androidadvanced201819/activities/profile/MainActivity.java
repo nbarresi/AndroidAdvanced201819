@@ -1,14 +1,18 @@
 package com.example.androidadvanced201819.activities.profile;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.androidadvanced201819.activities.AdapterActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.R;
+import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 
 public class MainActivity extends AppCompatActivity {
 
