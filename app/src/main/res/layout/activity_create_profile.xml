@@ -4,155 +4,178 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     android:orientation="vertical"
+    android:padding="20dp"
 
     tools:context=".activities.profile.CreateProfile">
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="0dp"
         android:layout_weight="1">
-    <EditText
-        android:id="@+id/profile_name"
-        android:layout_width="match_parent"
-        android:layout_height="60dp" />
-    
-    <TextView
-        android:id="@+id/detection_method"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="@string/detectionMerhod"
-        android:gravity="center"/>
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RadioButton android:id="@+id/gpsRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gps"
-            android:onClick="onRadioDetectionMethod"/>
-
-        <RadioButton android:id="@+id/wifiRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wifi"
-            android:onClick="onRadioDetectionMethod"/>
-
-        <RadioButton android:id="@+id/nfcRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nfc"
-            android:onClick="onRadioDetectionMethod"/>
-
-        <RadioButton android:id="@+id/beaconRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/beacon"
-            android:onClick="onRadioDetectionMethod"/>
-    </RadioGroup>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="@string/brightness"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
-        <SeekBar
-            android:id="@+id/seekBarBrightness"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:max="100"/>
-        <CheckBox android:id="@+id/checkbox_autoBrightness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/auto"
-            android:layout_gravity="center"
-            android:onClick="onCheckboxAutoBrightness"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="@string/volume"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="33dp"
-            android:layout_marginEnd="10dp"/>
-        <SeekBar
-            android:id="@+id/seekBarVolume"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:max="100"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="@string/bluethoot"
-            android:layout_gravity="center_vertical"
-            />
-
-        <Switch
-            android:id="@+id/switchBluethoot"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"/>
+            android:layout_height="0dp"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/detection_method"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/detectionMerhod" />
 
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="@string/wifi"
-            android:layout_gravity="center_vertical"
-            />
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Switch
-            android:id="@+id/switchWifi"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"/>
-    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/gpsRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioDetectionMethod"
+                    android:text="@string/gps" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/app"
-        android:gravity="center"
-        />
+                <RadioButton
+                    android:id="@+id/wifiRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioDetectionMethod"
+                    android:text="@string/wifi" />
 
-    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/nfcRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioDetectionMethod"
+                    android:text="@string/nfc" />
+
+                <RadioButton
+                    android:id="@+id/beaconRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioDetectionMethod"
+                    android:text="@string/beacon" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/brightness" />
+
+                <SeekBar
+                    android:id="@+id/seekBarBrightness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:max="100" />
+
+                <CheckBox
+                    android:id="@+id/checkbox_autoBrightness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="onCheckboxAutoBrightness"
+                    android:text="@string/auto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="33dp"
+                    android:layout_weight="1"
+                    android:text="@string/volume" />
+
+                <SeekBar
+                    android:id="@+id/seekBarVolume"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:max="100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/bluethoot" />
+
+                <Switch
+                    android:id="@+id/switchBluethoot"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/wifi" />
+
+                <Switch
+                    android:id="@+id/switchWifi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="@string/app" />
+
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:id="@+id/buttonCreateProfile"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:text="@string/create"
         android:layout_gravity="bottom"
-        android:onClick="createProfile"/>
+        android:onClick="createProfile"
+        android:text="@string/create" />
 
 
 </LinearLayout>
