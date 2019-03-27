@@ -8,9 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.androidadvanced201819.CustomAdapter;
+import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListaProfiliActivity extends AppCompatActivity {
+
+    private CustomAdapter customAdapter;
 
     @Override
     public void onBackPressed() { }
@@ -20,13 +27,13 @@ public class ListaProfiliActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_list);
 
-        String[] array = new String[]{"Casa","Ufficio"};
+        List<UserProfile> profileList = new ArrayList<UserProfile>();
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.list_item_layout,R.id.itemName,array);
+        customAdapter = new CustomAdapter(this,profileList);
 
-        listView.setAdapter(adapter);
+        listView.setAdapter(customAdapter);
 
         Button createProfile = findViewById(R.id.createProfile);
 
