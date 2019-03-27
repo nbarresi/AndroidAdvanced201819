@@ -25,6 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String PROFILE_COLUMN_UTENTE = "utente";
     public static final String PROFILE_COLUMN_NOME = "nome";
     public static final String PROFILE_COLUMN_METODO = "metodo";
+    public static final String PROFILE_COLUMN_VALORE_METODO = "valoreM";
     public static final String PROFILE_COLUMN_APP = "app";
     public static final String PROFILE_COLUMN_LUMINOSITA = "luminosita";
     public static final String PROFILE_COLUMN_VOLUME = "volume";
@@ -39,6 +40,7 @@ public class DbHelper extends SQLiteOpenHelper {
             GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PROFILE_COLUMN_NOME+ " TEXT," +
             PROFILE_COLUMN_METODO+ " TEXT," +
+            PROFILE_COLUMN_VALORE_METODO+ " TEXT," +
             PROFILE_COLUMN_APP+ " TEXT," +
             PROFILE_COLUMN_LUMINOSITA + " INTEGER," +
             PROFILE_COLUMN_VOLUME + " INTEGER," +
@@ -68,8 +70,10 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion < 2){
             String ADD_METODO="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_METODO+" TEXT;";
+            String ADD_VALORE_METODO="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_VALORE_METODO+" TEXT;";
             String ADD_APP="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_APP+" TEXT;";
             db.execSQL(ADD_METODO);
+            db.execSQL(ADD_VALORE_METODO);
             db.execSQL(ADD_APP);
         }
     }
@@ -77,10 +81,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public void insertProfile (UserProfile profile) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");//da cambiare se si inserisce la register
-        contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());//da cambiare se si inserisce la register
-        contentValues.put(PROFILE_COLUMN_METODO, profile.getMetodoDiRilevamento());//da cambiare se si inserisce la register
-        contentValues.put(PROFILE_COLUMN_APP, profile.getAppPackage());//da cambiare se si inserisce la register
+        contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");
+        contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());
+        contentValues.put(PROFILE_COLUMN_METODO, profile.getMetodoDiRilevamento());
+        contentValues.put(PROFILE_COLUMN_VALORE_METODO, profile.getValoreMetodo());
+        contentValues.put(PROFILE_COLUMN_APP, profile.getAppPackage());
         contentValues.put(PROFILE_COLUMN_LUMINOSITA, profile.getLuminosita());
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
@@ -98,12 +103,13 @@ public class DbHelper extends SQLiteOpenHelper {
                     int id = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID));
                     String nome = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_NOME));
                     String metodo = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_METODO));
+                    String valMetodo = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_VALORE_METODO));
                     String app = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_APP));
                     int luminosita = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_LUMINOSITA));
                     int volume = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_VOLUME));
                     boolean bluetooth = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_BLUETOOTH))==1;
                     boolean wifi = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_WIFI))==1;
-                    profiles.add(new UserProfile(id,nome,metodo,luminosita,volume,bluetooth,wifi,app));
+                    profiles.add(new UserProfile(id,nome,metodo,valMetodo,luminosita,volume,bluetooth,wifi,app));
                 } while (cursor.moveToNext());
             }
         }

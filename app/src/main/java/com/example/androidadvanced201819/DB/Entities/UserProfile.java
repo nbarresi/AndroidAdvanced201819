@@ -3,6 +3,7 @@ package com.example.androidadvanced201819.DB.Entities;
 public class UserProfile {
     private int id;
     private String metodoDiRilevamento;
+    private String valoreMetodo;
     private int luminosita;
     private int volume;
     private boolean bluetooth;
@@ -10,7 +11,7 @@ public class UserProfile {
     private String nome;
     private String appPackage;
 
-    public UserProfile(int id, String nome, String metodoDiRilevamento ,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage) {
+    public UserProfile(int id, String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage) {
         this.metodoDiRilevamento = metodoDiRilevamento;
         this.id = id;
         this.luminosita = luminosita;
@@ -19,6 +20,7 @@ public class UserProfile {
         this.wifi = wifi;
         this.nome=nome;
         this.appPackage=appPackage;
+        this.valoreMetodo=valoreMetodo;
     }
 
     public UserProfile(String nome, int luminosita, int volume, boolean bluetooth, boolean wifi) {
@@ -32,6 +34,10 @@ public class UserProfile {
 
     public int getId() {
         return id;
+    }
+
+    public String getValoreMetodo() {
+        return valoreMetodo;
     }
 
     public String getMetodoDiRilevamento() {
