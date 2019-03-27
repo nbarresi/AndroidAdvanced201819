@@ -68,7 +68,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void insertProfile (UserProfile profile) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");//da cambiare se si inserisce la register
         contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());//da cambiare se si inserisce la register
@@ -76,8 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
         contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi()? 1 : 0);
-        long bho = db.insert(PROFILE_TABLE_NAME, null, contentValues);
-        db.endTransaction();
+        long bho = db.insertOrThrow(PROFILE_TABLE_NAME, null, contentValues);
     }
 
     public List<UserProfile> getProfiles(){
