@@ -6,12 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import org.its.db.DbHelper;
 
 public abstract class GenericDao {
-    protected static final String TABLE_NAME = "profilo";
-    protected Context context;
-    protected DbHelper dbHelper;
-    protected SQLiteDatabase database;
+     Context context;
+     DbHelper dbHelper;
+     SQLiteDatabase database;
 
-    protected GenericDao(Context context) {
+     GenericDao(Context context) {
         dbHelper = new DbHelper(context);
     }
 
