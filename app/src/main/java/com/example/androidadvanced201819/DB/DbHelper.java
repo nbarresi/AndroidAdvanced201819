@@ -130,4 +130,19 @@ public class DbHelper extends SQLiteOpenHelper {
         return db.delete(PROFILE_TABLE_NAME,GENERIC_COLUMN_ID + "=?", new String[]{id+""})!=-1;
     }
 
+    public void updateProfile(UserProfile profile) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PROFILE_COLUMN_UTENTE, "nbarresi");
+        contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());
+        contentValues.put(PROFILE_COLUMN_METODO, profile.getMetodoDiRilevamento());
+        contentValues.put(PROFILE_COLUMN_VALORE_METODO, profile.getValoreMetodo());
+        contentValues.put(PROFILE_COLUMN_APP_NAME, profile.getAppName());
+        contentValues.put(PROFILE_COLUMN_APP, profile.getAppPackage());
+        contentValues.put(PROFILE_COLUMN_LUMINOSITA, profile.getLuminosita());
+        contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
+        contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth()? 1 : 0);
+        contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi()? 1 : 0);
+        db.update(PROFILE_TABLE_NAME,contentValues,GENERIC_COLUMN_ID + "=?", new String[]{profile.getId()+""});
+    }
 }

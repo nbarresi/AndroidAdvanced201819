@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
@@ -28,7 +29,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private TextView appName;
     private String appPackage = "";
     private String appNameVal = "";
-
+    private UserProfile profilo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,13 @@ public class CreateProfileActivity extends AppCompatActivity {
         Button addProfileButton = (Button) findViewById(R.id.confirmProfile);
         if (intent.hasExtra("PROFILE")) {
             addProfileButton.setText("MODIFICA");
-            UserProfile profilo = (UserProfile) intent.getSerializableExtra("PROFILE");
+            profilo = (UserProfile) intent.getSerializableExtra("PROFILE");
             textName.setText(profilo.getNome());
             luminosita.setProgress(profilo.getLuminosita());
             volume.setProgress(profilo.getVolume());
             bluetoothSwitch.setChecked(profilo.isBluetooth());
             wifiSwitch.setChecked(profilo.isWifi());
+            selectedMethod=profilo.getMetodoDiRilevamento();
             switch (profilo.getMetodoDiRilevamento()) {
                 case "nfc":
                     nfcButton.setChecked(true);
@@ -85,11 +87,11 @@ public class CreateProfileActivity extends AppCompatActivity {
                     boolean bluetooth = bluetoothSwitch.isChecked();
                     boolean wifi = wifiSwitch.isChecked();
 
-                    UserProfile profile = new UserProfile(name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
+                    UserProfile profile = new UserProfile(profilo.getId(),name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
 
-                    //dbHelper.updateProfile(profile);
+                    dbHelper.updateProfile(profile);
 
-                    onBackPressed();
+                    finish();
                 } else {
                     String name = textName.getText().toString();
                     appNameVal = appName.getText().toString();
@@ -98,10 +100,12 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     UserProfile profile = new UserProfile(name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
 
-                    dbHelper.insertProfile(profile);
-
-                    Intent back = new Intent(getApplicationContext(), ListaProfiliActivity.class);
-                    startActivity(back);
+                    if(!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
+                        dbHelper.insertProfile(profile);
+                    }else{
+                        Toast.makeText(CreateProfileActivity.this,"Inserire dati mancanti", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
                 }
             }
         });
