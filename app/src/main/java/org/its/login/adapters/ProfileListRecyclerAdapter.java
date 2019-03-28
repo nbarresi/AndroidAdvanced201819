@@ -16,7 +16,7 @@ import org.its.login.activities.NewProfileActivity;
 import java.util.List;
 
 
-public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileListRecyclerAdapter.ListViewHolder> {
+public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileListRecyclerAdapter.ProfileListViewHolder> {
     List<Profile> profiles;
 
 
@@ -24,13 +24,13 @@ public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileList
        this.profiles =  profiles;
     }
 
-    public static class ListViewHolder extends RecyclerView.ViewHolder {
+    public static class ProfileListViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView profileName;
 
 
 
-        public ListViewHolder(View view) {
+        public ProfileListViewHolder(View view) {
             super(view);
             cardView = itemView.findViewById(R.id.card_view_profile);
             profileName = (TextView) itemView.findViewById(R.id.profile_cv_name);
@@ -39,22 +39,29 @@ public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileList
     }
 
     @Override
-    public ProfileListRecyclerAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProfileListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.profile_card_view, parent, false);
-        return new ListViewHolder(itemView);
+        return new ProfileListViewHolder(itemView);
     }
 
 
-     public void onBindViewHolder(final ProfileListRecyclerAdapter.ListViewHolder holder, final int position) {
+     public void onBindViewHolder(final ProfileListViewHolder holder, final int position) {
          final Profile profile =profiles.get(position);
          holder.profileName.setText(profiles.get(position).getName());
-         holder.cardView.setOnClickListener(new View.OnClickListener() {
+         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
              @Override
-             public void onClick(View v) {
+             public boolean onLongClick(View v) {
                  Intent editProfileIntent = new Intent(v.getContext(), NewProfileActivity.class);
                  editProfileIntent.putExtra("editedProfile",profile);
                  v.getContext().startActivity(editProfileIntent);
+                 return true;
+             }
+         });
+         holder.cardView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+
              }
          });
      }
