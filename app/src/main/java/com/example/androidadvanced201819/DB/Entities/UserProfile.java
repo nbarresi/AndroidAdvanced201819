@@ -12,8 +12,9 @@ public class UserProfile implements Serializable {
     private boolean wifi;
     private String nome;
     private String appPackage;
+    private String appName;
 
-    public UserProfile(int id, String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage) {
+    public UserProfile(int id, String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage, String appName) {
         this.metodoDiRilevamento = metodoDiRilevamento;
         this.id = id;
         this.luminosita = luminosita;
@@ -23,9 +24,10 @@ public class UserProfile implements Serializable {
         this.nome=nome;
         this.appPackage=appPackage;
         this.valoreMetodo=valoreMetodo;
+        this.appName = appName;
     }
 
-    public UserProfile( String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage) {
+    public UserProfile( String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage, String appName) {
         this.metodoDiRilevamento = metodoDiRilevamento;
         this.luminosita = luminosita;
         this.volume = volume;
@@ -33,6 +35,7 @@ public class UserProfile implements Serializable {
         this.wifi = wifi;
         this.nome=nome;
         this.appPackage=appPackage;
+        this.appName = appName;
         this.valoreMetodo=valoreMetodo;
     }
 
@@ -70,5 +73,9 @@ public class UserProfile implements Serializable {
 
     public String getAppPackage() {
         return appPackage;
+    }
+
+    public String getAppName() {
+        return appName;
     }
 }

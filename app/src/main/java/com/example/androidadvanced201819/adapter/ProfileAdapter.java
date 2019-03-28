@@ -1,29 +1,27 @@
-package com.example.androidadvanced201819;
+package com.example.androidadvanced201819.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
+import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.CreateProfileActivity;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<UserProfile> {
+public class ProfileAdapter extends ArrayAdapter<UserProfile> {
 
     private final Context context;
     private List<UserProfile> profiles;
     private DbHelper dbHelper;
 
-    public CustomAdapter(Context context, List<UserProfile> objects,DbHelper dbHelper) {
+    public ProfileAdapter(Context context, List<UserProfile> objects, DbHelper dbHelper) {
         super(context, R.layout.list_item_layout ,objects);
         this.context = context;
         this.profiles = objects;

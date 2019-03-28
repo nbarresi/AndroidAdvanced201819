@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "AndroidAndvanced.db";
 
@@ -27,6 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String PROFILE_COLUMN_METODO = "metodo";
     public static final String PROFILE_COLUMN_VALORE_METODO = "valoreM";
     public static final String PROFILE_COLUMN_APP = "app";
+    public static final String PROFILE_COLUMN_APP_NAME = "appName";
     public static final String PROFILE_COLUMN_LUMINOSITA = "luminosita";
     public static final String PROFILE_COLUMN_VOLUME = "volume";
     public static final String PROFILE_COLUMN_BLUETOOTH = "bluetooth";
@@ -71,10 +72,14 @@ public class DbHelper extends SQLiteOpenHelper {
         if(oldVersion < 2){
             String ADD_METODO="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_METODO+" TEXT;";
             String ADD_VALORE_METODO="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_VALORE_METODO+" TEXT;";
-            String ADD_APP="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+PROFILE_COLUMN_APP+" TEXT;";
+            String ADD_APP="ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+ PROFILE_COLUMN_APP +" TEXT;";
             db.execSQL(ADD_METODO);
             db.execSQL(ADD_VALORE_METODO);
             db.execSQL(ADD_APP);
+        }
+        if(oldVersion < 3){
+            String ADD_APPNAME = "ALTER TABLE "+PROFILE_TABLE_NAME+" ADD COLUMN "+ PROFILE_COLUMN_APP_NAME +" TEXT;";
+            db.execSQL(ADD_APPNAME);
         }
     }
 
@@ -85,6 +90,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(PROFILE_COLUMN_NOME, profile.getNome());
         contentValues.put(PROFILE_COLUMN_METODO, profile.getMetodoDiRilevamento());
         contentValues.put(PROFILE_COLUMN_VALORE_METODO, profile.getValoreMetodo());
+        contentValues.put(PROFILE_COLUMN_APP_NAME, profile.getAppName());
         contentValues.put(PROFILE_COLUMN_APP, profile.getAppPackage());
         contentValues.put(PROFILE_COLUMN_LUMINOSITA, profile.getLuminosita());
         contentValues.put(PROFILE_COLUMN_VOLUME, profile.getVolume());
@@ -104,12 +110,13 @@ public class DbHelper extends SQLiteOpenHelper {
                     String nome = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_NOME));
                     String metodo = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_METODO));
                     String valMetodo = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_VALORE_METODO));
-                    String app = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_APP));
+                    String appName = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_APP_NAME));
+                    String appPackage = cursor.getString(cursor.getColumnIndex(PROFILE_COLUMN_APP));
                     int luminosita = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_LUMINOSITA));
                     int volume = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_VOLUME));
                     boolean bluetooth = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_BLUETOOTH))==1;
                     boolean wifi = cursor.getInt(cursor.getColumnIndex(PROFILE_COLUMN_WIFI))==1;
-                    profiles.add(new UserProfile(id,nome,metodo,valMetodo,luminosita,volume,bluetooth,wifi,app));
+                    profiles.add(new UserProfile(id,nome,metodo,valMetodo,luminosita,volume,bluetooth,wifi,appPackage,appName));
                 } while (cursor.moveToNext());
             }
         }

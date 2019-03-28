@@ -4,26 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.androidadvanced201819.CustomAdapter;
+import com.example.androidadvanced201819.adapter.ProfileAdapter;
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListaProfiliActivity extends AppCompatActivity {
 
-    private CustomAdapter customAdapter;
+    private ProfileAdapter customAdapter;
     private DbHelper dbHelper;
 
-    @Override
-    public void onBackPressed() { }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +31,7 @@ public class ListaProfiliActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.listView);
 
-        customAdapter = new CustomAdapter(this,profileList,dbHelper);
+        customAdapter = new ProfileAdapter(this,profileList,dbHelper);
         listView.setAdapter(customAdapter);
 
         Button createProfile = findViewById(R.id.createProfile);
