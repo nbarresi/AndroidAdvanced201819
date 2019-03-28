@@ -65,7 +65,7 @@ public class DetailActivity extends Activity {
             this.update = profilo.getId();
         }
 
-        
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -73,7 +73,8 @@ public class DetailActivity extends Activity {
 
                 switch (checkedId) {
                     case R.id.detailGPS:
-                        System.out.println("premuto radiobutton 1");
+                        Intent intent = new Intent(DetailActivity.this, MapActivity.class);
+                        startActivityForResult(intent, REFRESH_REQUESTCODE);
                         break;
                     case R.id.detailWIFI:
                         System.out.println("premuto radiobutton 2");

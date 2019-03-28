@@ -1,5 +1,7 @@
 package org.its.utilities;
 
+import android.widget.SeekBar;
+
 public class StringCollection {
 
     public final static String baseUrl="https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/academy/";

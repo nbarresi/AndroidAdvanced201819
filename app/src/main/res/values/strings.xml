@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">AndroidAdvanced201819</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    <!--login section-->
     <string name="login">Login</string>
+
+    <!--activity label-->
+    <string name="profili">Gestisci Profili</string>
+    <string name="detail">Dettaglio Profilo</string>
+    <string name="mappa">Mappa</string>
+
+
+    <!--aggiunta/modifica section-->
     <string name="detailRadio">Metodo di rilevamento:</string>
     <string name="detailGPS">GPS</string>
     <string name="detailWIFI">WIFI</string>
@@ -13,13 +24,15 @@
     <string name="wifi">Wifi</string>
     <string name="confermaDetail">Conferma</string>
 
-    <string name="profili">Gestisci Profili</string>
-    <string name="detail">Dettaglio Profilo</string>
-
+    <!--lista section-->
     <string name="alertCancella">Elimina</string>
     <string name="alertTitolo">Eliminazione profilo</string>
     <string name="alertMessage">Vuoi veramente eliminare il profilo?</string>
     <string name="alertDismiss">Annulla</string>
 
+    <!--mappa section-->
     <string name="raggio">Raggio</string>
+    <string name="mapAlertMessage">La localizzazione non è attiva, vuoi attivarla?</string>
+    <string name="currentPositionLabel">Posizione Attuale</string>
+    <string name="meter"> m</string>
 </resources>

@@ -16,21 +16,36 @@
         <activity
             android:name="org.its.Activity.LoginActivity"
             android:label="@string/login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity
             android:name="org.its.Activity.ListActivity"
-            android:label="@string/profili"></activity>
+            android:label="@string/profili">
+
+        </activity>
+
+
 
         <activity
             android:name="org.its.Activity.DetailActivity"
             android:label="@string/detail"></activity>
 
+        <activity
+            android:name="org.its.Activity.MapActivity"
+            android:label="@string/mappa">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
         <uses-library android:name="com.google.android.maps" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false"></uses-library>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDxkQPZB4hPpSVzvbQrAOpVjVeCm7FkrqQ" />
