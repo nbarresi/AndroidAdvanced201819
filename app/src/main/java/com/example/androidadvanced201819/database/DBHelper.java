@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "profile.db";
 
 
@@ -24,7 +24,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProfileDatabaseManager.KEY_BLUETHOOTH + " INTEGER, " +
                     ProfileDatabaseManager.KEY_WIFI + " INTEGER, " +
                     ProfileDatabaseManager.KEY_APPLICATION + " TEXT, " +
-                    ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER "+
+                    ProfileDatabaseManager.KEY_APPLICATION_NAME + " TEXT, " +
+                    ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER " +
                     ");";
 
     @Override
@@ -34,6 +35,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE " + ProfileDatabaseManager.DATABASE_TABLE + " ADD COLUMN " + ProfileDatabaseManager.KEY_APPLICATION_NAME + " TEXT DEFAULT 'Application'");
+        }
     }
 }

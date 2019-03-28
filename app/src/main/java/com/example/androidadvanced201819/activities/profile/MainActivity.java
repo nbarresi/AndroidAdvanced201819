@@ -7,16 +7,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.androidadvanced201819.activities.AdapterActivity;
+import com.example.androidadvanced201819.activities.adapter.MainAdapterActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    AdapterActivity adapterActivity;
+    MainAdapterActivity adapterActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         DataAccessUtils.initDataSource(this);
-        adapterActivity = new AdapterActivity(getApplicationContext());
+        adapterActivity = new MainAdapterActivity(getApplicationContext());
         ListView listView = (ListView) findViewById(R.id.listView);
-
         listView.setAdapter(adapterActivity);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        Button button = findViewById(R.id.accessButton);
+        button.setVisibility(View.VISIBLE);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> av, View v, final int pos, long id)
-            {
+            public boolean onItemLongClick(AdapterView<?> av, View v, final int pos, long id) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
 
                 // set title
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 // set dialog message
                 alertDialogBuilder
                         .setCancelable(false)
-                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 ProfileDatabaseManager profileDatabaseManager;
                                 // if this button is clicked, close
                                 // current activity
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
                                 adapterActivity.setValues();
                             }
                         })
-                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // if this button is clicked, just close
                                 // the dialog box and do nothing
                                 dialog.cancel();
@@ -91,13 +92,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToCreateProfile(View view) {
         Intent goToCreateProfile = new Intent(MainActivity.this, CreateProfile.class);
         startActivity(goToCreateProfile);
-        /*view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToCreateProfile = new Intent(MainActivity.this, CreateProfile.class);
-                startActivity(goToCreateProfile);
-            }
-        });*/
     }
 
     @Override

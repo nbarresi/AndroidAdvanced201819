@@ -1,5 +1,7 @@
 package com.example.androidadvanced201819.activities.profile;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
@@ -25,10 +28,10 @@ public class CreateProfile extends AppCompatActivity {
     SeekBar brightness, volume;
     Switch bluethoot, wifi;
     RadioGroup optionRadio;
+    TextView application;
     int option;
     CheckBox auto_brightness;
-    private int brightnessValue;
-    private int volumeValue;
+    protected int volumeValue;
     Profile profile;
 
     @Override
@@ -44,6 +47,7 @@ public class CreateProfile extends AppCompatActivity {
         wifi = findViewById(R.id.switchWifi);
         auto_brightness = findViewById(R.id.checkbox_autoBrightness);
         optionRadio = findViewById(R.id.optionRadio);
+        application = findViewById(R.id.applicationName);
 
         Intent det = getIntent();
         if (det.hasExtra("position")) {
@@ -54,6 +58,8 @@ public class CreateProfile extends AppCompatActivity {
         } else {
             setTitle("Crea profilo");
             profile = new Profile();
+            profile.setApplication("Application");
+            profile.setApplicationName("Application");
         }
     }
 
@@ -83,28 +89,25 @@ public class CreateProfile extends AppCompatActivity {
         }
     }
 
-    public void onCheckboxAutoBrightness(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
+    public void chooseApplication(View view) {
+        Intent chooseApplication = new Intent(CreateProfile.this, ApplicationActivity.class);
+        startActivityForResult(chooseApplication, 1);
+    }
 
-        // Check which checkbox was clicked
-        switch (view.getId()) {
-            case R.id.checkbox_autoBrightness:
-                if (checked) {
-
-                    // Put some meat on the sandwich
-                } else {
-
-                    // Remove the meat
-                }
-                break;
-            // TODO: Veggie sandwich
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && data != null) {
+            String appPackage = data.getExtras().getString("package");
+            String appName = data.getExtras().getString("name");
+            profile.setApplication(appPackage);
+            profile.setApplicationName(appName);
+            application.setText(appName);
         }
     }
 
     public void createProfile(final View view) {
         final String profileName = name.getText().toString();
-
 
         profile.setNome(profileName);
         profile.setOption(option);
@@ -129,7 +132,6 @@ public class CreateProfile extends AppCompatActivity {
             profile.setAuto_birghtness(0);
         }
 
-        profile.setApplication("application");
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
         profileDatabaseManager.open();
         Long cursor = profileDatabaseManager.createProfile(profile);
@@ -140,6 +142,7 @@ public class CreateProfile extends AppCompatActivity {
         startActivity(backToMain);
     }
 
+    @SuppressLint("SetTextI18n")
     private void setProfileSettings(int position) {
         Button editButton = findViewById(R.id.buttonEditProfile);
         Button createButton = findViewById(R.id.buttonCreateProfile);
@@ -148,12 +151,12 @@ public class CreateProfile extends AppCompatActivity {
         createButton.setVisibility(View.GONE);
 
         option = profile.getOption();
-        brightnessValue = profile.getbrightness();
+        int brightnessValue = profile.getbrightness();
         volumeValue = profile.getVolume();
-
         name.setText(profile.getNome());
         brightness.setProgress(brightnessValue);
         volume.setProgress(volumeValue);
+
         if (profile.getBluethoot() == 1) {
             bluethoot.setChecked(true);
         } else {
@@ -168,6 +171,11 @@ public class CreateProfile extends AppCompatActivity {
             auto_brightness.setChecked(true);
         } else {
             auto_brightness.setChecked(false);
+        }
+        if (!profile.getApplicationName().equals("")) {
+            application.setText(profile.getApplicationName());
+        } else {
+            application.setText("Application");
         }
 
         RadioButton radioButton = null;
@@ -215,7 +223,7 @@ public class CreateProfile extends AppCompatActivity {
             profile.setAuto_birghtness(0);
         }
 
-        profile.setApplication("application");
+        profile.setApplication(profile.getApplication());
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
         profileDatabaseManager.open();
         profileDatabaseManager.editProfile(profile);
@@ -224,5 +232,4 @@ public class CreateProfile extends AppCompatActivity {
         Intent backToMain = new Intent(CreateProfile.this, MainActivity.class);
         startActivity(backToMain);
     }
-
 }

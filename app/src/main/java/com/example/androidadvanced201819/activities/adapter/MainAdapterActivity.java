@@ -1,4 +1,4 @@
-package com.example.androidadvanced201819.activities;
+package com.example.androidadvanced201819.activities.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -17,13 +17,13 @@ import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 import com.example.androidadvanced201819.model.Profile;
 
-public class AdapterActivity extends ArrayAdapter<Profile> {
+public class MainAdapterActivity extends ArrayAdapter<Profile> {
 
     private final Context context;
     ProfileDatabaseManager profileDatabaseManager;
 
     //costruttore
-    public AdapterActivity(Context context) {
+    public MainAdapterActivity(Context context) {
 
         super(context, R.layout.profile_item);
         this.context = context;
@@ -76,6 +76,7 @@ public class AdapterActivity extends ArrayAdapter<Profile> {
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_BLUETHOOTH)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_WIFI)),
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION)),
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION_NAME)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS))
                 );
                 i++;

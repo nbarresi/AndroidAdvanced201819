@@ -9,6 +9,7 @@ public class Profile {
     private int bluethoot;
     private int wifi;
     private String application;
+    private String application_name;
     private int auto_birghtness;
 
     public Profile() {
@@ -19,7 +20,7 @@ public class Profile {
 
     }
 
-    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, int auto_brightness) {
+    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int auto_brightness) {
         this.id = id;
         this.nome = nome;
         this.option = option;
@@ -28,6 +29,7 @@ public class Profile {
         this.bluethoot = bluethoot;
         this.wifi = wifi;
         this.application = application;
+        this.application_name = application_name;
         this.auto_birghtness = auto_brightness;
     }
 
@@ -101,5 +103,13 @@ public class Profile {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getApplicationName() {
+        return application_name;
+    }
+
+    public void setApplicationName(String application_name) {
+        this.application_name = application_name;
     }
 }
