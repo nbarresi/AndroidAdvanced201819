@@ -78,4 +78,8 @@ public class UserProfile implements Serializable {
     public String getAppName() {
         return appName;
     }
+
+    public void setValoreMetodo(String valoreMetodo) {
+        this.valoreMetodo = valoreMetodo;
+    }
 }

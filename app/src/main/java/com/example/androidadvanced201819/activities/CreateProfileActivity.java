@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private TextView appName;
     private String appPackage = "";
     private String appNameVal = "";
+    private String methodValue = "";
     private UserProfile profilo;
 
     @Override
@@ -84,10 +86,11 @@ public class CreateProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (intent.hasExtra("PROFILE")) {
                     String name = textName.getText().toString();
+                    appNameVal = appName.getText().toString();
                     boolean bluetooth = bluetoothSwitch.isChecked();
                     boolean wifi = wifiSwitch.isChecked();
 
-                    UserProfile profile = new UserProfile(profilo.getId(),name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
+                    UserProfile profile = new UserProfile(profilo.getId(),name, selectedMethod, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
 
                     dbHelper.updateProfile(profile);
 
@@ -98,7 +101,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                     boolean bluetooth = bluetoothSwitch.isChecked();
                     boolean wifi = wifiSwitch.isChecked();
 
-                    UserProfile profile = new UserProfile(name, selectedMethod, "", luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
+                    UserProfile profile = new UserProfile(name, selectedMethod, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
 
                     if(!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
                         dbHelper.insertProfile(profile);
@@ -124,8 +127,15 @@ public class CreateProfileActivity extends AppCompatActivity {
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedMethod ="gps";
                 Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(toMap);
+                if(profilo != null && profilo.getValoreMetodo() != null){
+                    toMap.putExtra("latLng",profilo.getValoreMetodo());
+                }
+                if(!methodValue.isEmpty()){
+                    toMap.putExtra("latLng",methodValue);
+                }
+                startActivityForResult(toMap,2);
             }
         });
         nfcButton.setOnClickListener(new View.OnClickListener() {
@@ -178,12 +188,22 @@ public class CreateProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == 1) {
-            appNameVal = (String) data.getExtras().getString("appName");
-            appPackage = (String) data.getExtras().getString("appPackage");
+        switch (resultCode){
+            case 1:
+                appNameVal = (String) data.getExtras().getString("appName");
+                appPackage = (String) data.getExtras().getString("appPackage");
 
-            appName.setText(appNameVal);
-            appName.setVisibility(View.VISIBLE);
+                appName.setText(appNameVal);
+                appName.setVisibility(View.VISIBLE);
+                break;
+
+            case 2:
+                if(profilo != null) {
+                    profilo.setValoreMetodo((String) data.getExtras().getString("latLng"));
+                } else {
+                    methodValue = (String) data.getExtras().getString("latLng");
+                }
+                break;
         }
     }
 

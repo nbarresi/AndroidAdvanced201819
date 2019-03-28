@@ -2,6 +2,7 @@ package com.example.androidadvanced201819.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -32,10 +33,30 @@ public class MapsActivity extends FragmentActivity {
     private Circle circle;
     private TextView range;
 
+    //TODO: Permissions Management
+
+    @Override
+    public void onBackPressed() {
+        Intent toCreate = new Intent();
+        String formatted = latLngProvided.latitude +";"+ latLngProvided.longitude;
+        toCreate.putExtra("latLng",formatted);
+        setResult(2,toCreate);
+        super.onBackPressed();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Intent intent = getIntent();
+        if(intent.getExtras() != null) {
+            String coordinates = intent.getStringExtra("latLng");
+            String[] splitted = coordinates.split(";");
+            double lat = Double.parseDouble(splitted[0]);
+            double lng = Double.parseDouble(splitted[1]);
+            latLngProvided = new LatLng(lat, lng);
+        }
 
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -50,8 +71,10 @@ public class MapsActivity extends FragmentActivity {
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+            if(latLngProvided == null) {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+            }
         }
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
