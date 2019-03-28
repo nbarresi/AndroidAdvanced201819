@@ -120,7 +120,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMethod = "gps";
+                Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(toMap);
             }
         });
         nfcButton.setOnClickListener(new View.OnClickListener() {

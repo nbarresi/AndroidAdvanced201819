@@ -123,6 +123,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
+
+
     public boolean removeProfile(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(PROFILE_TABLE_NAME,GENERIC_COLUMN_ID + "=?", new String[]{id+""})!=-1;
