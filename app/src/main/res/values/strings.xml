@@ -20,4 +20,5 @@
     <string name="title_activity_list_profile">Lista Profili</string>
     <string name="app">App</string>
     <string name="addApp">Aggiungi Applicazione</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

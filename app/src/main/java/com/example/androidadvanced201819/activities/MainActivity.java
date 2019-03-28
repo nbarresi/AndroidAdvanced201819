@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginButton.setClickable(false);
+                loginButton.setClickable(true);
                 Call<LoginResponse> repos = service.login(new UserRequest(usernameEditText.getText().toString(),passwordEditText.getText().toString()));
                 repos.enqueue(new Callback<LoginResponse>() {
 
