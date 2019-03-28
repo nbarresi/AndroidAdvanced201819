@@ -139,6 +139,8 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectedMethod = "wifi";
+                Intent wifiIntent = new Intent(getApplicationContext(), WifiScanActivity.class);
+                startActivity(wifiIntent);
             }
         });
         beaconButton.setOnClickListener(new View.OnClickListener() {

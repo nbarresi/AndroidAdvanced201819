@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp">
+    android:layout_margin="@dimen/smallMargin">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </ListView>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </ListView>
     <Button
         android:id="@+id/createProfile"
         android:layout_width="match_parent"

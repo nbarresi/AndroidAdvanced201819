@@ -18,7 +18,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "AndroidAndvanced.db";
 
     public static final String PROFILE_TABLE_NAME = "profile";
-//    public static final String METODO_RILEVAMENTO_TABLE= "metodo_rilevamento";
+    public static final String WIFI_TABLE= "wifi";
 
     public static final String GENERIC_COLUMN_ID = "id";
 
@@ -33,9 +33,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String PROFILE_COLUMN_BLUETOOTH = "bluetooth";
     public static final String PROFILE_COLUMN_WIFI = "wifi";
 
-//    public static final String METODO_RILEVAMENTO_COLUMN_TIPO = "tipo";
-//    public static final String METODO_RILEVAMENTO_COLUMN_VALORE = "valore";
-//    public static final String METODO_RILEVAMENTO_COLUMN_ID_PROFILO = "id_profilo";
+    public static final String WIFI_COLUMN_BSSID = "bssid";
+    public static final String WIFI_COLUMN_LEVEL = "level";
+    public static final String WIFI_COLUMN_ID_PROFILO = "id_profilo";
 
     private static final String CREATE_TABLE_PROFILO = "CREATE TABLE " + PROFILE_TABLE_NAME + "(" +
             GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -49,12 +49,12 @@ public class DbHelper extends SQLiteOpenHelper {
             PROFILE_COLUMN_WIFI + " INTEGER," +
             PROFILE_COLUMN_UTENTE+ " TEXT)";
 //
-//    private static final String CREATE_TABLE_METODO_RILEVAMENTO = "CREATE TABLE " + METODO_RILEVAMENTO_TABLE + "(" +
-//            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-//            METODO_RILEVAMENTO_COLUMN_TIPO + " TEXT," +
-//            METODO_RILEVAMENTO_COLUMN_VALORE + " TEXT,"+
-//            METODO_RILEVAMENTO_COLUMN_ID_PROFILO+" INTEGER, " +
-//            "FOREIGN KEY("+METODO_RILEVAMENTO_COLUMN_ID_PROFILO+") REFERENCES "+PROFILE_TABLE_NAME+"("+GENERIC_COLUMN_ID+"))";
+    private static final String CREATE_TABLE_WIFI = "CREATE TABLE " + WIFI_TABLE + "(" +
+            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            WIFI_COLUMN_BSSID + " TEXT," +
+            WIFI_COLUMN_LEVEL + " INTEGER,"+
+            WIFI_COLUMN_ID_PROFILO+" INTEGER, " +
+            "FOREIGN KEY("+WIFI_COLUMN_ID_PROFILO+") REFERENCES "+PROFILE_TABLE_NAME+"("+GENERIC_COLUMN_ID+"))";
 
 
     public DbHelper(Context context) {
@@ -64,7 +64,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_PROFILO);
-//        db.execSQL(CREATE_TABLE_METODO_RILEVAMENTO);
+        db.execSQL(CREATE_TABLE_WIFI);
     }
 
     @Override

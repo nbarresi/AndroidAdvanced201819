@@ -1,6 +1,11 @@
 package com.example.androidadvanced201819.DB.Entities;
 
+import android.net.wifi.ScanResult;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserProfile implements Serializable {
     private int id;
@@ -13,6 +18,7 @@ public class UserProfile implements Serializable {
     private String nome;
     private String appPackage;
     private String appName;
+    private ArrayList<ScanResult> wifiValues = new ArrayList<>();
 
     public UserProfile(int id, String nome, String metodoDiRilevamento ,String valoreMetodo,int luminosita, int volume, boolean bluetooth, boolean wifi,String appPackage, String appName) {
         this.metodoDiRilevamento = metodoDiRilevamento;
