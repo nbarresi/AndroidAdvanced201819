@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,7 +27,7 @@ public class MapsActivity extends FragmentActivity {
     private GoogleMap mMap;
     private LocationManager locationManager;
     private Location location;
-    private LatLng latLng;
+    private LatLng latLngProvided;
     private SeekBar radius;
     private Circle circle;
     private TextView range;
@@ -37,8 +36,8 @@ public class MapsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
         radius = (SeekBar) findViewById(R.id.raggio);
@@ -52,7 +51,7 @@ public class MapsActivity extends FragmentActivity {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
         }
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -60,10 +59,10 @@ public class MapsActivity extends FragmentActivity {
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngProvided, 18.0f));
+                mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
                 circle = mMap.addCircle(new CircleOptions()
-                        .center(latLng)
+                        .center(latLngProvided)
                         .radius(100)
                         .strokeColor(Color.RED)
                 );
@@ -71,6 +70,7 @@ public class MapsActivity extends FragmentActivity {
                 mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @Override
                     public void onMapLongClick(LatLng latLng) {
+                        //latLngProvided = latLng;
                         mMap.clear();
                         updateMarker(latLng);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),mMap.getCameraPosition().zoom));
@@ -83,6 +83,8 @@ public class MapsActivity extends FragmentActivity {
                         Integer update = progress * 10;
                         circle.setRadius(update);
                         range.setText(update.toString());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
                     }
 
                     @Override
@@ -112,6 +114,16 @@ public class MapsActivity extends FragmentActivity {
                 .strokeColor(Color.RED));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngInput));
+    }
+
+    public int getZoomLevel(Circle circle) {
+        int zoomLevel = 11;
+        if (circle != null) {
+            double radius = circle.getRadius() + circle.getRadius() / 2;
+            double scale = radius / 500;
+            zoomLevel = (int) (16 - Math.log(scale) / Math.log(2));
+        }
+        return zoomLevel;
     }
 
 }
