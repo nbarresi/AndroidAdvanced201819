@@ -54,7 +54,7 @@ public class AggiungiProfilo extends AppCompatActivity {
                     startActivity(intent);
 
                 }else{
-                    tost("inserisci testo");
+                    toast(getString(R.string.Error_name_user));
                 }
             }
         });
@@ -65,12 +65,12 @@ public class AggiungiProfilo extends AppCompatActivity {
         boolean inserisci=db.addData(nuovoDato);
 
         if (inserisci){
-            tost("Dato inserito");
+            toast("Dato inserito");
         }else{
-            tost("dato non inserito");
+            toast("dato non inserito");
         }
     }
-    public void tost(String tost){
-        Toast.makeText(this, tost, Toast.LENGTH_SHORT).show();
+    private void toast(String toast){
+        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
     }
 }

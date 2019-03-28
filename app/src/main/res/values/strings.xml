@@ -12,5 +12,7 @@
     <string name="WIFI">WIFI</string>
     <string name="NFC">NFC</string>
     <string name="BACON">BACON</string>
-
+    <string name="Error_name_user">nome profilo non inserito</string>
+    <string name="Login_success">Login effettuato</string>
+    <string name="Login_failed">Login non effettuato</string>
 </resources>

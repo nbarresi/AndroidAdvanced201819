@@ -36,12 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText passwordEditText = findViewById(R.id.editTextPsw);
 
-        Button loginButton = findViewById(R.id.loginButton);
+        final Button loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Call<LoginResponse> repos = service.login(new UserRequest(usernameEditText.getText().toString(),passwordEditText.getText().toString()));
+                loginButton.setClickable(false);
                 repos.enqueue(new Callback<LoginResponse>() {
 
                     @Override
@@ -49,21 +50,24 @@ public class MainActivity extends AppCompatActivity {
 
                             Call<LoginResponse> call, Response<LoginResponse> response) {
                         if(response.body().getBody().equals("OK") && response.body().getStatusCode().equals("200")) {
-                            Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(MainActivity.this, getString(R.string.Login_success), Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.verde);
                             Intent intent=new Intent(getApplicationContext(), ListaProfili.class);
                             startActivity(intent);
 
                         }else{
-                            Toast.makeText(MainActivity.this, "Login non effettuato", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.Login_failed), Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.rosso);
+                            loginButton.setClickable(true);
 
                         }
                     }
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
-                        usernameEditText.setText(t.getMessage()); // can also do textv.setText(t.getMessage()) to display error reason
-                        t.printStackTrace();
+//                        usernameEditText.setText(t.getMessage()); // can also do textv.setText(t.getMessage()) to display error reason
+//                        t.printStackTrace();
+                        loginButton.setClickable(true);
                     }
                 });
             }
