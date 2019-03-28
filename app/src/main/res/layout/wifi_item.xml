@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="RtlSymmetry">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/item_marginTop_marginLeft_padding">
+
+            <TextView
+                android:id="@+id/wifiSSID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="ciao"
+                android:textSize="@dimen/wifiSSIDSize"
+                android:textStyle="normal"
+                tools:ignore="SpUsage" />
+            <TextView
+                android:id="@+id/wifiBSSID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ciao"
+                android:textSize="@dimen/wifiBSSIDSize"
+                android:textStyle="normal"
+                tools:ignore="SpUsage" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="@dimen/wifiBSSIDSize"
+                android:text="test"
+                tools:ignore="SpUsage"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
