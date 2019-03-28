@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,12 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name="org.its.login.activities.TestMapActivity"></activity>
-        <activity android:name="org.its.login.activities.AddAppListActivity" />
-        <activity
-            android:name="org.its.login.activities.NewProfileActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name="org.its.login.activities.ProfileListActivity"></activity>
+
+        <uses-library android:name="com.google.android.maps"/>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCyPT-NFBaVdXM9m495C8V4uHruBsH4lb8" />
+
+        <activity android:name="org.its.login.activities.AddAppListActivity"/>
+        <activity android:name="org.its.login.activities.NewProfileActivity"
+            android:theme="@style/Theme.AppCompat.Light"/>
+        <activity android:name="org.its.login.activities.ProfileListActivity"/>
+        <activity android:name="org.its.login.activities.MapActivity"/>
         <activity android:name="org.its.login.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

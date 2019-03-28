@@ -49,6 +49,8 @@ public class NewProfileActivity extends AppCompatActivity {
     public final int ADD_APP_REQUEST_CODE = 0;
     public final int ADD_COORDINATES_REQUEST_CODE =1;
 
+    public static int RESULT_MAP_ACTIVITY = 1111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class NewProfileActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         switch (rb.getText().toString().toLowerCase()) {
                             case "gps":
-                                Intent intentAddCoordinates = new Intent(NewProfileActivity.this, TestMapActivity.class);
+                                Intent intentAddCoordinates = new Intent(NewProfileActivity.this, MapActivity.class);
                                 startActivityForResult(intentAddCoordinates, ADD_COORDINATES_REQUEST_CODE);
                                 break;
                             case "wifi":
