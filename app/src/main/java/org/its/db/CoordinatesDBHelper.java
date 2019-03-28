@@ -25,8 +25,8 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_COORDINATES = "DROP TABLE IF EXISTS " + Coordinates.CoordinatesEntry.TABLE_NAME;
 
-    public CoordinatesDBHelper(Context context){
-        super(context,DATABASE_NAME, null, DATABASE_VERSION);
+    public CoordinatesDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -39,11 +39,11 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public SQLiteDatabase getWritableDatabase(){
+    public SQLiteDatabase getWritableDatabase() {
         return super.getWritableDatabase();
     }
 
-    public Coordinates insertCoordinates(Coordinates coordinates){
+    public Coordinates insertCoordinates(Coordinates coordinates) {
         SQLiteDatabase db = this.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -57,16 +57,16 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
         return coordinates;
     }
 
-    public boolean deleteCoordinates(Coordinates coordinates){
+    public boolean deleteCoordinates(Coordinates coordinates) {
         String selection = Coordinates.CoordinatesEntry._ID + " == ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { coordinates.getId()+"" };
+        String[] selectionArgs = {coordinates.getId() + ""};
         // Issue SQL statement.
         int deletedRows = this.getWritableDatabase().delete(Coordinates.CoordinatesEntry.TABLE_NAME, selection, selectionArgs);
         return (deletedRows > 0);
     }
 
-    public boolean updateCoordinates(Coordinates coordinates){
+    public boolean updateCoordinates(Coordinates coordinates) {
         ContentValues values = new ContentValues();
         values.put(Coordinates.CoordinatesEntry._LATITUDE, coordinates.getLatitude());
         values.put(Coordinates.CoordinatesEntry._LONGITUDE, coordinates.getLongitude());
@@ -74,18 +74,18 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
         values.put(Coordinates.CoordinatesEntry._IDPROFILE, coordinates.getIdProfile());
 // Which row to update, based on the title
         String selection = Coordinates.CoordinatesEntry._ID + " == ?";
-        String[] selectionArgs = { coordinates.getId()+"" };
+        String[] selectionArgs = {coordinates.getId() + ""};
 
         int count = this.getWritableDatabase().update(
                 Coordinates.CoordinatesEntry.TABLE_NAME,
                 values,
                 selection,
                 selectionArgs);
-        return (count >0);
+        return (count > 0);
     }
 
 
-    public List<Coordinates> getAllCoordinates(){
+    public List<Coordinates> getAllCoordinates() {
         Cursor cursor = this.getWritableDatabase().query(
                 Coordinates.CoordinatesEntry.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
@@ -101,10 +101,10 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
         return coordinates;
     }
 
-    private List<Coordinates> cursorToCoordinates(Cursor cursor){
+    private List<Coordinates> cursorToCoordinates(Cursor cursor) {
         List<Coordinates> coordinatesList = new ArrayList<>();
-        while(cursor.moveToNext()) {
-                Coordinates coordinates = new Coordinates(
+        while (cursor.moveToNext()) {
+            Coordinates coordinates = new Coordinates(
                     cursor.getLong(cursor.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._ID)),
                     cursor.getDouble((cursor.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._LATITUDE))),
                     cursor.getDouble(cursor.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._LONGITUDE)),
@@ -118,21 +118,13 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
     }
 
     public Coordinates getCoordinatesByIdProfile(long idProfile) {
-        String selection = Coordinates.CoordinatesEntry._IDPROFILE+" LIKE ?";
-        String[] seletion_args={Long.toString(idProfile)};
-        Cursor cursorSingleCoordinate = this.getWritableDatabase().query(Coordinates.CoordinatesEntry.TABLE_NAME,null, selection,seletion_args,null,null,null);
-
-        Coordinates coordinates = new Coordinates();
-        while(cursorSingleCoordinate.moveToNext()) {
-            Coordinates tc = new Coordinates(
-                    cursorSingleCoordinate.getLong(cursorSingleCoordinate.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._ID)),
-                    cursorSingleCoordinate.getDouble((cursorSingleCoordinate.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._LATITUDE))),
-                    cursorSingleCoordinate.getDouble(cursorSingleCoordinate.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._LONGITUDE)),
-                    cursorSingleCoordinate.getLong(cursorSingleCoordinate.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._RADIUS)),
-                    cursorSingleCoordinate.getLong(cursorSingleCoordinate.getColumnIndexOrThrow(Coordinates.CoordinatesEntry._IDPROFILE))
-            );
-            coordinates = tc;
+        List<Coordinates> coordinatesList = getAllCoordinates();
+        for (Coordinates coordinates : coordinatesList) {
+            if (coordinates.getIdProfile() == idProfile) {
+                return coordinates;
+            }
         }
-        return  coordinates;
+        return null;
     }
+
 }

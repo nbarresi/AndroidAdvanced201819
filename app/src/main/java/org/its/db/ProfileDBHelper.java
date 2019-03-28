@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
 
 import java.util.ArrayList;
@@ -143,5 +144,13 @@ public class ProfileDBHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
+    public int getLastInsertedProfileId(){
+        Cursor c = this.getWritableDatabase().rawQuery("SELECT last_insert_rowid()", null);
+        c.moveToFirst();
+        int id = c.getInt(0);
+        return  id;
+
+
+    }
 
 }

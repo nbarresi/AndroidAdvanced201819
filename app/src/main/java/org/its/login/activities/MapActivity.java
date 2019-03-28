@@ -159,16 +159,15 @@ public class MapActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(latLng.latitude);
         coordinates.setLongitude(latLng.longitude);
         coordinates.setRadius(radius);
-        Intent returnAppIntent = new Intent();
-        returnAppIntent.putExtra("ADD_COORDINATES_REQUEST_CODE", coordinates);
-        setResult(NewProfileActivity.RESULT_MAP_ACTIVITY, returnAppIntent);
+        Intent returnCoordinatesIntent = new Intent();
+        returnCoordinatesIntent.putExtra("ADD_COORDINATES_REQUEST_CODE", coordinates);
+        setResult(NewProfileActivity.RESULT_MAP_ACTIVITY, returnCoordinatesIntent);
         finish();
-
+        super.onBackPressed();
     }
 
     private void checkLocationPermission() {

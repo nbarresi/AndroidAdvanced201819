@@ -72,7 +72,7 @@ import java.io.Serializable;
 
         /* Inner class that defines the table contents */
         public static class CoordinatesEntry implements BaseColumns {
-            public final static String TABLE_NAME = "coordinate";
+            public final static String TABLE_NAME = "coordinates";
 
             public final static String _ID = "id";
 

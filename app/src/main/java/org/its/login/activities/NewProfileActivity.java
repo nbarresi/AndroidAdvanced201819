@@ -23,20 +23,26 @@ import android.widget.Toast;
 
 import com.example.androidadvanced201819.R;
 
+import org.its.db.CoordinatesDBHelper;
 import org.its.db.ProfileDBHelper;
+import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class NewProfileActivity extends AppCompatActivity {
 
     private ProfileDBHelper profileDbHelper;
+    private CoordinatesDBHelper coordinatesDBHelper;
+
     private EditText editTextNameProfile;
     private RadioGroup radioConnectivityGroup;
     private RadioButton radioConnectivityButton;
     private int radioGroupId;
     private Button btnDisplay;
     private Profile profile = new Profile();
+    private Coordinates coordinates = new Coordinates();
     int initialBrightness = 0;
     private SeekBar barBrightness;
     private CheckBox brightnessCheckbox;
@@ -47,7 +53,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private Boolean isEditUser = false;
 
     public final int ADD_APP_REQUEST_CODE = 0;
-    public final int ADD_COORDINATES_REQUEST_CODE =1;
+    public final int ADD_COORDINATES_REQUEST_CODE = 1;
 
     public static int RESULT_MAP_ACTIVITY = 1111;
 
@@ -55,11 +61,17 @@ public class NewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_profile);
-        Intent editProfile = getIntent();
+        profileDbHelper = new ProfileDBHelper(getApplicationContext());
+        coordinatesDBHelper = new CoordinatesDBHelper(getApplicationContext());
 
+
+        Intent editProfile = getIntent();
         isEditUser = editProfile.getSerializableExtra("editedProfile") != null;
         if (isEditUser) {
             profile = (Profile) editProfile.getSerializableExtra("editedProfile");
+            if (profile.getMetodoRilevamento().equals("GPS")) {
+                coordinates = coordinatesDBHelper.getCoordinatesByIdProfile(profile.getId());
+            }
         }
         //add all listeners
         saveInitialBrightness();
@@ -92,6 +104,8 @@ public class NewProfileActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         switch (rb.getText().toString().toLowerCase()) {
                             case "gps":
+
+
                                 Intent intentAddCoordinates = new Intent(NewProfileActivity.this, MapActivity.class);
                                 startActivityForResult(intentAddCoordinates, ADD_COORDINATES_REQUEST_CODE);
                                 break;
@@ -110,7 +124,7 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (isEditUser) {
+        if (isEditUser && profile.getMetodoRilevamento() != null) {
             switch (profile.getMetodoRilevamento().toLowerCase()) {
                 case "gps":
                     radioConnectivityButton = (RadioButton) findViewById(R.id.gps);
@@ -139,7 +153,6 @@ public class NewProfileActivity extends AppCompatActivity {
         else barBrightness.setProgress(1);
 
 
-
         barBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -162,7 +175,8 @@ public class NewProfileActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Context context = getApplicationContext();  boolean canWriteSettings = Settings.System.canWrite(context);
+                Context context = getApplicationContext();
+                boolean canWriteSettings = Settings.System.canWrite(context);
                 if (canWriteSettings) {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, initialBrightness);
                 }
@@ -204,6 +218,11 @@ public class NewProfileActivity extends AppCompatActivity {
     //luminosità auto
     private void setAutoBrightnessCheckboxListener() {
         brightnessCheckbox = (CheckBox) findViewById(R.id.auto_brightness);
+        boolean canWriteSettings = Settings.System.canWrite(getApplicationContext());
+        if (canWriteSettings) {
+
+        } else showAlertBrightnessPermission();
+
         if (isEditUser && profile.getLuminosita() == 0)
             brightnessCheckbox.setChecked(true); //temp valore arbitrario
 
@@ -240,7 +259,6 @@ public class NewProfileActivity extends AppCompatActivity {
         });
     }
 
-
     //switch bluetooth
     private void setBluetoothSwitchListener() {
         switchBluetooth = (Switch) findViewById(R.id.bluetooth);
@@ -266,7 +284,6 @@ public class NewProfileActivity extends AppCompatActivity {
 
     //create User
     private void setCreateUserButtonListener(final Boolean isEditUser) {
-        profileDbHelper = new ProfileDBHelper(getApplicationContext());
         btnDisplay = (Button) findViewById(R.id.crea_profilo);
         if (isEditUser) btnDisplay.setText("MODIFICA");
 
@@ -278,12 +295,7 @@ public class NewProfileActivity extends AppCompatActivity {
                     Toast.makeText(NewProfileActivity.this,
                             "PROFILE NAME VALUE IS NOT DEFINED", Toast.LENGTH_SHORT).show();
                 } else {
-                    profile.setApp(setPackageAppName());
-
-                    if (isEditUser) {
-                        profileDbHelper.updateProfile(profile);
-                    } else profileDbHelper.insertProfile(profile);
-
+                    saveDataOnDBs();
                     Intent intentGoToProfileList = new Intent(NewProfileActivity.this, ProfileListActivity.class);
                     startActivity(intentGoToProfileList);
                 }
@@ -291,12 +303,32 @@ public class NewProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void saveDataOnDBs() {
+        profile.setApp(setPackageAppName());
+        if (isEditUser) {
+            profileDbHelper.updateProfile(profile);
+            if (profile.getMetodoRilevamento().equals("GPS")) {
+                coordinates.setIdProfile(profile.getId());
+                coordinatesDBHelper.updateCoordinates(coordinates);
+            }
+        } else {
+            profileDbHelper.insertProfile(profile);
+            if (profile.getMetodoRilevamento().equals("GPS")) {
+                coordinates.setIdProfile(profileDbHelper.getLastInsertedProfileId());
+                coordinatesDBHelper.insertCoordinates(coordinates);
+            }
+        }
+    }
+
+
     private void setProfileValue() {
         profile.setName(editTextNameProfile.getText().toString());
 
         radioGroupId = radioConnectivityGroup.getCheckedRadioButtonId();
         radioConnectivityButton = (RadioButton) findViewById(radioGroupId);
-        profile.setMetodoRilevamento(radioConnectivityButton.getText().toString());
+
+        if (radioConnectivityButton != null)
+            profile.setMetodoRilevamento(radioConnectivityButton.getText().toString());
 
         if (brightnessCheckbox.isChecked()) {
             profile.setLuminosita(0);   //0 quando auto
@@ -338,20 +370,17 @@ public class NewProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case ADD_APP_REQUEST_CODE:
-                    profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
-                    textViewAppList.setText(profile.getApp());
-                    break;
-                case ADD_COORDINATES_REQUEST_CODE:
-
-                    break;
-                    //TODO
-            }
+        switch (requestCode) {
+            case ADD_APP_REQUEST_CODE:
+                profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
+                textViewAppList.setText(profile.getApp());
+                break;
+            case ADD_COORDINATES_REQUEST_CODE:
+                coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
+                break;
+            //TODO more cases
         }
     }
-
-
 }
+
 
