@@ -1,7 +1,9 @@
 package com.example.androidadvanced201819.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,10 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
     private final Context context;
     private List<UserProfile> profiles;
     private DbHelper dbHelper;
+    private AlertDialog.Builder dialog;
 
     public ProfileAdapter(Context context, List<UserProfile> objects, DbHelper dbHelper) {
-        super(context, R.layout.list_item_layout ,objects);
+        super(context, R.layout.list_item_layout, objects);
         this.context = context;
         this.profiles = objects;
         this.dbHelper = dbHelper;
@@ -32,8 +35,8 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View listItem = convertView;
 
-        if(listItem == null){
-            listItem = LayoutInflater.from(context).inflate(R.layout.list_item_layout,parent,false);
+        if (listItem == null) {
+            listItem = LayoutInflater.from(context).inflate(R.layout.list_item_layout, parent, false);
         }
 
 
@@ -42,8 +45,8 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
         listItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCreateProfile = new Intent(context,CreateProfileActivity.class);
-                intentCreateProfile.putExtra("PROFILE",profile);
+                Intent intentCreateProfile = new Intent(context, CreateProfileActivity.class);
+                intentCreateProfile.putExtra("PROFILE", profile);
                 context.startActivity(intentCreateProfile);
             }
         });
@@ -51,9 +54,22 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
         listItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                dbHelper.removeProfile(profile.getId());
-                profiles.remove(position);
-                notifyDataSetChanged();
+                dialog = new AlertDialog.Builder(context);
+                dialog.setTitle("Eliminazione")
+                        .setMessage("Confermi l'eliminazione dell'elemento")
+                        .setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialoginterface, int i) {
+                                dialoginterface.cancel();
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialoginterface, int i) {
+                                dbHelper.removeProfile(profile.getId());
+                                profiles.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        }).show();
+
                 return false;
             }
         });
