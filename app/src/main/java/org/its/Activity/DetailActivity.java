@@ -2,8 +2,12 @@ package org.its.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +32,7 @@ import org.its.db.entities.Profilo;
 import org.its.utilities.ProfileTypeEnum;
 import org.its.utilities.RequestCodes;
 import org.its.utilities.ResultsCode;
+import org.its.utilities.StringCollection;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -200,17 +205,17 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void launchIntentToMap(){
+    private void launchIntentToMap() {
         Intent mapIntent = new Intent(DetailActivity.this, MapActivity.class);
         if (idForUpdate != -1) {
-            mapIntent.putExtra("IsUpdate", true);
+            mapIntent.putExtra(StringCollection.isUpdate, true);
 
         } else {
-            mapIntent.putExtra("IsUpdate", false);
+            mapIntent.putExtra(StringCollection.isUpdate, false);
         }
 
         if (profiloFromIntent != null) {
-            mapIntent.putExtra("gps", profiloFromIntent.getRilevazione());
+            mapIntent.putExtra(StringCollection.gpsObject, profiloFromIntent.getRilevazione());
         }
         startActivityForResult(mapIntent, RequestCodes.MAP_CODE);
     }

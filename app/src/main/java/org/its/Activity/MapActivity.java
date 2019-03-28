@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 
 import org.its.db.entities.Gps;
 import org.its.utilities.ResultsCode;
+import org.its.utilities.StringCollection;
 
 public class MapActivity extends Activity {
 
@@ -81,9 +82,9 @@ public class MapActivity extends Activity {
                 receivedIntent = getIntent();
                 final TextView radiusMeter = findViewById(R.id.radiusMeter);
                 SeekBar seekBar = findViewById(R.id.raggioSeekbar);
-                boolean isAnUpdate = receivedIntent.getBooleanExtra("IsUpdate", false);
+                boolean isAnUpdate = receivedIntent.getBooleanExtra(StringCollection.isUpdate, false);
                 if (isAnUpdate) {
-                    Gps gettedGps = new Gson().fromJson(receivedIntent.getStringExtra("gps"), Gps.class);
+                    Gps gettedGps = new Gson().fromJson(receivedIntent.getStringExtra(StringCollection.gpsObject), Gps.class);
                     seekBar.setProgress((gettedGps.getRaggio() - 500) / 10);
                     radiusMeter.setText("" + gettedGps.getRaggio());
                     gps.setRaggio(gettedGps.getRaggio());
@@ -93,18 +94,21 @@ public class MapActivity extends Activity {
                     LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        buildAlertMessageNoGps();
-                    }
-
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        gps.setRaggio(500);
-                        gps.setLongitudine(location.getLongitude());
-                        gps.setLatitudine(location.getLatitude());
+                        gps.setLatitudine(48d);
+                        gps.setLongitudine(9d);
+                      //  buildAlertMessageNoGps();
+                    }else{
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            gps.setRaggio(500);
+                            gps.setLongitudine(location.getLongitude());
+                            gps.setLatitudine(location.getLatitude());
+                        }
                     }
 
                 }
+
 
 
                 LatLng currentLatLong = new LatLng(gps.getLatitudine(), gps.getLongitudine());
@@ -187,10 +191,4 @@ public class MapActivity extends Activity {
         finish();
     }
 
-    /*private void setCircle(int raggio, MapFragment map) {
-        Circle circle = googleMap.addCircle(new CircleOptions()
-                .center(currentLatLong)
-                .radius(500)
-                .strokeColor(Color.RED));
-    }*/
 }
