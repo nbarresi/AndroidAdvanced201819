@@ -1,8 +1,9 @@
 package org.its.db.entities;
 
 
+import java.io.Serializable;
 
-public class Gps {
+public class Gps implements Serializable {
     private Double latitudine;
     private Double longitudine;
     private Integer raggio;

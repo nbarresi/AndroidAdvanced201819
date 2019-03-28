@@ -1,9 +1,14 @@
 package org.its.Activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -15,20 +20,24 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
+import com.google.gson.Gson;
 
 import org.its.db.dao.ProfiloDao;
+import org.its.db.entities.Gps;
 import org.its.db.entities.Profilo;
 import org.its.utilities.ProfileTypeEnum;
-
-import java.util.List;
+import org.its.utilities.RequestCodes;
+import org.its.utilities.ResultsCode;
 
 
 public class DetailActivity extends AppCompatActivity {
 
-
-    public static int APP = 156;
-    private int update = -1;
+    private Profilo profiloFromIntent = null;
+    private final int PERMISSION_REQUEST_CODE = 115;
+    private int idForUpdate = -1;
     private TextView appChoiced = null;
+    private Gps gps;
+
 
     private ProfiloDao db = new ProfiloDao();
 
@@ -46,17 +55,17 @@ public class DetailActivity extends AppCompatActivity {
         final CheckBox autoLuminosita = findViewById(R.id.autoLuminosita);
         final TextView app = findViewById(R.id.choiceApp);
         appChoiced = findViewById(R.id.detailApp);
+        Intent currentIntent = getIntent();
+        if (currentIntent.getSerializableExtra(ListActivity.PROFILE) != null) {
+            profiloFromIntent = (Profilo) currentIntent.getSerializableExtra(ListActivity.PROFILE);
+            name.setText(profiloFromIntent.getNome());
+            luminosita.setProgress(profiloFromIntent.getLuminosita());
+            volume.setProgress(profiloFromIntent.getVolume());
+            wifi.setChecked(profiloFromIntent.isWifi());
+            bluetooth.setChecked(profiloFromIntent.isBluetooth());
+            autoLuminosita.setChecked(profiloFromIntent.isAutoLuminosita());
 
-        Intent intent = getIntent();
-        if (intent.getSerializableExtra(ListActivity.PROFILE) != null) {
-            Profilo profilo = (Profilo) intent.getSerializableExtra(ListActivity.PROFILE);
-            name.setText(profilo.getNome());
-            luminosita.setProgress(profilo.getLuminosita());
-            volume.setProgress(profilo.getVolume());
-            wifi.setChecked(profilo.isWifi());
-            bluetooth.setChecked(profilo.isBluetooth());
-            autoLuminosita.setChecked(profilo.isAutoLuminosita());
-            switch (profilo.getMetodo().getValue()) {
+            switch (profiloFromIntent.getMetodo().getValue()) {
                 case 0:
                     radioGroup.check(R.id.detailWIFI);
                     break;
@@ -70,20 +79,31 @@ public class DetailActivity extends AppCompatActivity {
                     radioGroup.check(R.id.detailGPS);
                     break;
             }
-            appChoiced.setText(profilo.getApp());
-            this.update = profilo.getId();
+            appChoiced.setText(profiloFromIntent.getApp());
+            this.idForUpdate = profiloFromIntent.getId();
         }
 
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Intent intentRadio = new Intent(DetailActivity.this, ListActivity.class);
 
                 switch (checkedId) {
                     case R.id.detailGPS:
-                        Intent intent = new Intent(DetailActivity.this, MapActivity.class);
-                        startActivityForResult(intent, REFRESH_REQUESTCODE);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                            if (ContextCompat.checkSelfPermission(
+                                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+
+                                checkLocationPermission();
+                            } else {
+                                launchIntentToMap();
+                            }
+                        }
+
+
                         break;
                     case R.id.detailWIFI:
                         System.out.println("premuto radiobutton 2");
@@ -102,7 +122,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent choiceAppIntent = new Intent(DetailActivity.this, AppListActivity.class);
-                startActivityForResult(choiceAppIntent, APP);
+                startActivityForResult(choiceAppIntent, RequestCodes.LIST_CODE);
             }
         });
 
@@ -112,14 +132,16 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Profilo profiloDaSalvare = new Profilo();
-                profiloDaSalvare.setId(update);
+                profiloDaSalvare.setId(idForUpdate);
                 profiloDaSalvare.setNome(String.valueOf(name.getText()));
                 profiloDaSalvare.setVolume(volume.getProgress());
                 profiloDaSalvare.setLuminosita(luminosita.getProgress());
                 profiloDaSalvare.setBluetooth(bluetooth.isChecked());
                 profiloDaSalvare.setWifi(wifi.isChecked());
+                profiloDaSalvare.setRilevazione("sample");
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.detailGPS:
+                        profiloDaSalvare.setRilevazione(new Gson().toJson(gps));
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.GPS);
                         break;
                     case R.id.detailWIFI:
@@ -135,15 +157,14 @@ public class DetailActivity extends AppCompatActivity {
                         profiloDaSalvare.setMetodo(null);
                         break;
                 }
-                profiloDaSalvare.setRilevazione("burle");
                 profiloDaSalvare.setAutoLuminosita(autoLuminosita.isChecked());
                 profiloDaSalvare.setApp(String.valueOf(appChoiced.getText()));
 
                 try {
                     db.openConn(getApplicationContext());
-                    if (update != -1) {
+                    if (idForUpdate != -1) {
                         db.updateProfilo(profiloDaSalvare);
-                        update = -1;
+                        idForUpdate = -1;
                     } else {
                         db.insertProfile(profiloDaSalvare);
                     }
@@ -158,13 +179,58 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    private void checkLocationPermission() {
+        ActivityCompat.requestPermissions(DetailActivity.this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSION_REQUEST_CODE);
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            for (int i : grantResults) {
+                if (i == PackageManager.PERMISSION_GRANTED) {
+                    launchIntentToMap();
+                }
+            }
+
+        }
+    }
+
+    private void launchIntentToMap(){
+        Intent mapIntent = new Intent(DetailActivity.this, MapActivity.class);
+        if (idForUpdate != -1) {
+            mapIntent.putExtra("IsUpdate", true);
+
+        } else {
+            mapIntent.putExtra("IsUpdate", false);
+        }
+
+        if (profiloFromIntent != null) {
+            mapIntent.putExtra("gps", profiloFromIntent.getRilevazione());
+        }
+        startActivityForResult(mapIntent, RequestCodes.MAP_CODE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == APP) {
-            if (resultCode == Activity.RESULT_OK) {
-                appChoiced.setText(data.getStringExtra(AppListActivity.APPRESULT));
-            }
+        switch (requestCode) {
+            case RequestCodes.LIST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    appChoiced.setText(data.getStringExtra(ResultsCode.LIST_RESULT));
+                }
+                break;
+            case RequestCodes.MAP_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    gps = (Gps) data.getSerializableExtra(ResultsCode.MAP_RESULT);
+                }
+                break;
+            default:
+                break;
         }
     }//onActivityResult
 

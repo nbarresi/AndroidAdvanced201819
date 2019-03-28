@@ -14,16 +14,22 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:name="org.its.Activity.AppListActivity"
+            android:label="@string/App"></activity>
+
+        <activity
             android:name="org.its.Activity.LoginActivity"
-            android:label="@string/login">
-        </activity>
+            android:label="@string/login"></activity>
 
         <activity
             android:name="org.its.Activity.ListActivity"
             android:label="@string/profili">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
-
 
 
         <activity
@@ -33,10 +39,7 @@
         <activity
             android:name="org.its.Activity.MapActivity"
             android:label="@string/mappa">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 
         </activity>
 
@@ -48,9 +51,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDxkQPZB4hPpSVzvbQrAOpVjVeCm7FkrqQ" />
-        <activity
-            android:name="org.its.Activity.AppListActivity"
-            android:label="@string/App"></activity>
+
 
     </application>
 </manifest>

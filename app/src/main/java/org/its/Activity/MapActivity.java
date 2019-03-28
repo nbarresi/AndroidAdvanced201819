@@ -28,47 +28,30 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.its.db.entities.Gps;
+import org.its.utilities.ResultsCode;
 
 public class MapActivity extends Activity {
-    private final int MAP_ACTIVITY_REQUEST_CODE = 115;
+
     private final Gps gps = new Gps();
+    private Intent receivedIntent;
 
     @Override
     protected void onCreate(Bundle saBundle) {
         super.onCreate(saBundle);
         setContentView(R.layout.map_layout);
 
+
         final MapFragment map = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            if (ContextCompat.checkSelfPermission(
-                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                checkLocationPermission();
-            }
-            if (ContextCompat.checkSelfPermission(
-                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                mapManagement(map);
-            }
-
-        } else {
-            mapManagement(map);
-        }
+        mapManagement(map);
 
 
     }
 
-    private void checkLocationPermission() {
-        ActivityCompat.requestPermissions(MapActivity.this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                MAP_ACTIVITY_REQUEST_CODE);
-
-    }
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -95,77 +78,90 @@ public class MapActivity extends Activity {
             @Override
             public void onMapReady(final GoogleMap googleMap) {
 
+                receivedIntent = getIntent();
+                final TextView radiusMeter = findViewById(R.id.radiusMeter);
+                SeekBar seekBar = findViewById(R.id.raggioSeekbar);
+                boolean isAnUpdate = receivedIntent.getBooleanExtra("IsUpdate", false);
+                if (isAnUpdate) {
+                    Gps gettedGps = new Gson().fromJson(receivedIntent.getStringExtra("gps"), Gps.class);
+                    seekBar.setProgress((gettedGps.getRaggio() - 500) / 10);
+                    radiusMeter.setText("" + gettedGps.getRaggio());
+                    gps.setRaggio(gettedGps.getRaggio());
+                    gps.setLongitudine(gettedGps.getLongitudine());
+                    gps.setLatitudine(gettedGps.getLatitudine());
+                } else {
+                    LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        buildAlertMessageNoGps();
+                    }
 
-                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    buildAlertMessageNoGps();
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        gps.setRaggio(500);
+                        gps.setLongitudine(location.getLongitude());
+                        gps.setLatitudine(location.getLatitude());
+                    }
+
                 }
 
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                    LatLng currentLatLong = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng currentLatLong = new LatLng(gps.getLatitudine(), gps.getLongitudine());
 
-                    final Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .position(currentLatLong)
-                            .title(getString(R.string.currentPositionLabel)));
+                final Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .position(currentLatLong)
+                        .title(getString(R.string.currentPositionLabel)));
 
-                    final Circle circle = googleMap.addCircle(new CircleOptions()
-                            .center(currentLatLong)
-                            .radius(500)
-                            .strokeColor(Color.RED));
-
-                    gps.setLatitudine(currentLatLong.latitude);
-                    gps.setLongitudine(currentLatLong.longitude);
+                final Circle circle = googleMap.addCircle(new CircleOptions()
+                        .center(currentLatLong)
+                        .radius(gps.getRaggio())
+                        .strokeColor(Color.RED));
 
 
-                    SeekBar seekBar = findViewById(R.id.raggioSeekbar);
-                    final TextView radiusMeter = findViewById(R.id.radiusMeter);
-                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            int radius = 500 + (progress * 10);
-                            radiusMeter.setText("" + radius);
-                            circle.setRadius(radius);
-                            gps.setRaggio(radius);
-                            googleMap.animateCamera(CameraUpdateFactory.zoomTo(getZoomLevel(circle)));
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        int radius = 500 + (progress * 10);
+                        radiusMeter.setText("" + radius);
+                        circle.setRadius(radius);
+                        gps.setRaggio(radius);
+                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(getZoomLevel(circle)));
 
-                        }
+                    }
 
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
 
-                        }
-                    });
+                    }
+                });
 
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
-                    googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
 
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLong).zoom(15.4f).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLong).zoom(15.4f).build();
 
-                    googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-                    googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                        @Override
-                        public void onMapLongClick(LatLng latLng) {
-                            marker.setPosition(latLng);
-                            circle.setCenter(latLng);
-                            gps.setLatitudine(latLng.latitude);
-                            gps.setLongitudine(latLng.longitude);
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                                    circle.getCenter(), getZoomLevel(circle)));
+                googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                    @Override
+                    public void onMapLongClick(LatLng latLng) {
+                        marker.setPosition(latLng);
+                        circle.setCenter(latLng);
+                        gps.setLatitudine(latLng.latitude);
+                        gps.setLongitudine(latLng.longitude);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                circle.getCenter(), getZoomLevel(circle)));
 
-                        }
-                    });
-                }
+                    }
+                });
 
 
             }
@@ -184,10 +180,10 @@ public class MapActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-       // super.onBackPressed();
+        // super.onBackPressed();
         Intent returnIntent = new Intent();
-       // returnIntent.putExtra(,result);
-        setResult(Activity.RESULT_OK,returnIntent);
+        returnIntent.putExtra(ResultsCode.MAP_RESULT, gps);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 

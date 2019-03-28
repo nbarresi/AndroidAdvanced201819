@@ -1,6 +1,5 @@
 package org.its.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -14,6 +13,8 @@ import android.widget.ListView;
 import com.example.androidadvanced201819.R;
 
 
+import org.its.utilities.ResultsCode;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,8 @@ public class AppListActivity extends AppCompatActivity {
 
     private List<String> list = new ArrayList<>();
 
-    public static String APPRESULT = "APPRESULT";
+
+
     private PackageManager pm = null;
 
     @Override
@@ -50,7 +52,7 @@ public class AppListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String app = list.get(position);
                 Intent result = new Intent(AppListActivity.this, DetailActivity.class);
-                result.putExtra(APPRESULT, app);
+                result.putExtra(ResultsCode.LIST_RESULT, app);
                 setResult(DetailActivity.RESULT_OK, result);
                 finish();
             }
