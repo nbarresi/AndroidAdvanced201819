@@ -1,7 +1,13 @@
 package com.example.androidadvanced201819.activities.profile;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
+import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
@@ -24,6 +31,7 @@ import com.example.androidadvanced201819.model.Profile;
 
 public class CreateProfile extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     EditText name;
     SeekBar brightness, volume;
     Switch bluethoot, wifi;
@@ -73,6 +81,20 @@ public class CreateProfile extends AppCompatActivity {
             case R.id.gpsRadioButton:
                 if (checked) {
                     option = Option.GPS.getOption();
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(
+                                this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            Intent goToMap = new Intent(this, MapsActivity.class);
+                            startActivityForResult(goToMap, 2);
+                                //Ho già i permessi necessari
+                        } else {
+                                //Richiedo i permessi (vedi slide successiva)
+                            checkLocationPermission();
+
+                        }
+                    }
+
                 }
                 break;
             case R.id.wifiRadioButton:
@@ -104,6 +126,8 @@ public class CreateProfile extends AppCompatActivity {
             profile.setApplication(appPackage);
             profile.setApplicationName(appName);
             application.setText(appName);
+        }else if (requestCode == 2 && data != null){
+            profile.setCoordinate(data.getExtras().getString("LatLong"));
         }
     }
 
@@ -225,6 +249,12 @@ public class CreateProfile extends AppCompatActivity {
         }
 
         profile.setApplication(profile.getApplication());
+
+        if(profile.getOption() == 1){
+            profile.setCoordinate(profile.getCoordinate());
+        }else {
+            profile.setCoordinate("");
+        }
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
         profileDatabaseManager.open();
         profileDatabaseManager.editProfile(profile);
@@ -233,4 +263,44 @@ public class CreateProfile extends AppCompatActivity {
         Intent backToMain = new Intent(CreateProfile.this, MainActivity.class);
         startActivity(backToMain);
     }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+//Alert prima di richiedere i permessi
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Intent goToMap = new Intent(this, MapsActivity.class);
+                    startActivity(goToMap);
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
 }

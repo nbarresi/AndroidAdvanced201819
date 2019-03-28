@@ -11,6 +11,7 @@ public class Profile {
     private String application;
     private String application_name;
     private int auto_birghtness;
+    private String coordinate;
 
     public Profile() {
         
@@ -20,7 +21,7 @@ public class Profile {
 
     }
 
-    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int auto_brightness) {
+    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int auto_birghtness, String coordinate) {
         this.id = id;
         this.nome = nome;
         this.option = option;
@@ -30,7 +31,8 @@ public class Profile {
         this.wifi = wifi;
         this.application = application;
         this.application_name = application_name;
-        this.auto_birghtness = auto_brightness;
+        this.auto_birghtness = auto_birghtness;
+        this.coordinate = coordinate;
     }
 
     public String getNome() {
@@ -111,5 +113,29 @@ public class Profile {
 
     public void setApplicationName(String application_name) {
         this.application_name = application_name;
+    }
+
+    public int getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(int brightness) {
+        this.brightness = brightness;
+    }
+
+    public String getApplication_name() {
+        return application_name;
+    }
+
+    public void setApplication_name(String application_name) {
+        this.application_name = application_name;
+    }
+
+    public String getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(String coordinate) {
+        this.coordinate = coordinate;
     }
 }

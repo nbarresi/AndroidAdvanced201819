@@ -17,6 +17,9 @@
     <string name="bluethoot">Bluethoot</string>
     <string name="create">Crea Profilo</string>
     <string name="edit">Modifica Profilo</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="range">Raggio</string>
+    <string name="baseRange"> 100 m</string>
     <string name="app">Application</string>
     <string name="profilelist">Lista Profili</string>
 </resources>

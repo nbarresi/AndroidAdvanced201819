@@ -77,7 +77,8 @@ public class MainAdapterActivity extends ArrayAdapter<Profile> {
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_WIFI)),
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION)),
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION_NAME)),
-                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS))
+                        cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS)),
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_COORDINATES))
                 );
                 i++;
                 DataAccessUtils.addItem(profile, context);
