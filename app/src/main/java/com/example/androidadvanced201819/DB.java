@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.Settings;
 
+import java.util.ArrayList;
+
 public class DB extends SQLiteOpenHelper {
     public static final int DB_VERSION = 1;
     public static final String DATABASE_NAME = "profile.db";
@@ -14,6 +16,14 @@ public class DB extends SQLiteOpenHelper {
     public static final String PROFILE_COLUMN_ID ="id";
     public static final String PROFILE_COLUMN_PROFILE_NAME ="profileName";
     public static final String PROFILE_COLUMN_APP="profileSurname";
+
+    public static final String CREATE_TABLE_SETTINGS=
+            "CREATE TABLE "+PROFILE_TABLE_NAME +
+            "("+PROFILE_COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +PROFILE_COLUMN_PROFILE_NAME +" TEXT)";
+
+    public static final String SELECT_PROFILE_TABLE_NAME="SELECT * FROM "+PROFILE_TABLE_NAME;
+
     public DB(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
     }
@@ -21,12 +31,7 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String nuova_tabella=
-                "CREATE TABLE "+PROFILE_TABLE_NAME +
-                        "("+PROFILE_COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        +PROFILE_COLUMN_PROFILE_NAME +" TEXT)";
-        db.execSQL(nuova_tabella);
-
+        db.execSQL(CREATE_TABLE_SETTINGS);
     }
 
     @Override
@@ -49,9 +54,12 @@ public class DB extends SQLiteOpenHelper {
 
     public Cursor getData(){
         SQLiteDatabase db=this.getWritableDatabase();
-        String query="SELECT * FROM "+PROFILE_TABLE_NAME;
-        Cursor data=db.rawQuery(query,null);
+        Cursor data=db.rawQuery(SELECT_PROFILE_TABLE_NAME,null);
         return data;
     }
+
+
+
+
 
 }
