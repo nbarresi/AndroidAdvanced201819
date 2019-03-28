@@ -11,17 +11,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.SeekBar;
 
 import com.example.androidadvanced201819.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -61,7 +59,7 @@ public class MapActivity extends Activity {
     };
     private LocationManager mLocationManager;
 
-    LatLng latLng = null;
+    LatLng latLng = new LatLng(41.9109, 12.4818);
 
     int radius = 100;
 
@@ -78,31 +76,33 @@ public class MapActivity extends Activity {
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
+        if(android.os.Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
+            if(ContextCompat.checkSelfPermission(
+                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+                //Ho già i permessi necessari
+            } else {
+                //Richiedo i permessi
+                checkLocationPermission();
+            }}
+
 
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final GoogleMap googleMap) {
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                if(android.os.Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
-                    if(ContextCompat.checkSelfPermission(
-                           getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-                        //Ho già i permessinecessari
-                    } else {
-                        //Richiedo i permessi
-                        checkLocationPermission();
-                    }}
+                if(ContextCompat.checkSelfPermission(
+                        getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
 
-                Location location = getCurrentLocation();
-                if(location != null){
-                    latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                    Location location = getCurrentLocation();
+                    if(location != null){
+                        latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+                    }
 
                 }
-                else{
 
-                    latLng = new LatLng(41.9109, 12.4818);
+                googleMap.setMyLocationEnabled(true);
 
-                }
 
                 final Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title("center"));
                 final Circle circle = googleMap.addCircle(new CircleOptions().center(latLng).radius(100).strokeColor(Color.RED));
@@ -145,6 +145,8 @@ public class MapActivity extends Activity {
                         latLng = latLngMap;
                         marker.setPosition(latLng);
                         circle.setCenter(latLng);
+                        googleMap.moveCamera(
+                                CameraUpdateFactory.newLatLng(latLng));
                         googleMap.animateCamera(
                                 CameraUpdateFactory.zoomTo(getZoomLevel(circle)));
                     }
@@ -168,6 +170,12 @@ public class MapActivity extends Activity {
         setResult(NewProfileActivity.RESULT_MAP_ACTIVITY, returnCoordinatesIntent);
         finish();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 
     private void checkLocationPermission() {
