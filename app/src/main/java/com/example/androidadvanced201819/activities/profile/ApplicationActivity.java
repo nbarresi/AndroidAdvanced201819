@@ -6,10 +6,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.adapter.ApplicationAdapterActivity;
@@ -21,15 +23,16 @@ public class ApplicationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         adapterActivity = new ApplicationAdapterActivity(getApplicationContext());
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapterActivity);
 
+        TextView title = findViewById(R.id.main_title);
+        title.setText("Applicazioni");
+
         Button button = findViewById(R.id.accessButton);
         button.setVisibility(View.GONE);
-        setTitle("List applicazioni");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

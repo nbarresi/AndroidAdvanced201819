@@ -1,10 +1,10 @@
 package com.example.androidadvanced201819.activities.profile;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +28,7 @@ public class CreateProfile extends AppCompatActivity {
     SeekBar brightness, volume;
     Switch bluethoot, wifi;
     RadioGroup optionRadio;
-    TextView application;
+    TextView application, title;
     int option;
     CheckBox auto_brightness;
     protected int volumeValue;
@@ -48,15 +48,16 @@ public class CreateProfile extends AppCompatActivity {
         auto_brightness = findViewById(R.id.checkbox_autoBrightness);
         optionRadio = findViewById(R.id.optionRadio);
         application = findViewById(R.id.applicationName);
+        title = findViewById(R.id.profile_title);
 
         Intent det = getIntent();
         if (det.hasExtra("position")) {
+            title.setText("Modifica");
             int position = det.getExtras().getInt("position");
-            setTitle("Modifica profilo");
             profile = DataAccessUtils.getItemByPosition(getApplicationContext(), position);
             this.setProfileSettings(position);
         } else {
-            setTitle("Crea profilo");
+            title.setText("Aggiungi");
             profile = new Profile();
             profile.setApplication("Application");
             profile.setApplicationName("Application");

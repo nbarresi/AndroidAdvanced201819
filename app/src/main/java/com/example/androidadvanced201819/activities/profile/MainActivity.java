@@ -1,14 +1,17 @@
 package com.example.androidadvanced201819.activities.profile;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.androidadvanced201819.activities.adapter.MainAdapterActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
@@ -29,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapterActivity);
         Button button = findViewById(R.id.accessButton);
+
+        TextView title = findViewById(R.id.main_title);
+        title.setText("Profili");
+
         button.setVisibility(View.VISIBLE);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -70,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        setTitle("Lista profili");
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
