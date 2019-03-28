@@ -17,8 +17,15 @@ import java.util.List;
 public class ListaProfiliActivity extends AppCompatActivity {
 
     private ProfileAdapter customAdapter;
+    public static final int ADDING_PROFILE_CODE = 666;
     private DbHelper dbHelper;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        customAdapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

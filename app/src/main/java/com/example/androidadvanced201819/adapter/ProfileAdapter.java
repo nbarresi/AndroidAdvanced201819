@@ -64,6 +64,8 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
         return listItem;
     }
 
-
-
+    public void resetData() {
+        profiles.clear();
+        profiles.addAll(dbHelper.getProfiles());
+    }
 }
