@@ -15,11 +15,12 @@ public class Profilo implements Serializable {
     private boolean bluetooth;
     private ProfileTypeEnum metodo;
     private String rilevazione;
+    private String app;
 
     public Profilo() {
     }
 
-    public Profilo(Integer id, String nome, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione) {
+    public Profilo(Integer id, String nome, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app) {
         this.id = id;
         this.nome = nome;
         this.volume = volume;
@@ -29,9 +30,10 @@ public class Profilo implements Serializable {
         this.bluetooth = bluetooth;
         this.metodo = metodo;
         this.rilevazione = rilevazione;
+        this.app = app;
     }
 
-    public Profilo(Integer volume, String nome,Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione) {
+    public Profilo(Integer volume, String nome,Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app) {
         this.volume = volume;
         this.nome = nome;
         this.luminosita = luminosita;
@@ -40,6 +42,7 @@ public class Profilo implements Serializable {
         this.bluetooth = bluetooth;
         this.metodo = metodo;
         this.rilevazione = rilevazione;
+        this.app = app;
     }
 
     public Integer getId() {
@@ -106,6 +109,14 @@ public class Profilo implements Serializable {
 
     public void setRilevazione(String rilevazione) {
         this.rilevazione = rilevazione;
+    }
+
+    public String getApp() {
+        return app;
+    }
+
+    public void setApp(String app) {
+        this.app = app;
     }
 
     @Override

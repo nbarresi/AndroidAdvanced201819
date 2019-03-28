@@ -16,7 +16,6 @@
         <activity
             android:name="org.its.Activity.LoginActivity"
             android:label="@string/login">
-
         </activity>
 
         <activity
@@ -49,6 +48,9 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDxkQPZB4hPpSVzvbQrAOpVjVeCm7FkrqQ" />
+        <activity
+            android:name="org.its.Activity.AppListActivity"
+            android:label="@string/App"></activity>
 
     </application>
 </manifest>

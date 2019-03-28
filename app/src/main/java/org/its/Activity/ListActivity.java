@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,9 +19,10 @@ import org.its.db.entities.Profilo;
 
 import java.util.List;
 
-public class ListActivity extends Activity {
+public class ListActivity extends AppCompatActivity {
 
     public final static String PROFILE = "accademia.lynxspa.com.PROFILE";
+    public final int REFRESH_REQUESTCODE = 123;
 
     CustomArrayAdapter adapter;
     List<Profilo> list;

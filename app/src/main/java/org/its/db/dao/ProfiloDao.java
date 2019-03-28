@@ -31,6 +31,7 @@ public class ProfiloDao extends GenericDao {
         contentValues.put(StringCollection.columnMetodo, profile.getMetodo().getValue());
         contentValues.put(StringCollection.columnRilevazione, profile.getRilevazione());
         contentValues.put(StringCollection.columnNome, profile.getNome());
+        contentValues.put(StringCollection.columnApp, profile.getApp());
 
         long profileId = database.insert(TABLE_NAME,
                 null,
@@ -44,7 +45,7 @@ public class ProfiloDao extends GenericDao {
         ArrayList<Profilo> profili = new ArrayList<>();
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
                         StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
-                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI},
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI, StringCollection.columnApp},
                 null, null, null, null, null);
 
         try {
@@ -59,7 +60,8 @@ public class ProfiloDao extends GenericDao {
                             Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
                             Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
                             ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione))));
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnApp))));
                 } while (result.moveToNext());
 
             }
@@ -90,7 +92,8 @@ public class ProfiloDao extends GenericDao {
                             Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
                             Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
                             ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)));
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnApp)));
                 } while (result.moveToNext());
 
             }
