@@ -20,7 +20,7 @@ import com.example.androidadvanced201819.model.Profile;
 public class MainAdapterActivity extends ArrayAdapter<Profile> {
 
     private final Context context;
-    ProfileDatabaseManager profileDatabaseManager;
+    private ProfileDatabaseManager profileDatabaseManager;
 
     //costruttore
     public MainAdapterActivity(Context context) {

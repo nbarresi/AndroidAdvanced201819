@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,18 +28,19 @@ import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
 import com.example.androidadvanced201819.model.Profile;
 
-public class CreateProfile extends AppCompatActivity {
+public class ProfileManagement extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     EditText name;
     SeekBar brightness, volume;
-    Switch bluethoot, wifi;
+    Switch bluetooth, wifi;
     RadioGroup optionRadio;
     TextView application, title;
-    int option;
     CheckBox auto_brightness;
-    protected int volumeValue;
     Profile profile;
+
+    int option;
+    protected int volumeValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class CreateProfile extends AppCompatActivity {
         name = findViewById(R.id.profile_name);
         brightness = (SeekBar) findViewById(R.id.seekBarBrightness);
         volume = (SeekBar) findViewById(R.id.seekBarVolume);
-        bluethoot = findViewById(R.id.switchBluethoot);
+        bluetooth = findViewById(R.id.switchBluethoot);
         wifi = findViewById(R.id.switchWifi);
         auto_brightness = findViewById(R.id.checkbox_autoBrightness);
         optionRadio = findViewById(R.id.optionRadio);
@@ -113,7 +113,7 @@ public class CreateProfile extends AppCompatActivity {
     }
 
     public void chooseApplication(View view) {
-        Intent chooseApplication = new Intent(CreateProfile.this, ApplicationActivity.class);
+        Intent chooseApplication = new Intent(ProfileManagement.this, ApplicationActivity.class);
         startActivityForResult(chooseApplication, 1);
     }
 
@@ -139,7 +139,7 @@ public class CreateProfile extends AppCompatActivity {
         profile.setVolume(volume.getProgress());
         profile.setbrightness(brightness.getProgress());
 
-        if (bluethoot.isChecked()) {
+        if (bluetooth.isChecked()) {
             profile.setBluethoot(1);
         } else {
             profile.setBluethoot(0);
@@ -163,7 +163,7 @@ public class CreateProfile extends AppCompatActivity {
         Log.d("cursor", cursor.toString());
         profileDatabaseManager.close();
 
-        Intent backToMain = new Intent(CreateProfile.this, MainActivity.class);
+        Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
         startActivity(backToMain);
     }
 
@@ -183,9 +183,9 @@ public class CreateProfile extends AppCompatActivity {
         volume.setProgress(volumeValue);
 
         if (profile.getBluethoot() == 1) {
-            bluethoot.setChecked(true);
+            bluetooth.setChecked(true);
         } else {
-            bluethoot.setChecked(false);
+            bluetooth.setChecked(false);
         }
         if (profile.getWifi() == 1) {
             wifi.setChecked(true);
@@ -230,7 +230,7 @@ public class CreateProfile extends AppCompatActivity {
         profile.setVolume(volume.getProgress());
         profile.setbrightness(brightness.getProgress());
 
-        if (bluethoot.isChecked()) {
+        if (bluetooth.isChecked()) {
             profile.setBluethoot(1);
         } else {
             profile.setBluethoot(0);
@@ -260,7 +260,7 @@ public class CreateProfile extends AppCompatActivity {
         profileDatabaseManager.editProfile(profile);
         profileDatabaseManager.close();
 
-        Intent backToMain = new Intent(CreateProfile.this, MainActivity.class);
+        Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
         startActivity(backToMain);
     }
 

@@ -1,12 +1,10 @@
 package com.example.androidadvanced201819.activities.profile;
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,7 +34,7 @@ public class ApplicationActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent resultIntent = new Intent(ApplicationActivity.this, CreateProfile.class);
+                Intent resultIntent = new Intent(ApplicationActivity.this, ProfileManagement.class);
                 ApplicationInfo applicationInfo = adapterActivity.getApplicationByPosition(position);
                 PackageManager pm = getApplicationContext().getPackageManager();
                 resultIntent.putExtra("package", applicationInfo.packageName);

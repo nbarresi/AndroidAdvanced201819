@@ -1,12 +1,10 @@
 package com.example.androidadvanced201819.activities.profile;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent toDetailActivity = new Intent(MainActivity.this, CreateProfile.class);
+                Intent toDetailActivity = new Intent(MainActivity.this, ProfileManagement.class);
                 toDetailActivity.putExtra("position", position);
                 startActivity(toDetailActivity);
             }
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToCreateProfile(View view) {
-        Intent goToCreateProfile = new Intent(MainActivity.this, CreateProfile.class);
+        Intent goToCreateProfile = new Intent(MainActivity.this, ProfileManagement.class);
         startActivity(goToCreateProfile);
     }
 
