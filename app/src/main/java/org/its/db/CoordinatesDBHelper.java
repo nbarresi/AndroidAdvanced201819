@@ -11,40 +11,16 @@ import org.its.db.entities.Coordinates;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoordinatesDBHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "CoordinateManager.db";
-
-    private static final String SQL_CREATE_COORDINATES =
-            "CREATE TABLE " + Coordinates.CoordinatesEntry.TABLE_NAME + " (" +
-                    Coordinates.CoordinatesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Coordinates.CoordinatesEntry._LATITUDE + " TEXT," +
-                    Coordinates.CoordinatesEntry._LONGITUDE + " TEXT," +
-                    Coordinates.CoordinatesEntry._RADIUS + " INTEGER," +
-                    Coordinates.CoordinatesEntry._IDPROFILE + " INTEGER)";
+public class CoordinatesDBHelper extends GenericDBHelper {
 
     private static final String SQL_DELETE_COORDINATES = "DROP TABLE IF EXISTS " + Coordinates.CoordinatesEntry.TABLE_NAME;
 
     public CoordinatesDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_COORDINATES);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    }
-
-    @Override
-    public SQLiteDatabase getWritableDatabase() {
-        return super.getWritableDatabase();
+        super(context);
     }
 
     public Coordinates insertCoordinates(Coordinates coordinates) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(Coordinates.CoordinatesEntry._LATITUDE, coordinates.getLatitude());
@@ -62,7 +38,7 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
         // Specify arguments in placeholder order.
         String[] selectionArgs = {coordinates.getId() + ""};
         // Issue SQL statement.
-        int deletedRows = this.getWritableDatabase().delete(Coordinates.CoordinatesEntry.TABLE_NAME, selection, selectionArgs);
+        int deletedRows = getWritableDatabase().delete(Coordinates.CoordinatesEntry.TABLE_NAME, selection, selectionArgs);
         return (deletedRows > 0);
     }
 
@@ -76,7 +52,7 @@ public class CoordinatesDBHelper extends SQLiteOpenHelper {
         String selection = Coordinates.CoordinatesEntry._ID + " == ?";
         String[] selectionArgs = {coordinates.getId() + ""};
 
-        int count = this.getWritableDatabase().update(
+        int count = getWritableDatabase().update(
                 Coordinates.CoordinatesEntry.TABLE_NAME,
                 values,
                 selection,

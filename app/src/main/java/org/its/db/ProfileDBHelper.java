@@ -12,46 +12,18 @@ import org.its.db.entities.Profile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileDBHelper extends SQLiteOpenHelper {
-
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "ProfileManager.db";
-
-    private static final String SQL_CREATE_PROFILE =
-            "CREATE TABLE " + Profile.ProfileEntry.TABLE_NAME + " (" +
-                    Profile.ProfileEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Profile.ProfileEntry._NAME + " TEXT," +
-                    Profile.ProfileEntry._METODO_RILEVAMENTO + " TEXT," +
-                    Profile.ProfileEntry._LUMINOSITA + " INTEGER," +
-                    Profile.ProfileEntry._VOLUME + " INTEGER," +
-                    Profile.ProfileEntry._BLUETOOTH + " BOOLEAN," +
-                    Profile.ProfileEntry._APP + " TEXT)";
+public class ProfileDBHelper extends GenericDBHelper {
 
     private static final String SQL_DELETE_PROFILE =
             "DROP TABLE IF EXISTS " + Profile.ProfileEntry.TABLE_NAME;
 
     public ProfileDBHelper(Context context){
-        super(context,DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_PROFILE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-
-    @Override
-    public SQLiteDatabase getWritableDatabase(){
-        return super.getWritableDatabase();
+        super(context);
     }
 
     public Profile insertProfile(Profile profile){
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
