@@ -1,12 +1,14 @@
 package org.its.login.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +40,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private int radioGroupId;
     private Button btnDisplay;
     private Profile profile = new Profile();
+    int initialBrightness = 0;
     private SeekBar barBrightness;
     private CheckBox brightnessCheckbox;
     private SeekBar barVolume;
@@ -59,6 +62,7 @@ public class NewProfileActivity extends AppCompatActivity {
             profile = (Profile) editProfile.getSerializableExtra("editedProfile");
         }
         //add all listeners
+        saveInitialBrightness();
         setCreateUserButtonListener(isEditUser);
         setNameProfileEditTextListener();
         setListenerOnRadioButton();
@@ -107,22 +111,21 @@ public class NewProfileActivity extends AppCompatActivity {
         if (isEditUser) barBrightness.setProgress(profile.getLuminosita());
         else barBrightness.setProgress(1);
 
+
+
         barBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Context context = getApplicationContext();
                 boolean canWriteSettings = Settings.System.canWrite(context);
                 if (canWriteSettings) {
+
                     //Because max screen brightness value is 255 But max seekbar value is 100, so need to convert.
                     int screenBrightnessValue = progress * 255 / 100;
                     Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
                     Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, screenBrightnessValue);
                 } else {
-                    // Show Can modify system settings panel to let user add WRITE_SETTINGS permission for this app.
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                    intent.setData(Uri.parse("package:" + context.getPackageName()));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    showAlertBrightnessPermission();
                 }
             }
 
@@ -132,14 +135,50 @@ public class NewProfileActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Context context = getApplicationContext();  boolean canWriteSettings = Settings.System.canWrite(context);
+                if (canWriteSettings) {
+                    Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, initialBrightness);
+                }
             }
         });
+    }
+
+    private void saveInitialBrightness() {
+        Context context = getApplicationContext();
+        boolean canWriteSettings = Settings.System.canWrite(context);
+        if (canWriteSettings) {
+            try {
+                initialBrightness = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showAlertBrightnessPermission() {
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setTitle("Permission required")
+                .setMessage("You need to confirm permission to change brightness")
+
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveInitialBrightness();
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     //luminosità auto
     private void setAutoBrightnessCheckboxListener() {
         brightnessCheckbox = (CheckBox) findViewById(R.id.auto_brightness);
-                            if (isEditUser && profile.getLuminosita() == 0 ) brightnessCheckbox.setChecked(true); //temp valore arbitrario
+        if (isEditUser && profile.getLuminosita() == 0)
+            brightnessCheckbox.setChecked(true); //temp valore arbitrario
 
     }
 
@@ -154,7 +193,7 @@ public class NewProfileActivity extends AppCompatActivity {
         barVolume.setProgress(audioManager
                 .getStreamVolume(AudioManager.STREAM_MUSIC));
 
-                            if (isEditUser) barVolume.setProgress(profile.getVolume());
+        if (isEditUser) barVolume.setProgress(profile.getVolume());
 
 
         barVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -178,7 +217,7 @@ public class NewProfileActivity extends AppCompatActivity {
     //switch bluetooth
     private void setBluetoothSwitchListener() {
         switchBluetooth = (Switch) findViewById(R.id.bluetooth);
-                            if (isEditUser) switchBluetooth.setChecked(profile.isBluetooth());
+        if (isEditUser) switchBluetooth.setChecked(profile.isBluetooth());
 
     }
 
@@ -276,19 +315,11 @@ public class NewProfileActivity extends AppCompatActivity {
             switch (requestCode) {
                 case ADD_APP_REQUEST_CODE:
                     profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
-                        textViewAppList.setText(profile.getApp());
+                    textViewAppList.setText(profile.getApp());
                     break;
-
                 //TODO
-
-
-
-
-
-
             }
         }
-
     }
 
 
