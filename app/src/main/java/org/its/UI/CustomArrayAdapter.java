@@ -1,5 +1,6 @@
 package org.its.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class CustomArrayAdapter extends ArrayAdapter<Profilo> {
 
     private Context context;
     private List<Profilo> values;
+
 
     public CustomArrayAdapter(Context context, List<Profilo> values) {
         super(context, R.layout.item_layout, values);

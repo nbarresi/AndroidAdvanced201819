@@ -12,6 +12,7 @@ public class StringCollection {
     public final static String columnWIFI="wifi";
     public final static String columnRilevazione="rilevazione";
     public final static String columnNome="nome";
+    public final static String columnApp="app";
 
 
 
