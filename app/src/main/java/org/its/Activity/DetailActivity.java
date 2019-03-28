@@ -25,7 +25,7 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
-    
+
     public static int APP = 156;
     private int update = -1;
     private TextView appChoiced = null;
