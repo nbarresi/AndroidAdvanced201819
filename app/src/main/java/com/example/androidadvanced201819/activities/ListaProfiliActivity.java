@@ -26,6 +26,7 @@ public class ListaProfiliActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        customAdapter.resetData();
         customAdapter.notifyDataSetChanged();
     }
 

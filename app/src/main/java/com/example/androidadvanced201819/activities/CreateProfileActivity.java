@@ -89,7 +89,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     //dbHelper.updateProfile(profile);
 
-                    onBackPressed();
+                    finish();
                 } else {
                     String name = textName.getText().toString();
                     appNameVal = appName.getText().toString();
@@ -100,8 +100,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     dbHelper.insertProfile(profile);
 
-                    Intent back = new Intent(getApplicationContext(), ListaProfiliActivity.class);
-                    startActivity(back);
+                    finish();
                 }
             }
         });
@@ -121,6 +120,8 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectedMethod = "gps";
+                Intent gpsIntent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(gpsIntent);
             }
         });
         nfcButton.setOnClickListener(new View.OnClickListener() {
