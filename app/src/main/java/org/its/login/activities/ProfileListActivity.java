@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.example.androidadvanced201819.R;
 
-import org.its.db.DBHelper;
+import org.its.db.ProfileDBHelper;
 import org.its.db.entities.Profile;
 import org.its.login.adapters.ProfileListRecyclerAdapter;
 
@@ -22,13 +22,13 @@ public class ProfileListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProfileListRecyclerAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private DBHelper dbHelper;
+    private ProfileDBHelper profileDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DBHelper(getApplicationContext());
-        profiles = dbHelper.getAllProfiles();
+        profileDbHelper = new ProfileDBHelper(getApplicationContext());
+        profiles = profileDbHelper.getAllProfiles();
 
         setContentView(R.layout.activity_profile_list);
         recyclerView =  findViewById(R.id.rv_profile);

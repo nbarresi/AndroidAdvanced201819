@@ -11,7 +11,7 @@ import org.its.db.entities.Profile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHelper extends SQLiteOpenHelper {
+public class ProfileDBHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ProfileManager.db";
@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_PROFILE =
             "DROP TABLE IF EXISTS " + Profile.ProfileEntry.TABLE_NAME;
 
-    public DBHelper(Context context){
+    public ProfileDBHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
     }
 

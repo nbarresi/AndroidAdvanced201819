@@ -68,10 +68,7 @@ public class AppListRecyclerAdapter extends RecyclerView.Adapter<AppListRecycler
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                profile.setApp(holder.appName.getText().toString());
-//                Intent intentAddApp = new Intent(v.getContext(), NewProfileActivity.class);
-//                intentAddApp.putExtra("tempProfileWithApp", profile);
-//                v.getContext().startActivity(intentAddApp);
+
 
                 Intent returnAppIntent = new Intent();
                 returnAppIntent.putExtra("ADD_APP_REQUEST_CODE", holder.appName.getText().toString());

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,16 +23,14 @@ import android.widget.Toast;
 
 import com.example.androidadvanced201819.R;
 
-import org.its.db.DBHelper;
+import org.its.db.ProfileDBHelper;
 import org.its.db.entities.Profile;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewProfileActivity extends AppCompatActivity {
 
-    private DBHelper dbHelper;
+    private ProfileDBHelper profileDbHelper;
     private EditText editTextNameProfile;
     private RadioGroup radioConnectivityGroup;
     private RadioButton radioConnectivityButton;
@@ -49,7 +46,8 @@ public class NewProfileActivity extends AppCompatActivity {
     private TextView textViewAppList;
     private Boolean isEditUser = false;
 
-    private final int ADD_APP_REQUEST_CODE = 0;
+    public final int ADD_APP_REQUEST_CODE = 0;
+    public final int ADD_COORDINATES_REQUEST_CODE =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,33 @@ public class NewProfileActivity extends AppCompatActivity {
     //metodo rilevamento
     private void setListenerOnRadioButton() {
         radioConnectivityGroup = (RadioGroup) findViewById(R.id.radioConnectivity);
+        radioConnectivityGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                final RadioButton rb = (RadioButton) findViewById(checkedId);
+                rb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (rb.getText().toString().toLowerCase()) {
+                            case "gps":
+                                Intent intentAddCoordinates = new Intent(NewProfileActivity.this, TestMapActivity.class);
+                                startActivityForResult(intentAddCoordinates, ADD_COORDINATES_REQUEST_CODE);
+                                break;
+                            case "wifi":
+                                radioConnectivityButton = (RadioButton) findViewById(R.id.wifi);
+                                break;
+                            case "nfc":
+                                radioConnectivityButton = (RadioButton) findViewById(R.id.nfc);
+                                break;
+                            case "beacon":
+                                radioConnectivityButton = (RadioButton) findViewById(R.id.beacon);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+
         if (isEditUser) {
             switch (profile.getMetodoRilevamento().toLowerCase()) {
                 case "gps":
@@ -239,7 +264,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
     //create User
     private void setCreateUserButtonListener(final Boolean isEditUser) {
-        dbHelper = new DBHelper(getApplicationContext());
+        profileDbHelper = new ProfileDBHelper(getApplicationContext());
         btnDisplay = (Button) findViewById(R.id.crea_profilo);
         if (isEditUser) btnDisplay.setText("MODIFICA");
 
@@ -254,8 +279,8 @@ public class NewProfileActivity extends AppCompatActivity {
                     profile.setApp(setPackageAppName());
 
                     if (isEditUser) {
-                        dbHelper.updateProfile(profile);
-                    } else dbHelper.insertProfile(profile);
+                        profileDbHelper.updateProfile(profile);
+                    } else profileDbHelper.insertProfile(profile);
 
                     Intent intentGoToProfileList = new Intent(NewProfileActivity.this, ProfileListActivity.class);
                     startActivity(intentGoToProfileList);
@@ -317,7 +342,10 @@ public class NewProfileActivity extends AppCompatActivity {
                     profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
                     textViewAppList.setText(profile.getApp());
                     break;
-                //TODO
+                case ADD_COORDINATES_REQUEST_CODE:
+
+                    break;
+                    //TODO
             }
         }
     }
