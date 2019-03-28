@@ -1,7 +1,5 @@
 package org.its.utilities;
 
-import android.widget.SeekBar;
-
 public class StringCollection {
 
     public final static String baseUrl="https://kx99i37oa2.execute-api.eu-west-2.amazonaws.com/academy/";
@@ -15,6 +13,9 @@ public class StringCollection {
     public final static String columnRilevazione="rilevazione";
     public final static String columnNome="nome";
     public final static String columnApp="app";
+
+    public final static String isUpdate="IsUpdate";
+    public final static String gpsObject="gps";
 
 
 
