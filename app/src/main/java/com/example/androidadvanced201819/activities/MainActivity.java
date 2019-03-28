@@ -39,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText passwordEditText = findViewById(R.id.password);
 
-        Button loginButton = findViewById(R.id.login);
+        final Button loginButton = findViewById(R.id.login);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loginButton.setClickable(false);
                 Call<LoginResponse> repos = service.login(new UserRequest(usernameEditText.getText().toString(),passwordEditText.getText().toString()));
                 repos.enqueue(new Callback<LoginResponse>() {
 
@@ -62,12 +63,14 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(MainActivity.this, "Login non effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.ko);
+                            loginButton.setClickable(true);
 
                         }
                     }
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         call.cancel();
+                        loginButton.setClickable(true);
                     }
                 });
             }

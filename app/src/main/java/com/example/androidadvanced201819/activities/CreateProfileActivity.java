@@ -66,7 +66,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
 //                    dbHelper.updateProfile(profile);
 
-                    onBackPressed();
+                    finish();
                 }else {
                     String name = textName.getText().toString();
                     boolean bluetooth = bluetoothSwitch.isChecked();
@@ -76,7 +76,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     dbHelper.insertProfile(profile);
 
-                    onBackPressed();
+                    finish();
                 }
             }
         });

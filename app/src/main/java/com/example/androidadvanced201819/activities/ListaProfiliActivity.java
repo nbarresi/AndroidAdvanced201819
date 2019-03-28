@@ -2,6 +2,7 @@ package com.example.androidadvanced201819.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,11 +20,18 @@ import java.util.List;
 
 public class ListaProfiliActivity extends AppCompatActivity {
 
+    public static final int ADDING_PROFILE_CODE = 666;
     private CustomAdapter customAdapter;
     private DbHelper dbHelper;
 
     @Override
     public void onBackPressed() { }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,4 +60,12 @@ public class ListaProfiliActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==ADDING_PROFILE_CODE){
+            customAdapter.resetData();
+            customAdapter.notifyDataSetChanged();
+        }
+    }
 }
