@@ -1,10 +1,14 @@
 package com.example.androidadvanced201819.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,11 +36,13 @@ public class CreateProfileActivity extends AppCompatActivity {
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 
+    private static final String[] MAPS_PERMISSION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final int REQUEST_MAP = 1;
+
     private DbHelper dbHelper;
     private TextView appName;
     private UserProfile profilo;
 
-    private String selectedMethod = "";
     private String appPackage = "";
     private String appNameVal = "";
     private String methodValue = "";
@@ -79,7 +85,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             bluetoothSwitch.setChecked(profilo.isBluetooth());
             wifiSwitch.setChecked(profilo.isWifi());
 
-            selectedMethod = profilo.getMetodoDiRilevamento();
+            String selectedMethod = profilo.getMetodoDiRilevamento();
 
             switch (selectedMethod) {
                 case NFC:
@@ -146,14 +152,13 @@ public class CreateProfileActivity extends AppCompatActivity {
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
-                if (profilo != null) {
-                    toMap.putExtra(EXTRA_PROFILE_LAT_LNG, profilo.getValoreMetodo());
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    goToMaps();
+                } else{
+                    ActivityCompat.requestPermissions(CreateProfileActivity.this,MAPS_PERMISSION,REQUEST_MAP);
                 }
-                if (!methodValue.isEmpty()) {
-                    toMap.putExtra(EXTRA_PROFILE_LAT_LNG, methodValue);
-                }
-                startActivityForResult(toMap, 2);
+
+
             }
         });
 
@@ -187,6 +192,17 @@ public class CreateProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void goToMaps(){
+        Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
+        if (profilo != null) {
+            toMap.putExtra(EXTRA_PROFILE_LAT_LNG, profilo.getValoreMetodo());
+        }
+        if (!methodValue.isEmpty()) {
+            toMap.putExtra(EXTRA_PROFILE_LAT_LNG, methodValue);
+        }
+        startActivityForResult(toMap, 2);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -204,7 +220,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,9 +235,21 @@ public class CreateProfileActivity extends AppCompatActivity {
 
             case 2:
                 methodValue = (String) data.getExtras().getString(MapsActivity.EXTRA_MAP_LAT_LNG);
-
                 break;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_MAP){
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                goToMaps();
+            } else {
+                Toast.makeText(CreateProfileActivity.this, "Permessi non concessi", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 }
