@@ -19,8 +19,7 @@
             android:layout_marginTop="10dp"
             android:hint="@string/nome_profilo"
             android:inputType="text"
-            android:focusable="true"
-            android:focusableInTouchMode ="true"/>
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -29,6 +28,7 @@
             android:text="@string/metodo_di_rilevamento" />
 
         <RadioGroup
+            android:id="@+id/methods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp">
@@ -81,6 +81,7 @@
                 android:layout_weight="5" />
 
             <CheckBox
+                android:id="@+id/autoLuminosita"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="1"

@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.ok);
 
-
                             Intent listIntent = new Intent(getApplicationContext(),ListaProfiliActivity.class);
                             startActivity(listIntent);
 

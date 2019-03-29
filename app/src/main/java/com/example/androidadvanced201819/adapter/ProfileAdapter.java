@@ -19,6 +19,8 @@ import java.util.List;
 
 public class ProfileAdapter extends ArrayAdapter<UserProfile> {
 
+    public static final String EXTRA_PROFILE = "profile";
+
     private final Context context;
     private List<UserProfile> profiles;
     private DbHelper dbHelper;
@@ -46,7 +48,7 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
             @Override
             public void onClick(View v) {
                 Intent intentCreateProfile = new Intent(context, CreateProfileActivity.class);
-                intentCreateProfile.putExtra("PROFILE", profile);
+                intentCreateProfile.putExtra(EXTRA_PROFILE, profile);
                 context.startActivity(intentCreateProfile);
             }
         });

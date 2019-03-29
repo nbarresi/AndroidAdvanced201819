@@ -27,6 +27,7 @@ import java.util.List;
 public class WifiScanActivity extends AppCompatActivity {
 
     ScanAdapter scanAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,21 +38,21 @@ public class WifiScanActivity extends AppCompatActivity {
 
 
         registerReceiver(new BroadcastReceiver() {
-                             @Override
-                             public void onReceive(Context context, Intent intent) {
-                                 boolean success = intent.getBooleanExtra(
-                                         WifiManager.EXTRA_RESULTS_UPDATED, false);
-                                 if (success) {
-                                     scanAdapter = new ScanAdapter(WifiScanActivity.this,wifiManager.getScanResults());
-                                     listView.setAdapter(scanAdapter);
-                                 } else {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean success = intent.getBooleanExtra(
+                        WifiManager.EXTRA_RESULTS_UPDATED, false);
+                if (success) {
+                    scanAdapter = new ScanAdapter(WifiScanActivity.this, wifiManager.getScanResults());
+                    listView.setAdapter(scanAdapter);
+                } else {
 
-                                 }
-                             }
-                         },new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                }
+            }
+        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
 
-                Button createProfile = findViewById(R.id.confirm);
+        Button createProfile = findViewById(R.id.confirm);
 
         createProfile.setOnClickListener(new View.OnClickListener() {
             @Override

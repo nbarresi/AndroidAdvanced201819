@@ -25,4 +25,5 @@
     <string name="title_activity_wifi_scan">WifiScanActivity</string>
     <string name="potenza_segnale">Livello segnale</string>
     <string name="bssid">BSSID</string>
+    <string name="editProfileButton">MODIFICA</string>
 </resources>

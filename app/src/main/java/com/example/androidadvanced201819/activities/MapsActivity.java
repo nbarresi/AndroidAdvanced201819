@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity {
 
+    public static final String EXTRA_MAP_LAT_LNG  = "mapLatLng";
+
     private GoogleMap mMap;
     private LocationManager locationManager;
     private Location location;
@@ -39,7 +41,7 @@ public class MapsActivity extends FragmentActivity {
     public void onBackPressed() {
         Intent toCreate = new Intent();
         String formatted = latLngProvided.latitude +";"+ latLngProvided.longitude;
-        toCreate.putExtra("latLng",formatted);
+        toCreate.putExtra(EXTRA_MAP_LAT_LNG,formatted);
         setResult(2,toCreate);
         super.onBackPressed();
     }
@@ -51,10 +53,12 @@ public class MapsActivity extends FragmentActivity {
 
         Intent intent = getIntent();
         if(intent.getExtras() != null) {
-            String coordinates = intent.getStringExtra("latLng");
+            String coordinates = intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG);
+
             String[] splitted = coordinates.split(";");
             double lat = Double.parseDouble(splitted[0]);
             double lng = Double.parseDouble(splitted[1]);
+
             latLngProvided = new LatLng(lat, lng);
         }
 
@@ -93,14 +97,15 @@ public class MapsActivity extends FragmentActivity {
                 mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @Override
                     public void onMapLongClick(LatLng latLng) {
-                        //latLngProvided = latLng;
                         mMap.clear();
                         updateMarker(latLng);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),mMap.getCameraPosition().zoom));
+                        latLngProvided = latLng;
                     }
                 });
 
                 radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         Integer update = progress * 10;
@@ -131,6 +136,7 @@ public class MapsActivity extends FragmentActivity {
         mMap.addMarker(new MarkerOptions()
                 .position(latLngInput)
         );
+
         circle = mMap.addCircle(new CircleOptions()
                 .center(latLngInput)
                 .radius(100)

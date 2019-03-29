@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,16 +21,25 @@ import android.widget.Toast;
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.R;
+import com.example.androidadvanced201819.adapter.ProfileAdapter;
 
 public class CreateProfileActivity extends AppCompatActivity {
 
+    public static final String EXTRA_PROFILE_LAT_LNG = "profileLatLng";
+
+    private static final String GPS = "GPS";
+    private static final String WIFI = "WIFI";
+    private static final String NFC = "NFC";
+    private static final String BEACON = "Beacon";
+
     private DbHelper dbHelper;
-    private String selectedMethod = "";
     private TextView appName;
+    private UserProfile profilo;
+
+    private String selectedMethod = "";
     private String appPackage = "";
     private String appNameVal = "";
     private String methodValue = "";
-    private UserProfile profilo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +51,13 @@ public class CreateProfileActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         final EditText textName = (EditText) findViewById(R.id.name);
+
+        final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.methods);
         final RadioButton gpsButton = (RadioButton) findViewById(R.id.gps);
         final RadioButton nfcButton = (RadioButton) findViewById(R.id.nfc);
         final RadioButton wifiButton = (RadioButton) findViewById(R.id.wifi);
         final RadioButton beaconButton = (RadioButton) findViewById(R.id.beacon);
+
         final SeekBar luminosita = (SeekBar) findViewById(R.id.luminosita);
         final SeekBar volume = (SeekBar) findViewById(R.id.volume);
         final Switch bluetoothSwitch = (Switch) findViewById(R.id.bluetoothSwitch);
@@ -55,58 +66,66 @@ public class CreateProfileActivity extends AppCompatActivity {
         appName = (TextView) findViewById(R.id.appName);
 
         Button addProfileButton = (Button) findViewById(R.id.confirmProfile);
-        if (intent.hasExtra("PROFILE")) {
-            addProfileButton.setText("MODIFICA");
-            profilo = (UserProfile) intent.getSerializableExtra("PROFILE");
+
+        if (intent.hasExtra(ProfileAdapter.EXTRA_PROFILE)) {
+
+            addProfileButton.setText(getString(R.string.editProfileButton));
+
+            profilo = (UserProfile) intent.getSerializableExtra(ProfileAdapter.EXTRA_PROFILE);
+
             textName.setText(profilo.getNome());
             luminosita.setProgress(profilo.getLuminosita());
             volume.setProgress(profilo.getVolume());
             bluetoothSwitch.setChecked(profilo.isBluetooth());
             wifiSwitch.setChecked(profilo.isWifi());
-            selectedMethod=profilo.getMetodoDiRilevamento();
-            switch (profilo.getMetodoDiRilevamento()) {
-                case "nfc":
+
+            selectedMethod = profilo.getMetodoDiRilevamento();
+
+            switch (selectedMethod) {
+                case NFC:
                     nfcButton.setChecked(true);
                     break;
-                case "wifi":
+                case WIFI:
                     wifiButton.setChecked(true);
                     break;
-                case "beacon":
+                case BEACON:
                     beaconButton.setChecked(true);
                     break;
-                case "gps":
+                case GPS:
                     gpsButton.setChecked(true);
                     break;
             }
+
             appName.setText(profilo.getAppName());
             appName.setVisibility(View.VISIBLE);
         }
+
         addProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (intent.hasExtra("PROFILE")) {
-                    String name = textName.getText().toString();
-                    appNameVal = appName.getText().toString();
-                    boolean bluetooth = bluetoothSwitch.isChecked();
-                    boolean wifi = wifiSwitch.isChecked();
 
-                    UserProfile profile = new UserProfile(profilo.getId(),name, selectedMethod, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
+                String name = textName.getText().toString();
+                appNameVal = appName.getText().toString();
 
+                RadioButton selected = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+                String selectedString = selected.getText().toString();
+
+                boolean bluetooth = bluetoothSwitch.isChecked();
+                boolean wifi = wifiSwitch.isChecked();
+
+                UserProfile profile = new UserProfile(null, name, selectedString, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage, appNameVal);
+
+                if (intent.hasExtra(ProfileAdapter.EXTRA_PROFILE)) {
+                    profile.setId(profilo.getId());
                     dbHelper.updateProfile(profile);
 
                     finish();
                 } else {
-                    String name = textName.getText().toString();
-                    appNameVal = appName.getText().toString();
-                    boolean bluetooth = bluetoothSwitch.isChecked();
-                    boolean wifi = wifiSwitch.isChecked();
 
-                    UserProfile profile = new UserProfile(name, selectedMethod, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage,appNameVal);
-
-                    if(!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
+                    if (!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
                         dbHelper.insertProfile(profile);
-                    }else{
-                        Toast.makeText(CreateProfileActivity.this,"Inserire dati mancanti", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CreateProfileActivity.this, "Inserire dati mancanti", Toast.LENGTH_SHORT).show();
                     }
                     finish();
                 }
@@ -127,35 +146,35 @@ public class CreateProfileActivity extends AppCompatActivity {
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMethod ="gps";
                 Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
-                if(profilo != null && profilo.getValoreMetodo() != null){
-                    toMap.putExtra("latLng",profilo.getValoreMetodo());
+                if (profilo != null) {
+                    toMap.putExtra(EXTRA_PROFILE_LAT_LNG, profilo.getValoreMetodo());
                 }
-                if(!methodValue.isEmpty()){
-                    toMap.putExtra("latLng",methodValue);
+                if (!methodValue.isEmpty()) {
+                    toMap.putExtra(EXTRA_PROFILE_LAT_LNG, methodValue);
                 }
-                startActivityForResult(toMap,2);
+                startActivityForResult(toMap, 2);
             }
         });
+
         nfcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMethod = "nfc";
             }
         });
+
         wifiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMethod = "wifi";
                 Intent wifiIntent = new Intent(getApplicationContext(), WifiScanActivity.class);
                 startActivity(wifiIntent);
             }
         });
+
         beaconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMethod = "beacon";
+
             }
         });
 
@@ -163,7 +182,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toAppList = new Intent(getApplicationContext(), ApplicationListActivity.class);
-                startActivityForResult(toAppList,1);
+                startActivityForResult(toAppList, 1);
             }
         });
     }
@@ -172,10 +191,10 @@ public class CreateProfileActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())) {
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -190,21 +209,18 @@ public class CreateProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (resultCode){
+        switch (resultCode) {
             case 1:
-                appNameVal = (String) data.getExtras().getString("appName");
-                appPackage = (String) data.getExtras().getString("appPackage");
+                appNameVal = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_NAME);
+                appPackage = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_PACKAGE);
 
                 appName.setText(appNameVal);
                 appName.setVisibility(View.VISIBLE);
                 break;
 
             case 2:
-                if(profilo != null) {
-                    profilo.setValoreMetodo((String) data.getExtras().getString("latLng"));
-                } else {
-                    methodValue = (String) data.getExtras().getString("latLng");
-                }
+                methodValue = (String) data.getExtras().getString(MapsActivity.EXTRA_MAP_LAT_LNG);
+
                 break;
         }
     }

@@ -18,6 +18,9 @@ import java.util.List;
 
 public class ApplicationListActivity extends AppCompatActivity {
 
+    public static final String EXTRA_APP_NAME = "appName";
+    public static final String EXTRA_APP_PACKAGE = "appPackage";
+
     private PackageManager packageManager;
     private AppAdapter appAdapter;
 
@@ -41,8 +44,8 @@ public class ApplicationListActivity extends AppCompatActivity {
                 ApplicationInfo appInfo = applicationInfoList.get(position);
 
                 Intent backToList = new Intent();
-                backToList.putExtra("appName",appInfo.loadLabel(packageManager));
-                backToList.putExtra("appPackage",appInfo.packageName);
+                backToList.putExtra(EXTRA_APP_NAME, appInfo.loadLabel(packageManager));
+                backToList.putExtra(EXTRA_APP_PACKAGE, appInfo.packageName);
                 setResult(1,backToList);
                 finish();
             }
