@@ -28,11 +28,9 @@ import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.activities.WiFiActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
-import com.example.androidadvanced201819.database.ProfileWifiDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
 import com.example.androidadvanced201819.model.Profile;
 import com.example.androidadvanced201819.model.WiFi;
-import com.example.androidadvanced201819.model.WiFiList;
 
 public class ProfileManagement extends AppCompatActivity {
 
@@ -46,6 +44,9 @@ public class ProfileManagement extends AppCompatActivity {
     CheckBox auto_brightness;
     Profile profile;
     private WiFiList wiFiList;
+    Button editButton;
+    Button createButton;
+
     int option;
     protected int volumeValue;
 
@@ -65,6 +66,9 @@ public class ProfileManagement extends AppCompatActivity {
         application = findViewById(R.id.applicationName);
         title = findViewById(R.id.profile_title);
 
+        editButton = findViewById(R.id.buttonEditProfile);
+        createButton = findViewById(R.id.buttonCreateProfile);
+
         Intent det = getIntent();
         if (det.hasExtra("position")) {
             title.setText("Modifica");
@@ -77,6 +81,40 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setApplication("Application");
             profile.setApplicationName("Application");
         }
+
+        name.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.toString().trim().length()==0){
+                    createButton.setEnabled(false);
+                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                    editButton.setEnabled(false);
+                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+
+                } else {
+                    createButton.setEnabled(true);
+                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                    editButton.setEnabled(true);
+                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
     }
 
     public void onRadioDetectionMethod(View view) {

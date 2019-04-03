@@ -201,18 +201,18 @@
         android:layout_height="65dp"
         android:layout_gravity="bottom"
         android:onClick="createProfile"
-        android:background="@color/blue"
         android:textColor="@color/white"
-        android:text="@string/create" />
+        android:text="@string/create"
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/buttonEditProfile"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:text="@string/edit"
-        android:background="@color/blue"
         android:textColor="@color/white"
         android:layout_gravity="bottom"
         android:onClick="editProfile"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:enabled="false"/>
 </LinearLayout>
