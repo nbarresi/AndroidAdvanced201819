@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
@@ -18,6 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <service
+            android:enabled="true"
+            android:name=".IntentServices.GpsService">
+            <intent-filter>
+                <action
+                    android:name = "com.example.androidadvanced201819.IntentServices">
+                </action>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -62,6 +72,17 @@
             android:name=".activities.WifiScanActivity"
             android:label="@string/title_activity_wifi_scan"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".IntentServices.GpsReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

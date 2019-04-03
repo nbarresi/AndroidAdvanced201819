@@ -36,8 +36,6 @@ public class CreateProfileActivity extends AppCompatActivity {
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 
-    private static final String[] MAPS_PERMISSION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private static final int REQUEST_MAP = 1;
 
     private DbHelper dbHelper;
     private TextView appName;
@@ -152,13 +150,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    goToMaps();
-                } else{
-                    ActivityCompat.requestPermissions(CreateProfileActivity.this,MAPS_PERMISSION,REQUEST_MAP);
-                }
-
-
+                goToMaps();
             }
         });
 
@@ -239,17 +231,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_MAP){
-            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                goToMaps();
-            } else {
-                Toast.makeText(CreateProfileActivity.this, "Permessi non concessi", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+
 
 
 }

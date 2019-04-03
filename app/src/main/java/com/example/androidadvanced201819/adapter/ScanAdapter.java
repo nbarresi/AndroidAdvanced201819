@@ -43,7 +43,7 @@ public class ScanAdapter extends ArrayAdapter {
 
         TextView ssid = (TextView) listItem.findViewById(R.id.SSID);
         TextView bssid = (TextView) listItem.findViewById(R.id.BSSID);
-        TextView livello = (TextView) listItem.findViewById(R.id.livello);
+        TextView livello = (TextView) listItem.findViewById(R.id.LEVEL);
 
         ssid.setText(wifi.SSID);
         bssid.setText(wifi.BSSID);

@@ -43,6 +43,7 @@ public class DbHelper extends SQLiteOpenHelper {
             PROFILE_COLUMN_METODO+ " TEXT," +
             PROFILE_COLUMN_VALORE_METODO+ " TEXT," +
             PROFILE_COLUMN_APP+ " TEXT," +
+            PROFILE_COLUMN_APP_NAME+ " TEXT," +
             PROFILE_COLUMN_LUMINOSITA + " INTEGER," +
             PROFILE_COLUMN_VOLUME + " INTEGER," +
             PROFILE_COLUMN_BLUETOOTH + " INTEGER," +

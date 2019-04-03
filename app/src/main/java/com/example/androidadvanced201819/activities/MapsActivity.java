@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidadvanced201819.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,14 +26,17 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements LocationListener {
+
+    private static final String[] MAPS_PERMISSION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final int REQUEST_MAP = 1;
 
     public static final String EXTRA_MAP_LAT_LNG  = "mapLatLng";
 
     private GoogleMap mMap;
     private LocationManager locationManager;
     private Location location;
-    private LatLng latLngProvided;
+    private LatLng latLngProvided= new LatLng(45.464211, 9.191383);//Sulla madonnina
     private SeekBar radius;
     private Circle circle;
     private TextView range;
@@ -38,7 +44,7 @@ public class MapsActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         Intent toCreate = new Intent();
-        String formatted = latLngProvided.latitude +";"+ latLngProvided.longitude;
+        String formatted = latLngProvided.latitude +";"+ latLngProvided.longitude+";"+radius.getProgress();
         toCreate.putExtra(EXTRA_MAP_LAT_LNG,formatted);
         setResult(2,toCreate);
         super.onBackPressed();
@@ -49,17 +55,6 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        Intent intent = getIntent();
-        if(intent.getExtras() != null) {
-            String coordinates = intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG);
-
-            String[] splitted = coordinates.split(";");
-            double lat = Double.parseDouble(splitted[0]);
-            double lng = Double.parseDouble(splitted[1]);
-
-            latLngProvided = new LatLng(lat, lng);
-        }
-
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -69,14 +64,32 @@ public class MapsActivity extends FragmentActivity {
         range = (TextView) findViewById(R.id.km);
         range.setText("100");
 
+        Intent intent = getIntent();
+        if(intent.getExtras() != null) {
+            String coordinates = intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG);
+
+            String[] splitted = coordinates.split(";");
+            double lat = Double.parseDouble(splitted[0]);
+            double lng = Double.parseDouble(splitted[1]);
+            radius.setProgress(Integer.parseInt(splitted[2]));
+            range.setText(Integer.parseInt(splitted[2])*10+"");
+
+            latLngProvided = new LatLng(lat, lng);
+        }
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200,20, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 20, this);
             if(latLngProvided == null) {
                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+                if(location!=null) {
+                    latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+                }
             }
+        }else{
+            ActivityCompat.requestPermissions(MapsActivity.this,MAPS_PERMISSION,REQUEST_MAP);
         }
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -84,13 +97,14 @@ public class MapsActivity extends FragmentActivity {
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngProvided, 18.0f));
                 mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
                 circle = mMap.addCircle(new CircleOptions()
                         .center(latLngProvided)
-                        .radius(100)
+                        .radius(radius.getProgress()*10)
                         .strokeColor(Color.RED)
                 );
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
 
                 mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @Override
@@ -137,7 +151,7 @@ public class MapsActivity extends FragmentActivity {
 
         circle = mMap.addCircle(new CircleOptions()
                 .center(latLngInput)
-                .radius(100)
+                .radius(circle.getRadius())
                 .strokeColor(Color.RED));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngInput));
@@ -152,5 +166,51 @@ public class MapsActivity extends FragmentActivity {
         }
         return zoomLevel;
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == REQUEST_MAP){
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200,20, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 20, this);
+            if(latLngProvided == null) {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if(location!=null) {
+                    latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+                }
+            }
+        }
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        mMap.clear();
+        latLngProvided= new LatLng(location.getLatitude(),location.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
+        circle = mMap.addCircle(new CircleOptions()
+                .center(latLngProvided)
+                .radius(circle.getRadius())
+                .strokeColor(Color.RED)
+        );
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }
