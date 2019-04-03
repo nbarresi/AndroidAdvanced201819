@@ -2,9 +2,14 @@ package org.its.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.its.db.entities.Profile;
 import org.its.db.entities.WiFiPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WiFiPointDBHelper extends GenericDBHelper{
 
@@ -61,4 +66,63 @@ public class WiFiPointDBHelper extends GenericDBHelper{
 
         return (count >0);
     }
+
+    public List<WiFiPoint> getAllPoints(){
+
+        Cursor cursor = this.getWritableDatabase().query(
+                Profile.ProfileEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        return cursorToWiFiPoint(cursor);
+
+    }
+
+    private WiFiPoint getByBSSID(String BSSID){
+        String selection = WiFiPoint.WifiPointEntry._BSSID+ " == ?";
+        String[] selectionArgs = { BSSID};
+        Cursor cursor = this.getWritableDatabase().query(
+                Profile.ProfileEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        cursor.moveToFirst();
+
+        WiFiPoint wifiPoint = new WiFiPoint(
+                cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._BSSID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._SSID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._LEVEL))
+        );
+
+        return wifiPoint;
+    }
+
+    private List<WiFiPoint> cursorToWiFiPoint(Cursor cursor){
+        List<WiFiPoint> wifiPoints = new ArrayList<>();
+
+        List itemIds = new ArrayList<>();
+        while(cursor.moveToNext()) {
+
+            WiFiPoint wifiPoint = new WiFiPoint(
+                    cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._BSSID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._SSID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._LEVEL))
+            );
+
+            wifiPoints.add(wifiPoint);
+        }
+        return wifiPoints;
+    }
+
+
 }
