@@ -89,14 +89,10 @@ public class ProfileManagement extends AppCompatActivity {
                 if(s.toString().trim().length()==0){
                     createButton.setEnabled(false);
                     createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                    editButton.setEnabled(false);
-                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
 
                 } else {
                     createButton.setEnabled(true);
                     createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-                    editButton.setEnabled(true);
-                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
                 }
             }
 
