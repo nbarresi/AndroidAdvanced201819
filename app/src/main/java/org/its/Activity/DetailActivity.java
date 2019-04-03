@@ -27,7 +27,9 @@ import com.example.androidadvanced201819.R;
 import com.google.gson.Gson;
 
 import org.its.db.dao.ProfiloDao;
+import org.its.db.dao.WifiDao;
 import org.its.db.entities.Gps;
+import org.its.db.entities.ListWifiConnection;
 import org.its.db.entities.Profilo;
 import org.its.db.entities.WifiConnection;
 import org.its.utilities.ProfileTypeEnum;
@@ -41,10 +43,12 @@ public class DetailActivity extends AppCompatActivity {
     private Profilo profiloFromIntent = null;
     private final int PERMISSION_REQUEST_CODE_LOCATION = 115;
     private final int PERMISSION_REQUEST_CODE_WIFI = 155;
+    private boolean wifi = false;
     private int idForUpdate = -1;
     private TextView appChoiced = null;
     private Gps gps;
-    private WifiConnection wifiConnection;
+    private ListWifiConnection wifiConnectionList;
+    private final WifiDao wifiDao = new WifiDao();
 
 
     private ProfiloDao db = new ProfiloDao();
@@ -168,6 +172,10 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case R.id.detailWIFI:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.WIFI);
+                        setIsWifi(false);
+                        if (getIdForUpdate() != -1) {
+                            wifiDao.deleteListForAProfile(getIdForUpdate());
+                        }
                         break;
                     case R.id.detailNFC:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.NFC);
@@ -183,14 +191,24 @@ public class DetailActivity extends AppCompatActivity {
                 profiloDaSalvare.setApp(String.valueOf(appChoiced.getText()));
 
                 try {
+                    int id;
                     db.openConn(getApplicationContext());
                     if (idForUpdate != -1) {
                         db.updateProfilo(profiloDaSalvare);
+                        id = profiloDaSalvare.getId();
                         idForUpdate = -1;
                     } else {
-                        db.insertProfile(profiloDaSalvare);
+                        id = db.insertProfile(profiloDaSalvare).getId();
                     }
                     db.closeConn();
+                    if (isWifi()) {
+
+                        wifiDao.openConn(getApplicationContext());
+                        for (WifiConnection wifiConnection : wifiConnectionList.getConnections()) {
+                            wifiDao.insertWifi(wifiConnection, id);
+                        }
+                        wifiDao.closeConn();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -236,6 +254,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+
     private void launchIntentToMap() {
         Intent mapIntent = new Intent(DetailActivity.this, MapActivity.class);
         if (idForUpdate != -1) {
@@ -272,13 +291,29 @@ public class DetailActivity extends AppCompatActivity {
                 break;
 
             case RequestCodes.WIFI_CODE:
-                    if (resultCode == Activity.RESULT_OK) {
-                        wifiConnection = (WifiConnection) data.getSerializableExtra(ResultsCode.WIFI_RESULT);
-                    }
-                    break;
+                if (resultCode == Activity.RESULT_OK) {
+                    wifiConnectionList = (ListWifiConnection) data.getSerializableExtra(ResultsCode.WIFI_RESULT);
+                    setIsWifi(true);
+                }
+                break;
             default:
                 break;
         }
     }//onActivityResult
 
+    private boolean isWifi() {
+        return wifi;
+    }
+
+    private void setIsWifi(boolean wifi) {
+        this.wifi = wifi;
+    }
+
+    private int getIdForUpdate() {
+        return idForUpdate;
+    }
+
+    private void setIdForUpdate(int idForUpdate) {
+        this.idForUpdate = idForUpdate;
+    }
 }
