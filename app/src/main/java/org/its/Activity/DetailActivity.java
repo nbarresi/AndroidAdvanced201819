@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import org.its.db.dao.ProfiloDao;
 import org.its.db.entities.Gps;
 import org.its.db.entities.Profilo;
+import org.its.db.entities.WifiConnection;
 import org.its.utilities.ProfileTypeEnum;
 import org.its.utilities.RequestCodes;
 import org.its.utilities.ResultsCode;
@@ -38,10 +39,12 @@ import org.its.utilities.StringCollection;
 public class DetailActivity extends AppCompatActivity {
 
     private Profilo profiloFromIntent = null;
-    private final int PERMISSION_REQUEST_CODE = 115;
+    private final int PERMISSION_REQUEST_CODE_LOCATION = 115;
+    private final int PERMISSION_REQUEST_CODE_WIFI = 155;
     private int idForUpdate = -1;
     private TextView appChoiced = null;
     private Gps gps;
+    private WifiConnection wifiConnection;
 
 
     private ProfiloDao db = new ProfiloDao();
@@ -95,7 +98,6 @@ public class DetailActivity extends AppCompatActivity {
 
                 switch (checkedId) {
                     case R.id.detailGPS:
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                             if (ContextCompat.checkSelfPermission(
@@ -107,15 +109,30 @@ public class DetailActivity extends AppCompatActivity {
                                 launchIntentToMap();
                             }
                         }
-
-
                         break;
+
                     case R.id.detailWIFI:
-                        System.out.println("premuto radiobutton 2");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                            if (ContextCompat.checkSelfPermission(
+                                    getApplicationContext(), Manifest.permission.ACCESS_WIFI_STATE)
+                                    != PackageManager.PERMISSION_GRANTED &&
+                                    ContextCompat.checkSelfPermission(
+                                            getApplicationContext(), Manifest.permission.CHANGE_WIFI_STATE)
+                                            != PackageManager.PERMISSION_GRANTED) {
+
+                                checkWifiPermission();
+                            } else {
+                                launchIntentToWifi();
+                            }
+                        }
+
                         break;
+
                     case R.id.detailNFC:
                         System.out.println("premuto radiobutton 3");
                         break;
+
                     case R.id.detailBeacon:
                         System.out.println("premuto radiobutton 4");
                         break;
@@ -187,7 +204,15 @@ public class DetailActivity extends AppCompatActivity {
     private void checkLocationPermission() {
         ActivityCompat.requestPermissions(DetailActivity.this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSION_REQUEST_CODE);
+                PERMISSION_REQUEST_CODE_LOCATION);
+
+
+    }
+
+    private void checkWifiPermission() {
+        ActivityCompat.requestPermissions(DetailActivity.this,
+                new String[]{Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.ACCESS_WIFI_STATE},
+                PERMISSION_REQUEST_CODE_WIFI);
 
 
     }
@@ -195,13 +220,19 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+        if (requestCode == PERMISSION_REQUEST_CODE_LOCATION) {
             for (int i : grantResults) {
                 if (i == PackageManager.PERMISSION_GRANTED) {
                     launchIntentToMap();
                 }
             }
 
+        } else if (requestCode == PERMISSION_REQUEST_CODE_WIFI) {
+            for (int i : grantResults) {
+                if (i == PackageManager.PERMISSION_GRANTED) {
+                    launchIntentToWifi();
+                }
+            }
         }
     }
 
@@ -220,6 +251,11 @@ public class DetailActivity extends AppCompatActivity {
         startActivityForResult(mapIntent, RequestCodes.MAP_CODE);
     }
 
+    private void launchIntentToWifi() {
+        Intent wifiIntent = new Intent(DetailActivity.this, WifiActivity.class);
+        startActivityForResult(wifiIntent, RequestCodes.WIFI_CODE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,6 +270,12 @@ public class DetailActivity extends AppCompatActivity {
                     gps = (Gps) data.getSerializableExtra(ResultsCode.MAP_RESULT);
                 }
                 break;
+
+            case RequestCodes.WIFI_CODE:
+                    if (resultCode == Activity.RESULT_OK) {
+                        wifiConnection = (WifiConnection) data.getSerializableExtra(ResultsCode.WIFI_RESULT);
+                    }
+                    break;
             default:
                 break;
         }
