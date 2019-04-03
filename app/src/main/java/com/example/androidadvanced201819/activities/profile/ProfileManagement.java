@@ -28,9 +28,11 @@ import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.activities.WiFiActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
+import com.example.androidadvanced201819.database.ProfileWifiDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
 import com.example.androidadvanced201819.model.Profile;
 import com.example.androidadvanced201819.model.WiFi;
+import com.example.androidadvanced201819.model.WiFiList;
 
 public class ProfileManagement extends AppCompatActivity {
 
