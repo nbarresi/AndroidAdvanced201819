@@ -23,6 +23,7 @@ import org.its.db.entities.ListWifiConnection;
 import org.its.db.entities.WifiConnection;
 import org.its.utilities.RequestCodes;
 import org.its.utilities.ResultsCode;
+import org.its.utilities.StringCollection;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ public class WifiActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.wifiList);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
+        Intent currentIntent= getIntent();
+        final int idForUpdate= currentIntent.getIntExtra(StringCollection.isUpdate,-1);
 
         registerReceiver(new BroadcastReceiver() {
             @Override
@@ -75,6 +77,12 @@ public class WifiActivity extends AppCompatActivity {
                     listToSave.add(wifiConnection);
                 }
 
+                WifiDao wifiDao = new WifiDao();
+                if (idForUpdate != -1) {
+                    wifiDao.openConn(getApplicationContext());
+                    wifiDao.deleteListForAProfile(idForUpdate);
+                    wifiDao.closeConn();
+                }
                 wifiIntent.putExtra(ResultsCode.WIFI_RESULT, new ListWifiConnection(listToSave));
                 setResult(Activity.RESULT_OK, wifiIntent);
                 finish();

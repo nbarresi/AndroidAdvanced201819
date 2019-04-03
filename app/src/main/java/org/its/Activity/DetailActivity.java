@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -94,42 +95,66 @@ public class DetailActivity extends AppCompatActivity {
             appChoiced.setText(profiloFromIntent.getApp());
             this.idForUpdate = profiloFromIntent.getId();
         }
+        RadioButton gpsButton = (RadioButton) findViewById(R.id.detailGPS);
+        RadioButton wifiButton = (RadioButton) findViewById(R.id.detailWIFI);
+        RadioButton nfcButton = (RadioButton) findViewById(R.id.detailNFC);
+        RadioButton beaconButton = (RadioButton) findViewById(R.id.detailBeacon);
 
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                switch (checkedId) {
-                    case R.id.detailGPS:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(
+                            getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
 
-                            if (ContextCompat.checkSelfPermission(
-                                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        checkLocationPermission();
+                    } else {
+                        launchIntentToMap();
+                    }
+                }
+            }
+        });
+
+        wifiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    if (ContextCompat.checkSelfPermission(
+                            getApplicationContext(), Manifest.permission.ACCESS_WIFI_STATE)
+                            != PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(
+                                    getApplicationContext(), Manifest.permission.CHANGE_WIFI_STATE)
                                     != PackageManager.PERMISSION_GRANTED) {
+                        if (ContextCompat.checkSelfPermission(
+                                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
 
-                                checkLocationPermission();
-                            } else {
-                                launchIntentToMap();
-                            }
+                            checkLocationPermission();
                         }
+                        checkWifiPermission();
+                    } else {
+                        setIsWifi(false);
+
+                        launchIntentToWifi();
+                    }
+                }
+            }
+        });
+
+       /* radioGroup.setOnClickListener(new RadioGroup.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.detailGPS:
+
                         break;
 
                     case R.id.detailWIFI:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                            if (ContextCompat.checkSelfPermission(
-                                    getApplicationContext(), Manifest.permission.ACCESS_WIFI_STATE)
-                                    != PackageManager.PERMISSION_GRANTED &&
-                                    ContextCompat.checkSelfPermission(
-                                            getApplicationContext(), Manifest.permission.CHANGE_WIFI_STATE)
-                                            != PackageManager.PERMISSION_GRANTED) {
-
-                                checkWifiPermission();
-                            } else {
-                                launchIntentToWifi();
-                            }
-                        }
 
                         break;
 
@@ -143,7 +168,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
-
+*/
         app.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,10 +197,6 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case R.id.detailWIFI:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.WIFI);
-                        setIsWifi(false);
-                        if (getIdForUpdate() != -1) {
-                            wifiDao.deleteListForAProfile(getIdForUpdate());
-                        }
                         break;
                     case R.id.detailNFC:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.NFC);
@@ -272,7 +293,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private void launchIntentToWifi() {
         Intent wifiIntent = new Intent(DetailActivity.this, WifiActivity.class);
+        wifiIntent.putExtra(StringCollection.isUpdate,idForUpdate);
         startActivityForResult(wifiIntent, RequestCodes.WIFI_CODE);
+
     }
 
     @Override
