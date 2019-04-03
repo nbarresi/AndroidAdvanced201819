@@ -4,6 +4,7 @@
     <string name="password">Password</string>
     <string name="enter">Accedi</string>
     <string name="addProfile">Aggiungi profilo</string>
+    <string name="savewifi">Salva WiFi</string>
     <string name="errorLogin">Credenziali errate</string>
     <string name="remindme">Ricordami</string>
     <string name="detectionMerhod">Metodo di rilevamento</string>

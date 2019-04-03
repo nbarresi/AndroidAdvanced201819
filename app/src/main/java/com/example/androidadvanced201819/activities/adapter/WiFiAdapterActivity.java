@@ -1,9 +1,8 @@
 package com.example.androidadvanced201819.activities.adapter;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -35,6 +34,7 @@ public class WiFiAdapterActivity extends ArrayAdapter<WiFi> {
         return getViewOptimize(position, convertView, parent);
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View getViewOptimize(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
@@ -52,7 +52,8 @@ public class WiFiAdapterActivity extends ArrayAdapter<WiFi> {
         }
         viewHolder.BSSID.setText(wiFis.get(position).getBSSID());
         viewHolder.SSID.setText(wiFis.get(position).getSSID());
-        viewHolder.level.setText(wiFis.get(position).getLevel());
+        int level = wiFis.get(position).getLevel() * (-1);
+        viewHolder.level.setText(level + "%");
         return convertView;
     }
 
