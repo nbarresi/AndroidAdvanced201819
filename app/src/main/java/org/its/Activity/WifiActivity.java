@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.example.androidadvanced201819.R;
 
 import org.its.UI.WifiArrayAdapter;
+import org.its.db.dao.WifiDao;
 import org.its.db.entities.ListWifiConnection;
 import org.its.db.entities.WifiConnection;
 import org.its.utilities.RequestCodes;
@@ -38,6 +39,7 @@ public class WifiActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list_layout);
+        final ListView listView = (ListView) findViewById(R.id.wifiList);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -47,15 +49,12 @@ public class WifiActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 trovati = wifiManager.getScanResults();
 
-
                 for (ScanResult item : trovati) {
                     list.add(item);
                 }
                 if (list.size() > 0) {
                     adapter = new WifiArrayAdapter(context, list);
-                    final ListView listView = (ListView) findViewById(R.id.wifiList);
                     listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
                 }
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));

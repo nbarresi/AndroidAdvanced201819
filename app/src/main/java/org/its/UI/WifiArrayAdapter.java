@@ -19,6 +19,8 @@ public class WifiArrayAdapter extends ArrayAdapter<ScanResult> {
 
     public WifiArrayAdapter( Context context, List<ScanResult> values) {
         super(context, R.layout.wifi_list_item_layout ,values);
+        this.list = values;
+        this.context = context;
     }
 
     @Override
