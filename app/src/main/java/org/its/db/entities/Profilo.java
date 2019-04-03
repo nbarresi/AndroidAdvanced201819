@@ -15,6 +15,7 @@ public class Profilo implements Serializable {
     private boolean bluetooth;
     private ProfileTypeEnum metodo;
     private String rilevazione;
+    private boolean isActive;
     private String app;
 
     public Profilo() {
@@ -119,6 +120,14 @@ public class Profilo implements Serializable {
         this.app = app;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -127,17 +136,19 @@ public class Profilo implements Serializable {
         return autoLuminosita == profilo.autoLuminosita &&
                 wifi == profilo.wifi &&
                 bluetooth == profilo.bluetooth &&
+                isActive == profilo.isActive &&
                 Objects.equals(id, profilo.id) &&
                 Objects.equals(nome, profilo.nome) &&
                 Objects.equals(volume, profilo.volume) &&
                 Objects.equals(luminosita, profilo.luminosita) &&
                 metodo == profilo.metodo &&
-                Objects.equals(rilevazione, profilo.rilevazione);
+                Objects.equals(rilevazione, profilo.rilevazione) &&
+                Objects.equals(app, profilo.app);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, metodo);
+        return Objects.hash(id, nome, volume, luminosita, autoLuminosita, wifi, bluetooth, metodo, rilevazione, isActive, app);
     }
 
     public String getNome() {

@@ -4,8 +4,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -40,10 +40,17 @@
 
         <activity
             android:name="org.its.Activity.MapActivity"
-            android:label="@string/mappa">
-        </activity>
+            android:label="@string/mappa"></activity>
 
-        <activity android:name="org.its.Activity.WifiActivity" android:label="Wifi Scan"></activity>
+        <activity
+            android:name="org.its.Activity.WifiActivity"
+            android:label="Wifi Scan"></activity>
+
+        <receiver android:name="org.its.receiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <uses-library android:name="com.google.android.maps" />
         <uses-library
