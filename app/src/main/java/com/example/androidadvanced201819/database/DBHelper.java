@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "profile.db";
 
 
@@ -22,10 +22,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProfileDatabaseManager.KEY_BRIGHTNESS + " INTEGER, " +
                     ProfileDatabaseManager.KEY_VOLUME + " INTEGER, " +
                     ProfileDatabaseManager.KEY_BLUETHOOTH + " INTEGER, " +
+                    ProfileDatabaseManager.KEY_COORDINATES + " TEXT DEFAULT'', " +
                     ProfileDatabaseManager.KEY_WIFI + " INTEGER, " +
                     ProfileDatabaseManager.KEY_APPLICATION + " TEXT, " +
                     ProfileDatabaseManager.KEY_APPLICATION_NAME + " TEXT, " +
-                    ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER "+
+                    ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER " +
                     ");";
 
     public static final String DATABASE_CREATE_WIFI =
@@ -38,9 +39,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_CREATE_PROFILE_WIFI =
             "CREATE TABLE profileWifi(" +
                     ProfileWifiDatabaseManager.KEY_IDPROFILE + " INTEGER, " +
-                    ProfileWifiDatabaseManager.KEY_SSID + " TEXT, " +
+                    ProfileWifiDatabaseManager.KEY_BSSID + " TEXT, " +
                     "PRIMARY KEY (" + ProfileWifiDatabaseManager.KEY_IDPROFILE + ", " +
-                    ProfileWifiDatabaseManager.KEY_SSID + ")" +
+                    ProfileWifiDatabaseManager.KEY_BSSID + ")" +
                     ");";
 
     @Override
@@ -52,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 5) {
+        if (oldVersion < 6) {
             db.execSQL("ALTER TABLE " + ProfileDatabaseManager.DATABASE_TABLE + " ADD COLUMN " + ProfileDatabaseManager.KEY_COORDINATES + " TEXT DEFAULT ''");
         }
     }

@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.androidadvanced201819.model.WiFi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WiFiDatabaseManager {
 
     private SQLiteDatabase database;
@@ -42,11 +45,43 @@ public class WiFiDatabaseManager {
     }
 
     public long createWifi(WiFi wifi) {
+        List<WiFi> wiFis = new ArrayList<>();
+        Cursor cursor = fetchAllWifi();
+        cursor.moveToFirst();
+        int index = cursor.getCount();
+
+        if (index > 0) {
+            int i = 0;
+            do {
+                WiFi wiFi = new WiFi(
+                        cursor.getString(cursor.getColumnIndex(KEY_BSSID)),
+                        cursor.getString(cursor.getColumnIndex(KEY_SSID)),
+                        cursor.getInt(cursor.getColumnIndex(KEY_LEVEL))
+                );
+                i++;
+                wiFis.add(wifi);
+                cursor.moveToNext();
+            } while (i < index);
+        }
+
         ContentValues initialValues = createContentValues(wifi.getSSID(), wifi.getBSSID(), wifi.getLevel());
-        return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
+        boolean checked = checkWiFi(wiFis, wifi.getBSSID());
+        if (checked) {
+            return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
+        }
+        return 0;
     }
 
     public Cursor fetchAllWifi() {
         return database.query(DATABASE_TABLE, null, null, null, null, null, null);
+    }
+
+    private boolean checkWiFi(List<WiFi> wiFis, String BSSID) {
+        for (WiFi wiFi : wiFis) {
+            if (wiFi.getBSSID().equals(BSSID)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

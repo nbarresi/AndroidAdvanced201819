@@ -1,6 +1,8 @@
 package com.example.androidadvanced201819.model;
 
-public class WiFi {
+import java.io.Serializable;
+
+public class WiFi implements Serializable {
     private String BSSID;
     private String SSID;
     private int level;
