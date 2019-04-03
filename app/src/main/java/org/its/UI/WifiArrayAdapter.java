@@ -31,7 +31,7 @@ public class WifiArrayAdapter extends ArrayAdapter<ScanResult> {
         TextView wifiBssid = (TextView) rowView.findViewById(R.id.wifiBSSID);
         TextView wifiName = (TextView) rowView.findViewById(R.id.wifiName);
         ScanResult itemName = this.list.get(position);
-        wifiPower.setText(String.valueOf(itemName.level) + "%");
+        wifiPower.setText(String.valueOf(itemName.level*(-1)) + "%");
         wifiBssid.setText(String.valueOf(itemName.BSSID));
         wifiName.setText(String.valueOf(itemName.SSID));
 

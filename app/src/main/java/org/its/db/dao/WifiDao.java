@@ -85,23 +85,6 @@ public class WifiDao extends GenericDao {
         return wifi;
     }
 
-   /* public void updateProfilo(WifiConnection profilo) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(StringCollection.columnLuminosita, profilo.getLuminosita());
-        contentValues.put(StringCollection.columnAutoLuminosita, Converters.fromBooleanToInt(profilo.isAutoLuminosita()));
-        contentValues.put(StringCollection.columnWIFI, Converters.fromBooleanToInt(profilo.isWifi()));
-        contentValues.put(StringCollection.columnBluetooth, Converters.fromBooleanToInt(profilo.isBluetooth()));
-        contentValues.put(StringCollection.columnVolume, profilo.getVolume());
-        contentValues.put(StringCollection.columnMetodo, profilo.getMetodo().getValue());
-        contentValues.put(StringCollection.columnRilevazione, profilo.getRilevazione());
-        contentValues.put(StringCollection.columnNome, profilo.getNome());
-        database.update(
-                TABLE_NAME,
-                contentValues,
-                StringCollection.columnID + "=?",
-                new String[]{"" + profilo.getId()});
-
-    }*/
 
     public boolean deleteListForAProfile(int idProfilo) {
         return database.delete(RELATION_TABLE_NAME, StringCollection.columnIdProfilo + "=?", new String[]{"" + idProfilo}) > 0;
