@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import org.its.db.entities.Gps;
+import org.its.services.GpsTracker;
 import org.its.utilities.ResultsCode;
 import org.its.utilities.StringCollection;
 
@@ -38,6 +40,9 @@ public class MapActivity extends Activity {
 
     private final Gps gps = new Gps();
     private Intent receivedIntent;
+    private Circle circle;
+    private Marker marker;
+    private LatLng currentLatLong;
 
     @Override
     protected void onCreate(Bundle saBundle) {
@@ -81,6 +86,7 @@ public class MapActivity extends Activity {
 
                 receivedIntent = getIntent();
                 final TextView radiusMeter = findViewById(R.id.radiusMeter);
+
                 SeekBar seekBar = findViewById(R.id.raggioSeekbar);
                 boolean isAnUpdate = receivedIntent.getBooleanExtra(StringCollection.isUpdate, false);
                 if (isAnUpdate) {
@@ -92,35 +98,53 @@ public class MapActivity extends Activity {
                     gps.setLatitudine(gettedGps.getLatitudine());
                 } else {
                     LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
+                    Location location;
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        gps.setLatitudine(48d);
-                        gps.setLongitudine(9d);
-                      //  buildAlertMessageNoGps();
-                    }else{
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                            Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            gps.setRaggio(500);
+                        location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (location != null) {
                             gps.setLongitudine(location.getLongitude());
                             gps.setLatitudine(location.getLatitude());
+                        } else {
+                            gps.setLatitudine(48d);
+                            gps.setLongitudine(9d);
+                        }
+                        //  buildAlertMessageNoGps();
+                    } else {
+
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            GpsTracker gpsTracker = new GpsTracker(getApplicationContext(), "mapActivity", new LocationListener() {
+                                @Override
+                                public void onLocationChanged(Location location) {
+                                    gps.setRaggio(500);
+                                    gps.setLongitudine(location.getLongitude());
+                                    gps.setLatitudine(location.getLatitude());
+                                    manageMap(googleMap);
+                                }
+
+                                @Override
+                                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                                }
+
+                                @Override
+                                public void onProviderEnabled(String s) {
+
+                                }
+
+                                @Override
+                                public void onProviderDisabled(String s) {
+
+                                }
+                            });
+
                         }
                     }
 
                 }
-
-
-
-                LatLng currentLatLong = new LatLng(gps.getLatitudine(), gps.getLongitudine());
-
-                final Marker marker = googleMap.addMarker(new MarkerOptions()
-                        .position(currentLatLong)
-                        .title(getString(R.string.currentPositionLabel)));
-
-                final Circle circle = googleMap.addCircle(new CircleOptions()
-                        .center(currentLatLong)
-                        .radius(gps.getRaggio())
-                        .strokeColor(Color.RED));
+                if (isAnUpdate) {
+                    manageMap(googleMap);
+                }
 
 
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -145,14 +169,6 @@ public class MapActivity extends Activity {
                     }
                 });
 
-                googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLong).zoom(15.4f).build();
-
-                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
 
                 googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @Override
@@ -170,6 +186,28 @@ public class MapActivity extends Activity {
 
             }
         });
+    }
+
+    private void manageMap(GoogleMap googleMap) {
+
+        currentLatLong = new LatLng(gps.getLatitudine(), gps.getLongitudine());
+
+        marker = googleMap.addMarker(new MarkerOptions()
+                .position(currentLatLong)
+                .title(getString(R.string.currentPositionLabel)));
+
+        circle = googleMap.addCircle(new CircleOptions()
+                .center(currentLatLong)
+                .radius(gps.getRaggio())
+                .strokeColor(Color.RED));
+
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLong).zoom(15.4f).build();
+
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     private int getZoomLevel(Circle circle) {

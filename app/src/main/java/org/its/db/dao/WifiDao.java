@@ -23,7 +23,6 @@ public class WifiDao extends GenericDao {
 
         contentValues.put(StringCollection.columnBssid, wifiConnection.getBSSID());
         contentValues.put(StringCollection.columnSsid, wifiConnection.getName());
-        contentValues.put(StringCollection.columnPotenza, wifiConnection.getPower());
         if (getWifiByBssid(wifiConnection.getBSSID()) == null) {
             database.insert(TABLE_NAME,
                     null,
@@ -33,6 +32,7 @@ public class WifiDao extends GenericDao {
         contentValues.clear();
         contentValues.put(StringCollection.columnBssid, wifiConnection.getBSSID());
         contentValues.put(StringCollection.columnIdProfilo, idProfilo);
+        contentValues.put(StringCollection.columnPotenza, wifiConnection.getPower());
         database.insert(RELATION_TABLE_NAME, null, contentValues);
 
         return wifiConnection;
@@ -66,6 +66,30 @@ public class WifiDao extends GenericDao {
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnBssid, StringCollection.columnSsid,
                         StringCollection.columnPotenza},
                 StringCollection.columnBssid + "=?", new String[]{bssid}, null, null, null);
+
+        try {
+            if (result.getCount() > 0) {
+                result.moveToFirst();
+                do {
+                    wifi = new WifiConnection(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnPotenza)),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
+                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
+                } while (result.moveToNext());
+
+            }
+        } catch (Exception e) {
+            Log.d("getAllProfilesError", e.getMessage());
+        } finally {
+            result.close();
+        }
+        return wifi;
+    }
+
+    public WifiConnection getAllWiFi() {
+        WifiConnection wifi = null;
+        Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnBssid, StringCollection.columnSsid,
+                        StringCollection.columnPotenza},
+                null, new String[]{}, null, null, null);
 
         try {
             if (result.getCount() > 0) {
