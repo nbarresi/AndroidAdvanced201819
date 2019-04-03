@@ -34,8 +34,8 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     public static final String EXTRA_PROFILE_LAT_LNG = "profileLatLng";
 
-    private static final String GPS = "GPS";
-    private static final String WIFI = "WIFI";
+    public static final String GPS = "GPS";
+    public static final String WIFI = "WIFI";
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 

@@ -28,8 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements LocationListener {
 
-    private static final String[] MAPS_PERMISSION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private static final int REQUEST_MAP = 1;
+    public static final String[] MAPS_PERMISSION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    public static final int REQUEST_MAP = 1;
 
     public static final String EXTRA_MAP_LAT_LNG  = "mapLatLng";
 
@@ -187,16 +187,18 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        mMap.clear();
-        latLngProvided= new LatLng(location.getLatitude(),location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
-        circle = mMap.addCircle(new CircleOptions()
-                .center(latLngProvided)
-                .radius(circle.getRadius())
-                .strokeColor(Color.RED)
-        );
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
+        if (mMap != null) {
+            mMap.clear();
+            latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
+            circle = mMap.addCircle(new CircleOptions()
+                    .center(latLngProvided)
+                    .radius(circle.getRadius())
+                    .strokeColor(Color.RED)
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(), getZoomLevel(circle)));
+        }
     }
 
     @Override
