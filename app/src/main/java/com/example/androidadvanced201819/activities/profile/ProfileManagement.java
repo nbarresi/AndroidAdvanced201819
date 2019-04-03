@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +43,8 @@ public class ProfileManagement extends AppCompatActivity {
     TextView application, title;
     CheckBox auto_brightness;
     Profile profile;
+    Button editButton;
+    Button createButton;
 
     int option;
     protected int volumeValue;
@@ -61,6 +65,9 @@ public class ProfileManagement extends AppCompatActivity {
         application = findViewById(R.id.applicationName);
         title = findViewById(R.id.profile_title);
 
+        editButton = findViewById(R.id.buttonEditProfile);
+        createButton = findViewById(R.id.buttonCreateProfile);
+
         Intent det = getIntent();
         if (det.hasExtra("position")) {
             title.setText("Modifica");
@@ -73,6 +80,40 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setApplication("Application");
             profile.setApplicationName("Application");
         }
+
+        name.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.toString().trim().length()==0){
+                    createButton.setEnabled(false);
+                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                    editButton.setEnabled(false);
+                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+
+                } else {
+                    createButton.setEnabled(true);
+                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                    editButton.setEnabled(true);
+                    editButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
     }
 
     public void onRadioDetectionMethod(View view) {
@@ -185,8 +226,6 @@ public class ProfileManagement extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void setProfileSettings(int position) {
-        Button editButton = findViewById(R.id.buttonEditProfile);
-        Button createButton = findViewById(R.id.buttonCreateProfile);
 
         editButton.setVisibility(View.VISIBLE);
         createButton.setVisibility(View.GONE);
