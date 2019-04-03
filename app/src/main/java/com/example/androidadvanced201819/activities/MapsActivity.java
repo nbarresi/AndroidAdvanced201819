@@ -35,8 +35,6 @@ public class MapsActivity extends FragmentActivity {
     private Circle circle;
     private TextView range;
 
-    //TODO: Permissions Management
-
     @Override
     public void onBackPressed() {
         Intent toCreate = new Intent();
