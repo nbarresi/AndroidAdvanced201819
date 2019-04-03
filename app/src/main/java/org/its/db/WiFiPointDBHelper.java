@@ -83,7 +83,7 @@ public class WiFiPointDBHelper extends GenericDBHelper{
 
     }
 
-    private WiFiPoint getByBSSID(String BSSID){
+    public WiFiPoint getByBSSID(String BSSID){
         String selection = WiFiPoint.WifiPointEntry._BSSID+ " == ?";
         String[] selectionArgs = { BSSID};
         Cursor cursor = this.getWritableDatabase().query(

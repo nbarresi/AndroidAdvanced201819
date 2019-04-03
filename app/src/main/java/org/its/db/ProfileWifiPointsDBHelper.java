@@ -2,10 +2,14 @@ package org.its.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.its.db.entities.ProfileWiFiPoints;
 import org.its.db.entities.WiFiPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileWifiPointsDBHelper extends GenericDBHelper {
 
@@ -28,12 +32,59 @@ public class ProfileWifiPointsDBHelper extends GenericDBHelper {
             // Insert the new row, returning the primary key value of the new row
             db.insert(ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME, null, values);
 
-            wifiHelper.insertWiFiPoint(wifiPoint);
+            if(wifiHelper.getByBSSID(wifiPoint.getBSSID()) == null)
+                wifiHelper.insertWiFiPoint(wifiPoint);
+            else
+                wifiHelper.updateWiFiPoint(wifiPoint);
+
         }
 
         return wiFiPoints;
     }
 
+    public boolean deleteProfileWifiPoints(ProfileWiFiPoints wiFiPoints){
+        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " == ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = {wiFiPoints.getIdProfile()+"" };
+        // Issue SQL statement.
+        int deletedRows = this.getWritableDatabase().delete(WiFiPoint.WifiPointEntry.TABLE_NAME, selection, selectionArgs);
 
+        return (deletedRows > 0);
+    }
+
+    public boolean updateProfileWifiPoints(ProfileWiFiPoints wiFiPoints){
+        deleteProfileWifiPoints(wiFiPoints);
+        insertProfileWiFiPoint(wiFiPoints);
+        return true;
+    }
+
+    public ProfileWiFiPoints getProfileWiFiPoints(Long idProfile){
+        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " == ?";
+        String[] selectionArgs = {idProfile+"" };
+        Cursor cursor = this.getWritableDatabase().query(
+                ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        ProfileWiFiPoints profileWiFiPoints = new ProfileWiFiPoints() ;
+        profileWiFiPoints.setIdProfile(idProfile);
+
+        List<WiFiPoint> wifiPoints = new ArrayList<>();
+
+        while(cursor.moveToNext()) {
+            WiFiPoint wiFiPoint = wifiHelper.getByBSSID(cursor.getString(cursor.getColumnIndexOrThrow(ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID)));
+            wifiPoints.add(wiFiPoint);
+        }
+
+        profileWiFiPoints.setWiFiPoints(wifiPoints);
+
+        return profileWiFiPoints;
+
+    }
 
 }

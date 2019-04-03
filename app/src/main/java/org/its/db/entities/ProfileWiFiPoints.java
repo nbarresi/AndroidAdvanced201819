@@ -9,6 +9,8 @@ public class ProfileWiFiPoints {
     private long idProfile;
     private List<WiFiPoint> wiFiPoints;
 
+    public ProfileWiFiPoints(){}
+
     public ProfileWiFiPoints(Long idProfile, List<WiFiPoint> wiFiPoints){
         this.idProfile = idProfile;
         this.wiFiPoints = wiFiPoints;
@@ -32,7 +34,7 @@ public class ProfileWiFiPoints {
 
     /* Inner class that defines the table contents */
     public static class ProfileWiFiPointsEntry implements BaseColumns {
-        public final static String TABLE_NAME = "wifipoints";
+        public final static String TABLE_NAME = "profilewifipoints";
 
         public final static String _ID = "id";
 
