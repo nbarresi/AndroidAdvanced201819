@@ -27,20 +27,21 @@
             android:textSize="@dimen/textSizeSmall"/>
     </RelativeLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/intestazione">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_below="@+id/intestazione">-->
 
         <ListView
+            android:layout_marginTop="@dimen/smallMargin"
+            android:layout_below="@+id/intestazione"
             android:id="@+id/listView"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
         </ListView>
 
-    </ScrollView>
+    <!--</ScrollView>-->
 
     <Button
         android:id="@+id/confirm"

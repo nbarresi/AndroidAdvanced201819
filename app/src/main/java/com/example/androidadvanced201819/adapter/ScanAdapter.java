@@ -34,21 +34,32 @@ public class ScanAdapter extends ArrayAdapter {
         View listItem = convertView;
 
         if (listItem == null) {
-            listItem = LayoutInflater.from(context).inflate(R.layout.list_item_layout, parent, false);
+            listItem = LayoutInflater.from(context).inflate(R.layout.scan_item_layout, parent, false);
         }
 
 
         final ScanResult wifi = wifis.get(position);
 
 
-        TextView ssid = (TextView) listItem.findViewById(R.id.itemName);
-        TextView bssid = (TextView) listItem.findViewById(R.id.itemName);
-        TextView livello = (TextView) listItem.findViewById(R.id.itemName);
+        TextView ssid = (TextView) listItem.findViewById(R.id.SSID);
+        TextView bssid = (TextView) listItem.findViewById(R.id.BSSID);
+        TextView livello = (TextView) listItem.findViewById(R.id.livello);
 
         ssid.setText(wifi.SSID);
         bssid.setText(wifi.BSSID);
-        livello.setText(wifi.level);
+        livello.setText(getPowerPercentage(wifi.level)+"%");
 
         return listItem;
+    }
+
+    public int getPowerPercentage(int power) {
+        int i = 0;
+        if (power <= -100) {
+            i = 0;
+        } else {
+            i = 100 + power;
+        }
+
+        return i;
     }
 }
