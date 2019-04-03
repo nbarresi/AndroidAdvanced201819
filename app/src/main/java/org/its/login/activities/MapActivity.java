@@ -96,13 +96,10 @@ public class MapActivity extends Activity {
                     Location location = getCurrentLocation();
                     if(location != null){
                         latLng = new LatLng(location.getLatitude(),location.getLongitude());
-
+                        googleMap.setMyLocationEnabled(true);
                     }
 
                 }
-
-                googleMap.setMyLocationEnabled(true);
-
 
                 final Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title("center"));
                 final Circle circle = googleMap.addCircle(new CircleOptions().center(latLng).radius(100).strokeColor(Color.RED));

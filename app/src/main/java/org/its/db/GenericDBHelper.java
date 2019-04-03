@@ -42,7 +42,7 @@ public abstract class GenericDBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME + " (" +
                     ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " INTEGER," +
                     ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID + " TEXT," +
-                    "PRIMARY KEY ("+Profile.ProfileEntry._ID + " , "+ WiFiPoint.WifiPointEntry._BSSID +")";
+                    "PRIMARY KEY ("+Profile.ProfileEntry._ID + " , "+ WiFiPoint.WifiPointEntry._BSSID +"))";
 
     public GenericDBHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
