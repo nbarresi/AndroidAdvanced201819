@@ -49,4 +49,5 @@ public class ApplicationActivity extends AppCompatActivity {
     public void onBackPressed() {
         finish();
     }
+
 }

@@ -34,15 +34,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="0dp" />
+
         <Button
             android:id="@+id/accessButton"
             android:layout_width="match_parent"
             android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/blue"
             android:onClick="goToCreateProfile"
-            android:layout_alignParentBottom="true"
             android:text="@string/addProfile"
             android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/setWifi"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/blue"
+            android:onClick="saveWifi"
+            android:text="@string/savewifi"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

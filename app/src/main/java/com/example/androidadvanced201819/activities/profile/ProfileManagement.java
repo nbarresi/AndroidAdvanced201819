@@ -23,14 +23,17 @@ import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.MapsActivity;
+import com.example.androidadvanced201819.activities.WiFiActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
 import com.example.androidadvanced201819.model.Profile;
+import com.example.androidadvanced201819.model.WiFi;
 
 public class ProfileManagement extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
+    private static final int MY_PERMISSIONS_REQUEST_WIFI = 2;
     EditText name;
     SeekBar brightness, volume;
     Switch bluetooth, wifi;
@@ -87,19 +90,31 @@ public class ProfileManagement extends AppCompatActivity {
                                 == PackageManager.PERMISSION_GRANTED) {
                             Intent goToMap = new Intent(this, MapsActivity.class);
                             startActivityForResult(goToMap, 2);
-                                //Ho già i permessi necessari
+                            //Ho già i permessi necessari
                         } else {
-                                //Richiedo i permessi (vedi slide successiva)
-                            checkLocationPermission();
-
+                            //Richiedo i permessi (vedi slide successiva)
+                            checkLocationPermission(MY_PERMISSIONS_REQUEST_LOCATION);
                         }
                     }
 
                 }
                 break;
             case R.id.wifiRadioButton:
-                if (checked)
+                if (checked) {
                     option = Option.WIFI.getOption();
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(
+                                this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            Intent goToWifi = new Intent(this, WiFiActivity.class);
+                            startActivity(goToWifi);
+                            //Ho già i permessi necessari
+                        } else {
+                            //Richiedo i permessi (vedi slide successiva)
+                            checkLocationPermission(MY_PERMISSIONS_REQUEST_WIFI);
+                        }
+                    }
+                }
                 break;
             case R.id.nfcRadioButton:
                 if (checked)
@@ -110,6 +125,7 @@ public class ProfileManagement extends AppCompatActivity {
                     option = Option.BEACON.getOption();
                 break;
         }
+
     }
 
     public void chooseApplication(View view) {
@@ -126,7 +142,7 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setApplication(appPackage);
             profile.setApplicationName(appName);
             application.setText(appName);
-        }else if (requestCode == 2 && data != null){
+        } else if (requestCode == 2 && data != null) {
             profile.setCoordinate(data.getExtras().getString("LatLong"));
         }
     }
@@ -250,9 +266,9 @@ public class ProfileManagement extends AppCompatActivity {
 
         profile.setApplication(profile.getApplication());
 
-        if(profile.getOption() == 1){
+        if (profile.getOption() == 1) {
             profile.setCoordinate(profile.getCoordinate());
-        }else {
+        } else {
             profile.setCoordinate("");
         }
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
@@ -264,7 +280,7 @@ public class ProfileManagement extends AppCompatActivity {
         startActivity(backToMain);
     }
 
-    private void checkLocationPermission() {
+    private void checkLocationPermission(int request) {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -273,11 +289,11 @@ public class ProfileManagement extends AppCompatActivity {
 //Alert prima di richiedere i permessi
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
+                        request);
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
+                        request);
             }
         }
     }
@@ -300,9 +316,19 @@ public class ProfileManagement extends AppCompatActivity {
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
+            case MY_PERMISSIONS_REQUEST_WIFI: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Intent goToWiFi = new Intent(this, WiFiActivity.class);
+                    startActivity(goToWiFi);
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
         }
     }
 
