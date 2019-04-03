@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -19,21 +20,29 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
+import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
 import com.example.androidadvanced201819.adapter.ScanAdapter;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WifiScanActivity extends AppCompatActivity {
 
-    ScanAdapter scanAdapter;
-    ListView listView;
+    private ScanAdapter scanAdapter;
+    private ListView listView;
+    public static String EXTRA_WIFI_LIST = "wifi_list";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_scan);
+
+        listView = (ListView) findViewById(R.id.listView);
         final WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         listView = (ListView) findViewById(R.id.listView);
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -61,9 +70,22 @@ public class WifiScanActivity extends AppCompatActivity {
         createProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent toCreate = new Intent();
+                toCreate.putExtra(EXTRA_WIFI_LIST, (Serializable) convertScanResult(wifiManager.getScanResults()));
+                setResult(3, toCreate);
+                finish();
             }
         });
+    }
+
+    private List<Wifi> convertScanResult(List<ScanResult> wifiResults) {
+        List<Wifi> wifis = new ArrayList<Wifi>();
+
+        for (ScanResult result : wifiResults) {
+            wifis.add(new Wifi(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5)));
+        }
+
+        return wifis;
     }
 
     @Override
