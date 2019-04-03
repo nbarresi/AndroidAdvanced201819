@@ -24,8 +24,11 @@ import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
+import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
+
+import java.util.List;
 
 public class CreateProfileActivity extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 
+    private static final int REQUEST_WIFI = 3;
 
     private DbHelper dbHelper;
     private TextView appName;
@@ -44,6 +48,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private String appPackage = "";
     private String appNameVal = "";
     private String methodValue = "";
+    private List<Wifi> wifis;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +117,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                 appNameVal = appName.getText().toString();
 
                 RadioButton selected = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
-                String selectedString = selected.getText().toString();
+                String selectedString = selected != null ? selected.getText().toString() : "";
 
                 boolean bluetooth = bluetoothSwitch.isChecked();
                 boolean wifi = wifiSwitch.isChecked();
@@ -123,14 +128,26 @@ public class CreateProfileActivity extends AppCompatActivity {
                     profile.setId(profilo.getId());
                     dbHelper.updateProfile(profile);
 
+                    dbHelper.removeWifiById(profilo.getId());
+                    for (Wifi single : wifis) {
+                        single.setIdProfilo(profilo.getId());
+                        dbHelper.insertWifi(single);
+                    }
+
                     finish();
                 } else {
 
                     if (!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
-                        dbHelper.insertProfile(profile);
+                        int idProfilo = (int) dbHelper.insertProfile(profile);
+                        for (Wifi single : wifis) {
+                            single.setIdProfilo(idProfilo);
+                            dbHelper.insertWifi(single);
+                        }
                     } else {
                         Toast.makeText(CreateProfileActivity.this, "Inserire dati mancanti", Toast.LENGTH_SHORT).show();
                     }
+
+
                     finish();
                 }
             }
@@ -164,7 +181,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent wifiIntent = new Intent(getApplicationContext(), WifiScanActivity.class);
-                startActivity(wifiIntent);
+                startActivityForResult(wifiIntent, REQUEST_WIFI);
             }
         });
 
@@ -184,7 +201,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void goToMaps(){
+    private void goToMaps() {
         Intent toMap = new Intent(getApplicationContext(), MapsActivity.class);
         if (profilo != null) {
             toMap.putExtra(EXTRA_PROFILE_LAT_LNG, profilo.getValoreMetodo());
@@ -227,6 +244,9 @@ public class CreateProfileActivity extends AppCompatActivity {
 
             case 2:
                 methodValue = (String) data.getExtras().getString(MapsActivity.EXTRA_MAP_LAT_LNG);
+                break;
+            case 3:
+                wifis = (List<Wifi>) data.getExtras().get(WifiScanActivity.EXTRA_WIFI_LIST);
                 break;
         }
     }
