@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +28,11 @@ import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.activities.WiFiActivity;
 import com.example.androidadvanced201819.dataaccess.DataAccessUtils;
 import com.example.androidadvanced201819.database.ProfileDatabaseManager;
+import com.example.androidadvanced201819.database.ProfileWifiDatabaseManager;
 import com.example.androidadvanced201819.model.Option;
 import com.example.androidadvanced201819.model.Profile;
 import com.example.androidadvanced201819.model.WiFi;
+import com.example.androidadvanced201819.model.WiFiList;
 
 public class ProfileManagement extends AppCompatActivity {
 
@@ -41,7 +45,7 @@ public class ProfileManagement extends AppCompatActivity {
     TextView application, title;
     CheckBox auto_brightness;
     Profile profile;
-
+    private WiFiList wiFiList;
     int option;
     protected int volumeValue;
 
@@ -86,8 +90,7 @@ public class ProfileManagement extends AppCompatActivity {
                     option = Option.GPS.getOption();
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (ContextCompat.checkSelfPermission(
-                                this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                == PackageManager.PERMISSION_GRANTED) {
+                                this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             Intent goToMap = new Intent(this, MapsActivity.class);
                             startActivityForResult(goToMap, 2);
                             //Ho già i permessi necessari
@@ -104,10 +107,9 @@ public class ProfileManagement extends AppCompatActivity {
                     option = Option.WIFI.getOption();
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (ContextCompat.checkSelfPermission(
-                                this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                == PackageManager.PERMISSION_GRANTED) {
+                                this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             Intent goToWifi = new Intent(this, WiFiActivity.class);
-                            startActivity(goToWifi);
+                            startActivityForResult(goToWifi, 3);
                             //Ho già i permessi necessari
                         } else {
                             //Richiedo i permessi (vedi slide successiva)
@@ -144,6 +146,8 @@ public class ProfileManagement extends AppCompatActivity {
             application.setText(appName);
         } else if (requestCode == 2 && data != null) {
             profile.setCoordinate(data.getExtras().getString("LatLong"));
+        } else if (requestCode == 3 && data != null) {
+            wiFiList = (WiFiList) data.getExtras().getSerializable("wifis");
         }
     }
 
@@ -174,10 +178,16 @@ public class ProfileManagement extends AppCompatActivity {
         }
 
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
+        ProfileWifiDatabaseManager profileWifiDatabaseManager = new ProfileWifiDatabaseManager(getApplicationContext());
         profileDatabaseManager.open();
         Long cursor = profileDatabaseManager.createProfile(profile);
-        Log.d("cursor", cursor.toString());
         profileDatabaseManager.close();
+
+        profileWifiDatabaseManager.open();
+        for (WiFi wifi : wiFiList.getWiFis()) {
+            profileWifiDatabaseManager.createProfileWifi(cursor, wifi.getBSSID());
+        }
+        profileWifiDatabaseManager.close();
 
         Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
         startActivity(backToMain);
@@ -272,9 +282,17 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setCoordinate("");
         }
         ProfileDatabaseManager profileDatabaseManager = new ProfileDatabaseManager(getApplicationContext());
+        ProfileWifiDatabaseManager profileWifiDatabaseManager = new ProfileWifiDatabaseManager(getApplicationContext());
+
         profileDatabaseManager.open();
         profileDatabaseManager.editProfile(profile);
         profileDatabaseManager.close();
+
+        profileWifiDatabaseManager.open();
+        profileWifiDatabaseManager.deleteProfileWifi(profile.getId());
+        for (WiFi wifi : wiFiList.getWiFis()) {
+            profileWifiDatabaseManager.createProfileWifi(profile.getId(), wifi.getBSSID());
+        }
 
         Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
         startActivity(backToMain);
@@ -322,7 +340,7 @@ public class ProfileManagement extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     Intent goToWiFi = new Intent(this, WiFiActivity.class);
-                    startActivity(goToWiFi);
+                    startActivityForResult(goToWiFi, 3);
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

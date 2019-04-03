@@ -18,7 +18,13 @@ import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.adapter.WiFiAdapterActivity;
+import com.example.androidadvanced201819.activities.profile.ProfileManagement;
+import com.example.androidadvanced201819.database.ProfileWifiDatabaseManager;
+import com.example.androidadvanced201819.database.WiFiDatabaseManager;
+import com.example.androidadvanced201819.model.WiFi;
+import com.example.androidadvanced201819.model.WiFiList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WiFiActivity extends AppCompatActivity {
@@ -61,6 +67,19 @@ public class WiFiActivity extends AppCompatActivity {
     }
 
     public void saveWifi(View view) {
+        List<WiFi> wiFis = new ArrayList<>();
+        for (ScanResult wifi : wifiList) {
+            WiFi newWifi = new WiFi(wifi.BSSID, wifi.SSID, wifi.level);
+            wiFis.add(newWifi);
+            WiFiDatabaseManager wiFiDatabaseManager = new WiFiDatabaseManager(getApplicationContext());
+            wiFiDatabaseManager.open();
+            wiFiDatabaseManager.createWifi(newWifi);
+            wiFiDatabaseManager.close();
+        }
 
+        Intent goToProfile = new Intent(this, ProfileManagement.class);
+        goToProfile.putExtra("wifis", new WiFiList(wiFis));
+        setResult(3, goToProfile);
+        finish();
     }
 }
