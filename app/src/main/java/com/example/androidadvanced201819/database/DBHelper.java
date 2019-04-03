@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "profile.db";
 
 
@@ -28,14 +28,31 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProfileDatabaseManager.KEY_AUTOBRIGHTNESS + " INTEGER "+
                     ");";
 
+    public static final String DATABASE_CREATE_WIFI =
+            "CREATE TABLE wifi(" +
+                    WiFiDatabaseManager.KEY_SSID + " TEXT PRIMARY KEY, " +
+                    WiFiDatabaseManager.KEY_BSSID + " TEXT, " +
+                    WiFiDatabaseManager.KEY_LEVEL + " INTEGER " +
+                    ");";
+
+    public static final String DATABASE_CREATE_PROFILE_WIFI =
+            "CREATE TABLE profileWifi(" +
+                    ProfileWifiDatabaseManager.KEY_IDPROFILE + " INTEGER, " +
+                    ProfileWifiDatabaseManager.KEY_SSID + " TEXT, " +
+                    "PRIMARY KEY (" + ProfileWifiDatabaseManager.KEY_IDPROFILE + ", " +
+                    ProfileWifiDatabaseManager.KEY_SSID + ")" +
+                    ");";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_PROFILE);
+        db.execSQL(DATABASE_CREATE_WIFI);
+        db.execSQL(DATABASE_CREATE_PROFILE_WIFI);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 4) {
+        if (oldVersion < 5) {
             db.execSQL("ALTER TABLE " + ProfileDatabaseManager.DATABASE_TABLE + " ADD COLUMN " + ProfileDatabaseManager.KEY_COORDINATES + " TEXT DEFAULT ''");
         }
     }

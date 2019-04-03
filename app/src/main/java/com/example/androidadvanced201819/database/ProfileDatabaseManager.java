@@ -64,8 +64,8 @@ public class ProfileDatabaseManager {
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 
-    public long deleteProfile(String name) {
-        return database.delete(DATABASE_TABLE, KEY_PROFILE_NAME + "=?", new String[]{name});
+    public void deleteProfile(String name) {
+        database.delete(DATABASE_TABLE, KEY_PROFILE_NAME + "=?", new String[]{name});
     }
 
     public Cursor fetchAllProfile() {
