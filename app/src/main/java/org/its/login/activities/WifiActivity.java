@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.androidadvanced201819.R;
 import com.google.gson.Gson;
@@ -34,6 +35,18 @@ public class WifiActivity extends AppCompatActivity {
     private Button btnDisplay;
     public static int FILTER_WIFI_LEVEL = 70;
 
+    private BroadcastReceiver listener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            wifiList = wifiManager.getScanResults();
+            //TEMPO TOREMOVE MOCK
+            mockScanResultList();
+            setRecyclerViewLayoutManager();
+            setRecyclerAdapter();
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +55,32 @@ public class WifiActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         setImpostaButtonListener();
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(new BroadcastReceiver() {
-                             @Override
-                             public void onReceive(Context context, Intent intent) {
-                                 wifiList = wifiManager.getScanResults();
-                                 //TEMPO TOREMOVE MOCK
-                                 mockScanResultList();
-                                 setRecyclerViewLayoutManager();
-                                 setRecyclerAdapter();
-                             }
-                         },
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+//        registerReceiver(new BroadcastReceiver() {
+//                             @Override
+//                             public void onReceive(Context context, Intent intent) {
+//                                 wifiList = wifiManager.getScanResults();
+//                                 //TEMPO TOREMOVE MOCK
+//                                 mockScanResultList();
+//                                 setRecyclerViewLayoutManager();
+//                                 setRecyclerAdapter();
+//                             }
+//                         },
+//                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
-        //TEMP TOREMOVE MOCK
-        mockScanResultList();
-        setRecyclerViewLayoutManager();
-        setRecyclerAdapter();
+        registerReceiver(listener, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+            //TEMPO TOREMOVE MOCK
+        //mockScanResultList();
+        //setRecyclerViewLayoutManager();
+        //setRecyclerAdapter();
+    }
+
+    private void loaderScanWifi() {
+        TextView loader = findViewById(R.id.loader);
+        while (wifiList.size() == 0){
+            loader.setVisibility(View.VISIBLE);
+        }
+        loader.setVisibility(View.GONE);
     }
 
     private void mockScanResultList() {
@@ -79,8 +102,8 @@ public class WifiActivity extends AppCompatActivity {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        sr.BSSID = "foo";
-        sr.SSID = "bar";
+        sr.BSSID = "foo BSSID";
+        sr.SSID = "bar SSID";
         sr.level = 90;
 
         ScanResult ar = null;
@@ -93,8 +116,8 @@ public class WifiActivity extends AppCompatActivity {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        ar.BSSID = "ANTANI";
-        ar.SSID = "LOFRANO";
+        ar.BSSID = "LOFRANO BSSID";
+        ar.SSID = "LOFRANO SSID";
         ar.level = 20;
 
         wifiList.add(sr);wifiList.add(ar);wifiList.add(sr);wifiList.add(ar);wifiList.add(sr);wifiList.add(sr);wifiList.add(ar);
@@ -135,4 +158,12 @@ public class WifiActivity extends AppCompatActivity {
         }
         return convertedList;
     }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(listener);
+        super.onStop();
+    }
+
 }

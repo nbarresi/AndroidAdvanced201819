@@ -26,27 +26,33 @@ import com.example.androidadvanced201819.R;
 
 import org.its.db.CoordinatesDBHelper;
 import org.its.db.ProfileDBHelper;
+import org.its.db.ProfileWifiPointsDBHelper;
+import org.its.db.WiFiPointDBHelper;
 import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
+import org.its.db.entities.ProfileWiFiPoints;
 import org.its.db.entities.WiFiPoint;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewProfileActivity extends AppCompatActivity {
 
+    private Profile profile = new Profile();
+    private Coordinates coordinates = new Coordinates();
+    private List<WiFiPoint> wiFiPointList = new ArrayList<>();
+    ProfileWiFiPoints profileWiFiPoints = new ProfileWiFiPoints();
+
     private ProfileDBHelper profileDbHelper;
     private CoordinatesDBHelper coordinatesDBHelper;
+    private ProfileWifiPointsDBHelper profileWifiPointsDBHelper;
 
     private EditText editTextNameProfile;
     private RadioGroup radioConnectivityGroup;
     private RadioButton radioConnectivityButton;
     private int radioGroupId;
     private Button btnDisplay;
-    private Profile profile = new Profile();
-    private Coordinates coordinates = new Coordinates();
-    private List<WiFiPoint> wiFiPoint = new ArrayList<>();
+
     int initialBrightness = 0;
     private SeekBar barBrightness;
     private CheckBox brightnessCheckbox;
@@ -67,6 +73,8 @@ public class NewProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_profile);
         profileDbHelper = new ProfileDBHelper(getApplicationContext());
         coordinatesDBHelper = new CoordinatesDBHelper(getApplicationContext());
+        profileWifiPointsDBHelper = new ProfileWifiPointsDBHelper(getApplicationContext());
+
 
 
         Intent editProfile = getIntent();
@@ -213,7 +221,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private void showAlertBrightnessPermission() {
         new android.support.v7.app.AlertDialog.Builder(this)
                 .setTitle("Permission required")
-                .setMessage("You need to confirm permission to change brightness")
+                .setMessage("You need to confirm permission to dinamically change brightness")
 
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -329,17 +337,41 @@ public class NewProfileActivity extends AppCompatActivity {
         profile.setApp(setPackageAppName());
         if (isEditUser) {
             profileDbHelper.updateProfile(profile);
-            if (profile.getMetodoRilevamento().equals("GPS")) {
-                coordinates.setIdProfile(profile.getId());
-                coordinatesDBHelper.updateCoordinates(coordinates);
-            }
-        } else {
-            profileDbHelper.insertProfile(profile);
-            if (profile.getMetodoRilevamento().equals("GPS")) {
-                coordinates.setIdProfile(profileDbHelper.getLastInsertedProfileId());
-                coordinatesDBHelper.insertCoordinates(coordinates);
+            switch (profile.getMetodoRilevamento().toLowerCase()) {
+                case "gps":
+                    coordinates.setIdProfile(profile.getId());
+                    coordinatesDBHelper.updateCoordinates(coordinates);
+                    break;
+                case "wifi":
+                    profileWiFiPoints.setIdProfile(profile.getId());
+                    profileWiFiPoints.setWiFiPoints(wiFiPointList);
+                    profileWifiPointsDBHelper.insertProfileWiFiPoint(profileWiFiPoints);
+
+                    //TEMP
+                 ProfileWiFiPoints temp = profileWifiPointsDBHelper.getProfileWiFiPoints(profile.getId());
+
+                    break;
             }
         }
+            else {
+            profileDbHelper.insertProfile(profile);
+            switch (profile.getMetodoRilevamento().toLowerCase()) {
+                case "gps":
+                    coordinates.setIdProfile(profileDbHelper.getLastInsertedProfileId());
+                    coordinatesDBHelper.insertCoordinates(coordinates);
+                    break;
+                case "wifi":
+                    profileWiFiPoints.setIdProfile(profileDbHelper.getLastInsertedProfileId());
+                    profileWiFiPoints.setWiFiPoints(wiFiPointList);
+                    profileWifiPointsDBHelper.insertProfileWiFiPoint(profileWiFiPoints);
+
+                    //TEMP
+                    ProfileWiFiPoints temp = profileWifiPointsDBHelper.getProfileWiFiPoints(profile.getId());
+                    break;
+            }
+        }
+
+        //TODO BEACON/NFC
     }
 
 
@@ -375,7 +407,7 @@ public class NewProfileActivity extends AppCompatActivity {
     }
 
     private String setLabelAppName() {
-        String result = profile.getApp();
+        if (profile.getApp() != null) { String result = profile.getApp();
         PackageManager pm = getPackageManager();
         List<ApplicationInfo> appList = pm.getInstalledApplications(0);
         for (ApplicationInfo applicationInfo : appList) {
@@ -385,6 +417,8 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         }
         return result;
+        }
+        return null;
     }
 
 
@@ -392,17 +426,21 @@ public class NewProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
+        if (data != null)
         switch (requestCode) {
             case ADD_APP_REQUEST_CODE:
                 profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
                 textViewAppList.setText(profile.getApp());
                 break;
             case ADD_COORDINATES_REQUEST_CODE:
+                if ( data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE" )!= null){
                 coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
-                break;
+            }
+            break;
             case ADD_WIFI_REQUEST_CODE:
-                wiFiPoint = (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
-                List<WiFiPoint> pino = wiFiPoint;
+                if (data.getSerializableExtra("ADD_WIFI_REQUEST_CODE") != null){
+                    wiFiPointList =  (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
+                } else wiFiPointList.clear();
                 break;
             //TODO more cases
         }

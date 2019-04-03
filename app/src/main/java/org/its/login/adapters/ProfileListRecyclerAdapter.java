@@ -61,7 +61,7 @@ public class ProfileListRecyclerAdapter extends RecyclerView.Adapter<ProfileList
          holder.cardView.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-
+                    //TODO
              }
          });
      }

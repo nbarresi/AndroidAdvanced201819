@@ -11,6 +11,14 @@
     android:paddingBottom="30dp"
     tools:context="org.its.login.activities.WifiActivity">
 
+    <TextView
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scanning for result..."
+        android:visibility="gone"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_wifi"
         android:layout_width="match_parent"

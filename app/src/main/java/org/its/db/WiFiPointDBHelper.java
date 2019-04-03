@@ -70,7 +70,7 @@ public class WiFiPointDBHelper extends GenericDBHelper{
     public List<WiFiPoint> getAllPoints(){
 
         Cursor cursor = this.getWritableDatabase().query(
-                Profile.ProfileEntry.TABLE_NAME,   // The table to query
+                WiFiPoint.WifiPointEntry.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
                 null,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
@@ -87,7 +87,7 @@ public class WiFiPointDBHelper extends GenericDBHelper{
         String selection = WiFiPoint.WifiPointEntry._BSSID+ " == ?";
         String[] selectionArgs = { BSSID};
         Cursor cursor = this.getWritableDatabase().query(
-                Profile.ProfileEntry.TABLE_NAME,   // The table to query
+                WiFiPoint.WifiPointEntry.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
