@@ -7,22 +7,38 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "deviceProfile.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
-    private static final String DATABASE_CREATE = "CREATE TABLE profilo (id Integer primary key AUTOINCREMENT, nome varchar(50), volume integer DEFAULT 50, luminosita integer DEFAULT 50, auto_luminosita integer DEFAULT 0,  metodo integer NOT NULL, bluetooth integer DEFAULT 0, wifi integer DEFAULT 0, rilevazione varchar(255) NOT NULL, app varchar(250));";
-    //private static final String DATABASE_CREATE4 = "CREATE TABLE list_product (id_list_fk integer, _id integer, quantita integer,PRIMARY KEY(id_list_fk,_id) ,FOREIGN KEY (id_list_fk) REFERENCES list(_id) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (_id) REFERENCES product(_id) ON UPDATE CASCADE ON DELETE CASCADE);";
+    private static final String DATABASE_CREATE = "CREATE TABLE profilo (id Integer primary key AUTOINCREMENT, nome varchar(50), " +
+            "volume integer DEFAULT 50, luminosita integer DEFAULT 50, auto_luminosita integer DEFAULT 0, " +
+            " metodo integer NOT NULL, bluetooth integer DEFAULT 0, wifi integer DEFAULT 0, rilevazione varchar(255)," +
+            " app varchar(250));";
+    private static final String DATABASE_CREATE2 = "CREATE TABLE wifi (bssid VARCHAR(50) primary key, ssid VARCHAR(50), potenza integer);";
+    private static final String DATABASE_CREATE3 = "CREATE TABLE profilo_wifi(id_profilo integer,bssid varchar(50), " +
+            "primary key (id_profilo,bssid), " +
+            "FOREIGN KEY(id_profilo) REFERENCES profilo(id), " +
+            "FOREIGN KEY(bssid) REFERENCES wifi(bssid)" +
+            ")";
 
     // Costruttore
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(DATABASE_CREATE);
+        sqLiteDatabase.execSQL(DATABASE_CREATE2);
+        sqLiteDatabase.execSQL(DATABASE_CREATE3);
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        if(oldVersion<1){}
+        if (oldVersion < 2) {
+            sqLiteDatabase.execSQL(DATABASE_CREATE2);
+            sqLiteDatabase.execSQL(DATABASE_CREATE3);
+        }
     }
 }
