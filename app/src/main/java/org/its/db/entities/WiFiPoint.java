@@ -1,5 +1,6 @@
 package org.its.db.entities;
 
+import android.net.wifi.ScanResult;
 import android.provider.BaseColumns;
 
 import java.io.Serializable;
@@ -17,7 +18,12 @@ public class WiFiPoint implements Serializable {
     }
 
     public WiFiPoint(){
+    }
 
+    public WiFiPoint(ScanResult scanResult){
+        this.BSSID = scanResult.BSSID;
+        this.SSID = scanResult.SSID;
+        this.level = scanResult.level;
     }
 
     public String getBSSID() {

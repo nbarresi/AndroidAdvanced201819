@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,8 +28,10 @@ import org.its.db.CoordinatesDBHelper;
 import org.its.db.ProfileDBHelper;
 import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
+import org.its.db.entities.WiFiPoint;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewProfileActivity extends AppCompatActivity {
@@ -43,6 +46,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private Button btnDisplay;
     private Profile profile = new Profile();
     private Coordinates coordinates = new Coordinates();
+    private List<WiFiPoint> wiFiPoint = new ArrayList<>();
     int initialBrightness = 0;
     private SeekBar barBrightness;
     private CheckBox brightnessCheckbox;
@@ -54,7 +58,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
     public final int ADD_APP_REQUEST_CODE = 0;
     public final int ADD_COORDINATES_REQUEST_CODE = 1;
-
+    private static final int ADD_WIFI_REQUEST_CODE = 2;
     public static int RESULT_MAP_ACTIVITY = 1111;
 
     @Override
@@ -100,16 +104,17 @@ public class NewProfileActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 final RadioButton rb = (RadioButton) findViewById(checkedId);
                 rb.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         switch (rb.getText().toString().toLowerCase()) {
                             case "gps":
-
-
                                 Intent intentAddCoordinates = new Intent(NewProfileActivity.this, MapActivity.class);
                                 startActivityForResult(intentAddCoordinates, ADD_COORDINATES_REQUEST_CODE);
                                 break;
                             case "wifi":
+                                Intent intentAddWifi = new Intent(NewProfileActivity.this, WifiActivity.class);
+                                startActivityForResult(intentAddWifi, ADD_WIFI_REQUEST_CODE);
                                 radioConnectivityButton = (RadioButton) findViewById(R.id.wifi);
                                 break;
                             case "nfc":
@@ -157,7 +162,10 @@ public class NewProfileActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Context context = getApplicationContext();
-                boolean canWriteSettings = Settings.System.canWrite(context);
+                boolean canWriteSettings = false;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    canWriteSettings = Settings.System.canWrite(context);
+                }
                 if (canWriteSettings) {
 
                     //Because max screen brightness value is 255 But max seekbar value is 100, so need to convert.
@@ -176,7 +184,10 @@ public class NewProfileActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Context context = getApplicationContext();
-                boolean canWriteSettings = Settings.System.canWrite(context);
+                boolean canWriteSettings = false;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    canWriteSettings = Settings.System.canWrite(context);
+                }
                 if (canWriteSettings) {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, initialBrightness);
                 }
@@ -186,7 +197,10 @@ public class NewProfileActivity extends AppCompatActivity {
 
     private void saveInitialBrightness() {
         Context context = getApplicationContext();
-        boolean canWriteSettings = Settings.System.canWrite(context);
+        boolean canWriteSettings = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            canWriteSettings = Settings.System.canWrite(context);
+        }
         if (canWriteSettings) {
             try {
                 initialBrightness = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
@@ -218,10 +232,18 @@ public class NewProfileActivity extends AppCompatActivity {
     //luminosità auto
     private void setAutoBrightnessCheckboxListener() {
         brightnessCheckbox = (CheckBox) findViewById(R.id.auto_brightness);
-        boolean canWriteSettings = Settings.System.canWrite(getApplicationContext());
-        if (canWriteSettings) {
+        brightnessCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                boolean canWriteSettings = false;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    canWriteSettings = Settings.System.canWrite(getApplicationContext());
+                }
+                if (canWriteSettings) {
 
-        } else showAlertBrightnessPermission();
+                } else showAlertBrightnessPermission();
+            }
+        });
 
         if (isEditUser && profile.getLuminosita() == 0)
             brightnessCheckbox.setChecked(true); //temp valore arbitrario
@@ -377,6 +399,10 @@ public class NewProfileActivity extends AppCompatActivity {
                 break;
             case ADD_COORDINATES_REQUEST_CODE:
                 coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
+                break;
+            case ADD_WIFI_REQUEST_CODE:
+                wiFiPoint = (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
+                List<WiFiPoint> pino = wiFiPoint;
                 break;
             //TODO more cases
         }
