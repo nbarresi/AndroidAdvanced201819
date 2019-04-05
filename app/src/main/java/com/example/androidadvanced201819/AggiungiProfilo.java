@@ -43,6 +43,17 @@ public class AggiungiProfilo extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        RadioButton WIFI=findViewById(R.id.WIFI);
+        WIFI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),ListaWifi.class);
+                startActivity(intent);
+
+            }
+        });
+
         conferma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,5 +83,8 @@ public class AggiungiProfilo extends AppCompatActivity {
     }
     public void tost(String tost){
         Toast.makeText(this, tost, Toast.LENGTH_SHORT).show();
+    }
+    private void permissionRequest(){
+
     }
 }

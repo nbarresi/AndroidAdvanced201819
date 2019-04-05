@@ -8,19 +8,39 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.Settings;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DB extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 1;
-    public static final String DATABASE_NAME = "profile.db";
-    public static final String PROFILE_TABLE_NAME ="settings";
-    public static final String PROFILE_COLUMN_ID ="id";
-    public static final String PROFILE_COLUMN_PROFILE_NAME ="profileName";
-    public static final String PROFILE_COLUMN_APP="profileSurname";
+    private static final int DB_VERSION = 1;
+    private static final String DATABASE_NAME = "profile.db";
+    private static final String PROFILE_TABLE_NAME ="settings";
+    private static final String PROFILE_COLUMN_ID ="id";
+    protected static final String PROFILE_COLUMN_PROFILE_NAME ="profileName";
+    private static final String PROFILE_COLUMN_APP="profileSurname";
 
-    public static final String CREATE_TABLE_SETTINGS=
+
+    public static final String LATLNG_TABLE="latlng";
+    public static final String LATLNG_COLUMN_ID="id";
+    public static final String LATLNG_COLUMN_LATITUDINE="latitudine";
+    public static final String LATLNG_COLUMN_LONGITUDINE="longitudine";
+    public static final String LATLNG_COLUMN_RAGGIO="raggio";
+
+  /*  public static final String WIFI_TABLE="wifi";
+    public static final String WIFI_COLUMN_ID="id";*/
+
+    public static final String CREATE_TABLE_LATLNG=
+            "CREATE TABLE "+LATLNG_TABLE +
+                    "("+LATLNG_COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    +LATLNG_COLUMN_LATITUDINE +" TEXT, "
+                    +LATLNG_COLUMN_LONGITUDINE +" TEXT, "
+                    +LATLNG_COLUMN_RAGGIO +" INTEGER)";
+
+
+    private static final String CREATE_TABLE_SETTINGS=
             "CREATE TABLE "+PROFILE_TABLE_NAME +
             "("+PROFILE_COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
             +PROFILE_COLUMN_PROFILE_NAME +" TEXT)";
+
 
     public static final String SELECT_PROFILE_TABLE_NAME="SELECT * FROM "+PROFILE_TABLE_NAME;
 
@@ -32,6 +52,7 @@ public class DB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_SETTINGS);
+        db.execSQL(CREATE_TABLE_LATLNG);
     }
 
     @Override
@@ -56,6 +77,7 @@ public class DB extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         Cursor data=db.rawQuery(SELECT_PROFILE_TABLE_NAME,null);
         return data;
+
     }
 
 

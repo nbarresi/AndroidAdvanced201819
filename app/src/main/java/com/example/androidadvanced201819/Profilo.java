@@ -1,11 +1,23 @@
 package com.example.androidadvanced201819;
 
+import java.util.List;
+
 public class Profilo {
     private int id;
     private String name;
     private int latitudine;
     private int longitudine;
     private int raggio;
+
+    public Profilo(int id, String name, int latitudine, int longitudine, int raggio) {
+        this.id = id;
+        this.name = name;
+        this.latitudine = latitudine;
+        this.longitudine = longitudine;
+        this.raggio = raggio;
+    }
+
+    public Profilo() { }
 
     public int getId() {
         return id;
@@ -45,5 +57,10 @@ public class Profilo {
 
     public void setRaggio(int raggio) {
         this.raggio = raggio;
+    }
+
+    @Override
+    public String toString() {
+        return " " + name;
     }
 }

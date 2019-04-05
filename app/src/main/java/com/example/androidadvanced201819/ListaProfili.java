@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.QuickContactBadge;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaProfili extends AppCompatActivity {
 
@@ -61,5 +62,7 @@ public class ListaProfili extends AppCompatActivity {
         ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
         listView.setAdapter(adapter);
     }
+
+
 
 }
