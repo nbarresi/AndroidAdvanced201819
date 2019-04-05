@@ -1,5 +1,6 @@
 package com.example.androidadvanced201819;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -30,7 +31,9 @@ public class ListaProfili extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent=new Intent(getApplicationContext(),AggiungiProfilo.class);
+
                 startActivity(intent);
             }
         });

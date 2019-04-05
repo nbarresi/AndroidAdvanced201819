@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"
         android:layout_marginStart="60dp"
+        android:singleLine="true"
         android:hint="@string/Username"/>
 
     <EditText
@@ -36,6 +37,7 @@
         android:layout_marginEnd="60dp"
         android:inputType="textPassword"
         android:layout_marginStart="60dp"
+        android:singleLine="true"
         android:hint="@string/Password"/>
 
         <Button
