@@ -28,6 +28,7 @@ import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CreateProfileActivity extends AppCompatActivity {
@@ -250,8 +251,6 @@ public class CreateProfileActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 
 
 }

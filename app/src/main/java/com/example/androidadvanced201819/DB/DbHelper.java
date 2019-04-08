@@ -138,9 +138,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
-    public List<Wifi> getWifi() {
+    public List<Wifi> getWifi(int profileId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(WIFI_TABLE, null, null, null, null, null, null);
+        Cursor cursor = db.query(WIFI_TABLE, null, WIFI_COLUMN_ID_PROFILO+"=?", null, null, null, null);
         List<Wifi> wifis = new ArrayList<>();
         if (cursor != null) {
             if (cursor.moveToFirst()) {
