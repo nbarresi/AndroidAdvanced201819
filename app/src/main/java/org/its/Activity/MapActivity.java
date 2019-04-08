@@ -11,10 +11,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -98,17 +96,10 @@ public class MapActivity extends Activity {
                     gps.setLatitudine(gettedGps.getLatitudine());
                 } else {
                     LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    Location location;
+
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if (location != null) {
-                            gps.setLongitudine(location.getLongitude());
-                            gps.setLatitudine(location.getLatitude());
-                        } else {
-                            gps.setLatitudine(48d);
-                            gps.setLongitudine(9d);
-                        }
-                        //  buildAlertMessageNoGps();
+                        gps.setLatitudine(48d);
+                        gps.setLongitudine(9d);
                     } else {
 
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
