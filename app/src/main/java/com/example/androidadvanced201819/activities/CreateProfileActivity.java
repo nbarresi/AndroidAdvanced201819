@@ -29,6 +29,7 @@ import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateProfileActivity extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private String appPackage = "";
     private String appNameVal = "";
     private String methodValue = "";
-    private List<Wifi> wifis;
+    private List<Wifi> wifis = new ArrayList<Wifi>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,10 +130,12 @@ public class CreateProfileActivity extends AppCompatActivity {
                     profile.setId(profilo.getId());
                     dbHelper.updateProfile(profile);
 
-                    dbHelper.removeWifiById(profilo.getId());
-                    for (Wifi single : wifis) {
-                        single.setIdProfilo(profilo.getId());
-                        dbHelper.insertWifi(single);
+                    if (wifi && !wifis.isEmpty()) {
+                        dbHelper.removeWifiById(profilo.getId());
+                        for (Wifi single : wifis) {
+                            single.setIdProfilo(profilo.getId());
+                            dbHelper.insertWifi(single);
+                        }
                     }
 
                     finish();
@@ -140,10 +143,14 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     if (!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
                         int idProfilo = (int) dbHelper.insertProfile(profile);
-                        for (Wifi single : wifis) {
-                            single.setIdProfilo(idProfilo);
-                            dbHelper.insertWifi(single);
+
+                        if (wifi && !wifis.isEmpty()) {
+                            for (Wifi single : wifis) {
+                                single.setIdProfilo(idProfilo);
+                                dbHelper.insertWifi(single);
+                            }
                         }
+
                     } else {
                         Toast.makeText(CreateProfileActivity.this, "Inserire dati mancanti", Toast.LENGTH_SHORT).show();
                     }

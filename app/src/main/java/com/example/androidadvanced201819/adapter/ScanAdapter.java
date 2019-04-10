@@ -43,7 +43,7 @@ public class ScanAdapter extends ArrayAdapter {
 
         ssid.setText(wifi.SSID);
         bssid.setText(wifi.BSSID);
-        livello.setText("" + WifiManager.calculateSignalLevel(wifi.level, 5));
+        livello.setText("" + WifiManager.calculateSignalLevel(wifi.level, 100) + "%");
 
         return listItem;
     }

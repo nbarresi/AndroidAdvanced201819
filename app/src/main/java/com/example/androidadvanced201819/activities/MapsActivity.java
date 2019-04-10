@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         range.setText("100");
 
         Intent intent = getIntent();
-        if(intent.getExtras() != null) {
+        if(intent.getExtras() != null && !intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG).isEmpty()) {
             String coordinates = intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG);
 
             String[] splitted = coordinates.split(";");
@@ -80,10 +80,9 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200,20, this);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 20, this);
             if(latLngProvided == null) {
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200,20, this);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 20, this);
                 if(location!=null) {
                     latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
                 }
@@ -103,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
                         .radius(radius.getProgress()*10)
                         .strokeColor(Color.RED)
                 );
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
 
                 mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -154,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
                 .radius(circle.getRadius())
                 .strokeColor(Color.RED));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngInput));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngInput));
     }
 
     public int getZoomLevel(Circle circle) {
