@@ -169,7 +169,7 @@ public class WifiService extends IntentService {
                 }
             }
             if (confirmedWifiPointList.size() >= savedWiFiPointList.size() * 0.7) {
-                return profileDBHelper.getProfileById(profileWiFiPoints.getIdProfile()).get(0);
+                return profileDBHelper.getProfileById(profileWiFiPoints.getIdProfile());
             }
         }
         return null;
