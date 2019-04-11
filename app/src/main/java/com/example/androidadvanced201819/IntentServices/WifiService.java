@@ -14,8 +14,6 @@ import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.activities.CreateProfileActivity;
-import com.example.androidadvanced201819.activities.WifiScanActivity;
-import com.example.androidadvanced201819.adapter.ScanAdapter;
 
 import java.util.List;
 
@@ -56,7 +54,10 @@ public class WifiService extends IntentService{
                             if(checkWifis(results,wifis))
                             {
                                 Log.d("myApp2","trovato");
+                                Toast.makeText(context,"Funziona",Toast.LENGTH_SHORT).show();
                                 //activateProfile(profile);
+                                serve=false;//da vedere come gestire al posto di chiudere il service
+                                break;
                             }
                         }
                     }
@@ -87,7 +88,8 @@ public class WifiService extends IntentService{
         Log.d("myApp2","percentage: "+percentage);
         Log.d("myApp2","foundConnection: "+foundConnections);
         Log.d("myApp2","wifis: "+wifis.size());
-        return percentage>70;
+        Log.d("myApp2","wifis: "+results.size());
+        return percentage>40;
     }
 
     @Override
