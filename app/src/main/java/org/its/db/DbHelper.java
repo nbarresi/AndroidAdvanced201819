@@ -12,7 +12,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "CREATE TABLE profilo (id Integer primary key AUTOINCREMENT, nome varchar(50), " +
             "volume integer DEFAULT 50, luminosita integer DEFAULT 50, auto_luminosita integer DEFAULT 0, " +
             " metodo integer NOT NULL, bluetooth integer DEFAULT 0, wifi integer DEFAULT 0, rilevazione varchar(255)," +
-            " app varchar(250),isactive integer DEFAULT 0);";
+            " isactive integer DEFAULT 0,app varchar(250));";
     private static final String DATABASE_CREATE2 = "CREATE TABLE wifi (bssid VARCHAR(50) primary key, ssid VARCHAR(50));";
     private static final String DATABASE_CREATE3 = "CREATE TABLE profilo_wifi(id_profilo integer,bssid varchar(50), potenza integer ," +
             "primary key (id_profilo,bssid), " +
