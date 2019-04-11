@@ -345,7 +345,7 @@ public class NewProfileActivity extends AppCompatActivity {
                 case "wifi":
                     profileWiFiPoints.setIdProfile(profile.getId());
                     profileWiFiPoints.setWiFiPoints(wiFiPointList);
-                    profileWifiPointsDBHelper.insertProfileWiFiPoint(profileWiFiPoints);
+                    profileWifiPointsDBHelper.updateProfileWifiPoints(profileWiFiPoints);
 
                     //TEMP
                  ProfileWiFiPoints temp = profileWifiPointsDBHelper.getProfileWiFiPoints(profile.getId());

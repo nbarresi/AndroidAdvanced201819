@@ -1,4 +1,4 @@
-package org.its.login.Servicies;
+package org.its.login.services;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
