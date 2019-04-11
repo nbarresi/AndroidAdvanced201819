@@ -118,7 +118,7 @@ public class ProfileDBHelper extends GenericDBHelper {
     }
 
 
-    public List<Profile> getProfileById(Long idProfile){
+    public Profile getProfileById(Long idProfile){
         String selection = Profile.ProfileEntry._ID + " == ?";
         String[] selectionArgs = {idProfile+"" };
 
@@ -132,7 +132,7 @@ public class ProfileDBHelper extends GenericDBHelper {
                 null               // The sort order
         );
 
-        List<Profile> profiles = cursorToProfile(cursor);
+        Profile profiles = cursorToProfile(cursor).get(0);
 
         cursor.close();
 

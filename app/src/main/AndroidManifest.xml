@@ -21,11 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
 
+
+
         <service
-            android:name="org.its.login.services.WifiService"
+            android:name="org.its.services.GPSService"
             android:exported="false" />
 
-        <receiver android:name="org.its.login.services.WifiReceiver">
+        <receiver android:name="org.its.services.GPSReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

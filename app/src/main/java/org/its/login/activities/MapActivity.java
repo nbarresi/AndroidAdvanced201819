@@ -63,6 +63,8 @@ public class MapActivity extends Activity {
 
     int radius = 100;
 
+    GoogleMap activityGoogleMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -89,6 +91,7 @@ public class MapActivity extends Activity {
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final GoogleMap googleMap) {
+                activityGoogleMap = googleMap;
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 if(ContextCompat.checkSelfPermission(
                         getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
@@ -96,11 +99,11 @@ public class MapActivity extends Activity {
                     Location location = getCurrentLocation();
                     if(location != null){
                         latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                        googleMap.setMyLocationEnabled(true);
                     }
 
                 }
 
+                googleMap.setMyLocationEnabled(true);
                 final Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title("center"));
                 final Circle circle = googleMap.addCircle(new CircleOptions().center(latLng).radius(100).strokeColor(Color.RED));
 
