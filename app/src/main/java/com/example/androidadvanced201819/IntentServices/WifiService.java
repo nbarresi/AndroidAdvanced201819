@@ -56,7 +56,7 @@ public class WifiService extends IntentService{
                                 Log.d("myApp2","trovato");
                                 Toast.makeText(context,"Funziona",Toast.LENGTH_SHORT).show();
                                 //activateProfile(profile);
-                                serve=false;//da vedere come gestire al posto di chiudere il service
+//                                serve=false;//da vedere come gestire al posto di chiudere il service
                                 break;
                             }
                         }

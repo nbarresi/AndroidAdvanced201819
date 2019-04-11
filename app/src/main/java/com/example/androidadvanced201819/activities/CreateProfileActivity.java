@@ -182,6 +182,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         nfcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent wifiIntent = new Intent(getApplicationContext(), NfcActivity.class);
+                startActivityForResult(wifiIntent, REQUEST_WIFI);
             }
         });
 
