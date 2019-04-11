@@ -21,7 +21,7 @@ public class Profilo implements Serializable {
     public Profilo() {
     }
 
-    public Profilo(Integer id, String nome, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app) {
+    public Profilo(Integer id, String nome, Integer volume, Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app,boolean isActive) {
         this.id = id;
         this.nome = nome;
         this.volume = volume;
@@ -32,9 +32,10 @@ public class Profilo implements Serializable {
         this.metodo = metodo;
         this.rilevazione = rilevazione;
         this.app = app;
+        this.isActive=isActive;
     }
 
-    public Profilo(Integer volume, String nome,Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app) {
+    public Profilo(Integer volume, String nome,Integer luminosita, boolean autoLuminosita, boolean wifi, boolean bluetooth, ProfileTypeEnum metodo, String rilevazione, String app, boolean isActive) {
         this.volume = volume;
         this.nome = nome;
         this.luminosita = luminosita;
@@ -44,6 +45,8 @@ public class Profilo implements Serializable {
         this.metodo = metodo;
         this.rilevazione = rilevazione;
         this.app = app;
+        this.isActive=isActive;
+
     }
 
     public Integer getId() {

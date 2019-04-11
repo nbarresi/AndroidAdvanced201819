@@ -39,7 +39,8 @@ public class DbHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             sqLiteDatabase.execSQL(DATABASE_CREATE2);
             sqLiteDatabase.execSQL(DATABASE_CREATE3);
-        }else if(oldVersion<3){
+        }
+        if(oldVersion<3){
             sqLiteDatabase.execSQL("ALTER TABLE profilo ADD COLUMN isactive integer DEFAULT 0 ");
         }
     }
