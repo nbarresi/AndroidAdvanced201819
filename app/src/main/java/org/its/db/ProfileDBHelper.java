@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
+import org.its.db.entities.ProfileWiFiPoints;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,29 @@ public class ProfileDBHelper extends GenericDBHelper {
         }
         return profiles;
     }
+
+
+    public List<Profile> getProfileById(Long idProfile){
+        String selection = Profile.ProfileEntry._ID + " == ?";
+        String[] selectionArgs = {idProfile+"" };
+
+        Cursor cursor = this.getWritableDatabase().query(
+                Profile.ProfileEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,           // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Profile> profiles = cursorToProfile(cursor);
+
+        cursor.close();
+
+        return profiles;
+    }
+
 
     public int getLastInsertedProfileId(){
         Cursor c = this.getWritableDatabase().rawQuery("SELECT last_insert_rowid()", null);
