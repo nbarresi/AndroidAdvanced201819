@@ -1,4 +1,4 @@
-package org.its.login.Servicies;
+package org.its.login.services;
 
 public class LoginRequest {
     private String user;

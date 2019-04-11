@@ -23,9 +23,13 @@
 
         <service
             android:name="org.its.login.services.WifiService"
-            android:exported="false" />
+            android:exported="false"
+            android:enabled="true" />
 
-        <receiver android:name="org.its.login.services.WifiReceiver">
+        <receiver android:name="org.its.login.services.WifiReceiver"
+            android:label="RestartServiceWhenStopped"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

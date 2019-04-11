@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.its.db.entities.ProfileWiFiPoints;
 import org.its.db.entities.WiFiPoint;
@@ -25,6 +26,7 @@ public class ProfileWifiPointsDBHelper extends GenericDBHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         for(WiFiPoint wifiPoint : wiFiPoints.getWiFiPoints()){
+            Log.w("BSSID", wifiPoint.getBSSID());
             ContentValues values = new ContentValues();
             values.put(ProfileWiFiPoints.ProfileWiFiPointsEntry._ID, wiFiPoints.getIdProfile());
             values.put(ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID, wifiPoint.getBSSID());

@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,21 +30,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WifiActivity extends AppCompatActivity {
+public class WifiActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private WifiManager wifiManager;
     private WifiListRecyclerAdapter adapter;
     private List<ScanResult> wifiList = new ArrayList<>();
     private Button btnDisplay;
-    public static int FILTER_WIFI_LEVEL = 70;
+    private  TextView loaderTxtView;
 
     private BroadcastReceiver listener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             wifiList = wifiManager.getScanResults();
+
             //TEMPO TOREMOVE MOCK
             mockScanResultList();
+
+            if (wifiList.size()>0)  loaderTxtView.setVisibility(View.GONE);
             setRecyclerViewLayoutManager();
             setRecyclerAdapter();
         }
@@ -52,6 +59,7 @@ public class WifiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi);
         recyclerView = (RecyclerView) findViewById(R.id.rv_wifi);
+        loaderTxtView = findViewById(R.id.loader);
         recyclerView.setHasFixedSize(true);
         setImpostaButtonListener();
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -68,20 +76,12 @@ public class WifiActivity extends AppCompatActivity {
 //                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
         registerReceiver(listener, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-
             //TEMPO TOREMOVE MOCK
-        //mockScanResultList();
-        //setRecyclerViewLayoutManager();
-        //setRecyclerAdapter();
+        mockScanResultList();
+        setRecyclerViewLayoutManager();
+        setRecyclerAdapter();
     }
 
-    private void loaderScanWifi() {
-        TextView loader = findViewById(R.id.loader);
-        while (wifiList.size() == 0){
-            loader.setVisibility(View.VISIBLE);
-        }
-        loader.setVisibility(View.GONE);
-    }
 
     private void mockScanResultList() {
         Constructor<ScanResult> ctor = null;
@@ -120,7 +120,7 @@ public class WifiActivity extends AppCompatActivity {
         ar.SSID = "LOFRANO SSID";
         ar.level = 20;
 
-        wifiList.add(sr);wifiList.add(ar);wifiList.add(sr);wifiList.add(ar);wifiList.add(sr);wifiList.add(sr);wifiList.add(ar);
+        wifiList.add(sr);wifiList.add(ar);
     }
 
 
@@ -151,11 +151,9 @@ public class WifiActivity extends AppCompatActivity {
     private List<WiFiPoint> convertToWifiPointListAndFilterForLevel(){
         List<WiFiPoint> convertedList = new ArrayList<>();
         for (ScanResult scanResult: wifiList){
-            if (scanResult.level >= FILTER_WIFI_LEVEL ){
                 WiFiPoint wiFiPoint = new WiFiPoint(scanResult);
                 convertedList.add(wiFiPoint);
             }
-        }
         return convertedList;
     }
 
@@ -165,5 +163,4 @@ public class WifiActivity extends AppCompatActivity {
         unregisterReceiver(listener);
         super.onStop();
     }
-
 }
