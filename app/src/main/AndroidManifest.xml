@@ -29,6 +29,16 @@
             </intent-filter>
         </service>
 
+        <service
+            android:enabled="true"
+            android:name=".IntentServices.WifiService">
+            <intent-filter>
+                <action
+                    android:name = "com.example.androidadvanced201819.IntentServices">
+                </action>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCyPT-NFBaVdXM9m495C8V4uHruBsH4lb8" />

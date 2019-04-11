@@ -16,12 +16,12 @@ import android.widget.Toast;
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.activities.CreateProfileActivity;
-import com.example.androidadvanced201819.activities.MapsActivity;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
 public class GpsService extends IntentService implements LocationListener{
+
+    private boolean serve= true;
 
     public GpsService(String name) {
         super(name);
@@ -67,7 +67,7 @@ public class GpsService extends IntentService implements LocationListener{
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
-        while(true){
+        while(serve){
 
         }
     }
@@ -89,7 +89,7 @@ public class GpsService extends IntentService implements LocationListener{
 
                 if(Integer.parseInt(splitted[2])>=location.distanceTo(profileLocation)){
                     Log.d("myApp","trovato");
-//                  ActivateProfile();
+//                  activateProfile(profile);
                     break;
                 }
             }

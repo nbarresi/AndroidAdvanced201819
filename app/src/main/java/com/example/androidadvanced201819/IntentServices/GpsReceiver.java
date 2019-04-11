@@ -12,12 +12,20 @@ public class GpsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Receiver Started", Toast.LENGTH_SHORT).show();
         Log.w("GESUUUXXX","DAI XXX");
-        Intent startServiceIntent = new Intent (context, GpsService.class);
+        Intent startGPSServiceIntent = new Intent (context, GpsService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(startServiceIntent);
-            context.startService(startServiceIntent);
+            context.startForegroundService(startGPSServiceIntent);
+            context.startService(startGPSServiceIntent);
         }else{
-            context.startService(startServiceIntent);
+            context.startService(startGPSServiceIntent);
+        }
+
+        Intent startWifiServiceIntent = new Intent (context, WifiService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(startWifiServiceIntent);
+            context.startService(startWifiServiceIntent);
+        }else{
+            context.startService(startWifiServiceIntent);
         }
     }
 }
