@@ -15,6 +15,7 @@ public class StringCollection {
     public final static String columnRilevazione="rilevazione";
     public final static String columnNome="nome";
     public final static String columnApp="app";
+    public final static String columnIsActive="isActive";
 
     //tabella wifi
     public final static String columnBssid="bssid";

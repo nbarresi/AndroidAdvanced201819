@@ -21,17 +21,7 @@ public class ProfiloDao extends GenericDao {
     }
 
     public Profilo insertProfile(Profilo profile) throws Exception {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(StringCollection.columnLuminosita, profile.getLuminosita());
-        contentValues.put(StringCollection.columnAutoLuminosita, Converters.fromBooleanToInt(profile.isAutoLuminosita()));
-        contentValues.put(StringCollection.columnWIFI, Converters.fromBooleanToInt(profile.isWifi()));
-        contentValues.put(StringCollection.columnBluetooth, Converters.fromBooleanToInt(profile.isBluetooth()));
-        contentValues.put(StringCollection.columnVolume, profile.getVolume());
-        contentValues.put(StringCollection.columnMetodo, profile.getMetodo().getValue());
-        contentValues.put(StringCollection.columnRilevazione, profile.getRilevazione());
-        contentValues.put(StringCollection.columnNome, profile.getNome());
-        contentValues.put(StringCollection.columnApp, profile.getApp());
+        ContentValues contentValues = fromProfileToContentValues(profile);
 
         long profileId = database.insert(TABLE_NAME,
                 null,
@@ -52,16 +42,7 @@ public class ProfiloDao extends GenericDao {
             if (result.getCount() > 0) {
                 result.moveToFirst();
                 do {
-                    profili.add(new Profilo(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnID)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnNome)),
-                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnVolume)),
-                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnLuminosita)),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnAutoLuminosita))),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
-                            ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnApp))));
+                    profili.add(fromCursorToProfile(result));
                 } while (result.moveToNext());
 
             }
@@ -84,37 +65,44 @@ public class ProfiloDao extends GenericDao {
             if (result.getCount() > 0) {
                 result.moveToFirst();
                 do {
-                    profilo = new Profilo(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnID)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnNome)),
-                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnVolume)),
-                            result.getInt(result.getColumnIndexOrThrow(StringCollection.columnLuminosita)),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnAutoLuminosita))),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
-                            Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
-                            ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnApp)));
+                    profilo = fromCursorToProfile(result);
                 } while (result.moveToNext());
 
             }
         } catch (Exception e) {
-            Log.d("getAllProfilesError", e.getMessage());
+            Log.d("getByIdError", e.getMessage());
         } finally {
             result.close();
         }
         return profilo;
     }
 
+    public List<Profilo> getByMetodo(ProfileTypeEnum metodo) {
+        List<Profilo> profili = new ArrayList<>();
+        Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
+                        StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI},
+                StringCollection.columnMetodo + "=?", new String[]{"" + metodo.getValue()}, null, null, null);
+
+        try {
+            if (result.getCount() > 0) {
+                result.moveToFirst();
+                do {
+                    profili.add(fromCursorToProfile(result));
+                } while (result.moveToNext());
+
+            }
+        } catch (Exception e) {
+            Log.d("getByMetodoError", e.getMessage());
+        } finally {
+            result.close();
+        }
+        return profili;
+    }
+
     public void updateProfilo(Profilo profilo) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(StringCollection.columnLuminosita, profilo.getLuminosita());
-        contentValues.put(StringCollection.columnAutoLuminosita, Converters.fromBooleanToInt(profilo.isAutoLuminosita()));
-        contentValues.put(StringCollection.columnWIFI, Converters.fromBooleanToInt(profilo.isWifi()));
-        contentValues.put(StringCollection.columnBluetooth, Converters.fromBooleanToInt(profilo.isBluetooth()));
-        contentValues.put(StringCollection.columnVolume, profilo.getVolume());
-        contentValues.put(StringCollection.columnMetodo, profilo.getMetodo().getValue());
-        contentValues.put(StringCollection.columnRilevazione, profilo.getRilevazione());
-        contentValues.put(StringCollection.columnNome, profilo.getNome());
+        ContentValues contentValues = fromProfileToContentValues(profilo);
+        contentValues.put(StringCollection.columnIsActive, Converters.fromBooleanToInt(profilo.isActive()));
         database.update(
                 TABLE_NAME,
                 contentValues,
@@ -127,6 +115,30 @@ public class ProfiloDao extends GenericDao {
         return database.delete(TABLE_NAME, StringCollection.columnID + "=?", new String[]{"" + id}) > 0;
     }
 
+    private ContentValues fromProfileToContentValues(Profilo profilo) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(StringCollection.columnLuminosita, profilo.getLuminosita());
+        contentValues.put(StringCollection.columnAutoLuminosita, Converters.fromBooleanToInt(profilo.isAutoLuminosita()));
+        contentValues.put(StringCollection.columnWIFI, Converters.fromBooleanToInt(profilo.isWifi()));
+        contentValues.put(StringCollection.columnBluetooth, Converters.fromBooleanToInt(profilo.isBluetooth()));
+        contentValues.put(StringCollection.columnVolume, profilo.getVolume());
+        contentValues.put(StringCollection.columnMetodo, profilo.getMetodo().getValue());
+        contentValues.put(StringCollection.columnRilevazione, profilo.getRilevazione());
+        contentValues.put(StringCollection.columnNome, profilo.getNome());
+        return contentValues;
+    }
 
-
+    private Profilo fromCursorToProfile(Cursor result) {
+        return new Profilo(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnID)),
+                result.getString(result.getColumnIndexOrThrow(StringCollection.columnNome)),
+                result.getInt(result.getColumnIndexOrThrow(StringCollection.columnVolume)),
+                result.getInt(result.getColumnIndexOrThrow(StringCollection.columnLuminosita)),
+                Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnAutoLuminosita))),
+                Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnWIFI))),
+                Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnBluetooth))),
+                ProfileTypeEnum.getEnumFromInt(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnMetodo))),
+                result.getString(result.getColumnIndexOrThrow(StringCollection.columnRilevazione)),
+                result.getString(result.getColumnIndexOrThrow(StringCollection.columnApp)),
+                Converters.fromIntToBoolean(result.getInt(result.getColumnIndexOrThrow((StringCollection.columnIsActive)))));
+    }
 }
