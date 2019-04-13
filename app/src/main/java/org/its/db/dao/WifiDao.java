@@ -61,6 +61,29 @@ public class WifiDao extends GenericDao {
         return wifiList;
     }
 
+    public WifiConnection getWyfiByBssidAndProfile(String bssid, int idProfilo) {
+        WifiConnection wifi = null;
+        Cursor result = database.rawQuery("SELECT wifi.bssid,ssid,potenza from wifi join profilo_wifi on profilo_wifi.bssid = wifi.bssid where" +
+                " profilo_wifi.id_profilo=? AND wifi.bssid=? ", new String[]{"" + idProfilo, bssid});
+
+        try {
+            if (result.getCount() > 0) {
+                result.moveToFirst();
+
+                wifi = new WifiConnection(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnPotenza)),
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
+
+
+            }
+        } catch (Exception e) {
+            Log.d("getAllProfilesError", e.getMessage());
+        } finally {
+            result.close();
+        }
+        return wifi;
+    }
+
     public WifiConnection getWifiByBssid(String bssid) {
         WifiConnection wifi = null;
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnBssid, StringCollection.columnSsid,
@@ -70,11 +93,10 @@ public class WifiDao extends GenericDao {
         try {
             if (result.getCount() > 0) {
                 result.moveToFirst();
-                do {
-                    wifi = new WifiConnection(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnPotenza)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
-                } while (result.moveToNext());
+                wifi = new WifiConnection(
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
+
 
             }
         } catch (Exception e) {
@@ -94,11 +116,11 @@ public class WifiDao extends GenericDao {
         try {
             if (result.getCount() > 0) {
                 result.moveToFirst();
-                do {
-                    wifi = new WifiConnection(result.getInt(result.getColumnIndexOrThrow(StringCollection.columnPotenza)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
-                            result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
-                } while (result.moveToNext());
+
+                wifi = new WifiConnection(
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnSsid)),
+                        result.getString(result.getColumnIndexOrThrow(StringCollection.columnBssid)));
+
 
             }
         } catch (Exception e) {

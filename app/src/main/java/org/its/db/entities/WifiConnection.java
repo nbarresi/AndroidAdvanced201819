@@ -19,6 +19,11 @@ public class WifiConnection implements Serializable {
         this.BSSID = BSSID;
     }
 
+    public WifiConnection( String name, String BSSID) {
+        this.name = name;
+        this.BSSID = BSSID;
+    }
+
     public int getPower() {
         return power;
     }

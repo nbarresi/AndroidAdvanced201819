@@ -35,7 +35,7 @@ public class ProfiloDao extends GenericDao {
         ArrayList<Profilo> profili = new ArrayList<>();
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
                         StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
-                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI, StringCollection.columnApp,StringCollection.columnIsActive},
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI, StringCollection.columnApp, StringCollection.columnIsActive},
                 null, null, null, null, null);
 
         try {
@@ -58,7 +58,7 @@ public class ProfiloDao extends GenericDao {
         Profilo profilo = null;
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
                         StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
-                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI,StringCollection.columnIsActive},
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnApp,StringCollection.columnWIFI, StringCollection.columnIsActive},
                 StringCollection.columnID + "=?", new String[]{"" + id}, null, null, null);
 
         try {
@@ -81,7 +81,7 @@ public class ProfiloDao extends GenericDao {
         List<Profilo> profili = new ArrayList<>();
         Cursor result = database.query(TABLE_NAME, new String[]{StringCollection.columnID, StringCollection.columnLuminosita,
                         StringCollection.columnNome, StringCollection.columnVolume, StringCollection.columnBluetooth, StringCollection.columnAutoLuminosita,
-                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI},
+                        StringCollection.columnRilevazione, StringCollection.columnMetodo, StringCollection.columnWIFI, StringCollection.columnApp,StringCollection.columnIsActive},
                 StringCollection.columnMetodo + "=?", new String[]{"" + metodo.getValue()}, null, null, null);
 
         try {
@@ -89,6 +89,7 @@ public class ProfiloDao extends GenericDao {
                 result.moveToFirst();
                 do {
                     profili.add(fromCursorToProfile(result));
+                    Log.d("nel ciclo",""+profili.size());
                 } while (result.moveToNext());
 
             }
@@ -125,6 +126,7 @@ public class ProfiloDao extends GenericDao {
         contentValues.put(StringCollection.columnMetodo, profilo.getMetodo().getValue());
         contentValues.put(StringCollection.columnRilevazione, profilo.getRilevazione());
         contentValues.put(StringCollection.columnNome, profilo.getNome());
+        contentValues.put(StringCollection.columnApp, profilo.getApp());
         return contentValues;
     }
 
