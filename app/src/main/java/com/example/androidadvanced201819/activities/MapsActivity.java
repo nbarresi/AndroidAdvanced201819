@@ -59,10 +59,8 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
                 .findFragmentById(R.id.map);
 
         radius = (SeekBar) findViewById(R.id.raggio);
-        radius.setProgress(10);
-
         range = (TextView) findViewById(R.id.km);
-        range.setText("100");
+
 
         Intent intent = getIntent();
         if(intent.getExtras() != null && !intent.getStringExtra(CreateProfileActivity.EXTRA_PROFILE_LAT_LNG).isEmpty()) {
@@ -72,9 +70,12 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             double lat = Double.parseDouble(splitted[0]);
             double lng = Double.parseDouble(splitted[1]);
             radius.setProgress(Integer.parseInt(splitted[2]));
-            range.setText(Integer.parseInt(splitted[2])*10+"");
+            range.setText(distanceFormatter(Integer.parseInt(splitted[2])*10));
 
             latLngProvided = new LatLng(lat, lng);
+        } else {
+            radius.setProgress(10);
+            range.setText(distanceFormatter(100));
         }
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -119,9 +120,10 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        Integer update = progress * 10;
+                        int update = progress == 0 ? 10 : progress * 10;
+                        String formatted = distanceFormatter(update);
                         circle.setRadius(update);
-                        range.setText(update.toString());
+                        range.setText(formatted);
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngProvided));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),getZoomLevel(circle)));
                     }
@@ -155,6 +157,11 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
 
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngInput));
     }
+
+    private String distanceFormatter(int progress){
+        return progress >= 1000 ? (progress/1000) + " km" : progress + " m";
+    }
+
 
     public int getZoomLevel(Circle circle) {
         int zoomLevel = 11;

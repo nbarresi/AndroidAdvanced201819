@@ -46,7 +46,7 @@ public class NfcActivity extends AppCompatActivity {
             throw new RuntimeException("fail",e);
         }
 
-        intentFiltersArray = new IntentFilter[]{nDef,};
+        intentFiltersArray = new IntentFilter[]{nDef};
         
         techListsArray = new String [][]{
                 new String[]{NfcF.class.getName()},

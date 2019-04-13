@@ -6,12 +6,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.NFC"/>
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
 
     <application
@@ -24,22 +30,18 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <service
-            android:enabled="true"
-            android:name=".IntentServices.GpsService">
+            android:name=".IntentServices.GpsService"
+            android:enabled="true">
             <intent-filter>
-                <action
-                    android:name = "com.example.androidadvanced201819.IntentServices">
-                </action>
+                <action android:name="com.example.androidadvanced201819.IntentServices"></action>
             </intent-filter>
         </service>
 
         <service
-            android:enabled="true"
-            android:name=".IntentServices.WifiService">
+            android:name=".IntentServices.WifiService"
+            android:enabled="true">
             <intent-filter>
-                <action
-                    android:name = "com.example.androidadvanced201819.IntentServices">
-                </action>
+                <action android:name="com.example.androidadvanced201819.IntentServices"></action>
             </intent-filter>
         </service>
 
@@ -71,7 +73,7 @@
             android:name=".activities.CreateProfileActivity"
             android:label="@string/title_activity_create_profile"
             android:theme="@style/AppThemeWithTitle"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".activities.ApplicationListActivity"
@@ -90,19 +92,20 @@
         <activity
             android:name=".activities.NfcActivity"
             android:label="@string/title_activity_wifi_scan"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            </activity>
+        </activity>
 
 
-        <receiver android:name=".IntentServices.GpsReceiver"
+        <receiver
+            android:name=".IntentServices.GpsReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

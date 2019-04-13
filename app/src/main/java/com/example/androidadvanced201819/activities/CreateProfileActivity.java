@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +46,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     private static final int REQUEST_WIFI = 3;
 
+    private SharedPreferences sharedPreferences;
     private DbHelper dbHelper;
     private TextView appName;
     private UserProfile profilo;
@@ -59,13 +63,19 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         dbHelper = new DbHelper(getApplicationContext());
 
+        sharedPreferences = this.getSharedPreferences("utilities", MODE_PRIVATE);
+        boolean nfcSupport = sharedPreferences.getBoolean("support", false);
+
         final Intent intent = getIntent();
 
         final EditText textName = (EditText) findViewById(R.id.name);
 
         final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.methods);
         final RadioButton gpsButton = (RadioButton) findViewById(R.id.gps);
+
         final RadioButton nfcButton = (RadioButton) findViewById(R.id.nfc);
+        nfcButton.setEnabled(nfcSupport);
+
         final RadioButton wifiButton = (RadioButton) findViewById(R.id.wifi);
         final RadioButton beaconButton = (RadioButton) findViewById(R.id.beacon);
 
@@ -91,6 +101,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             wifiSwitch.setChecked(profilo.isWifi());
 
             String selectedMethod = profilo.getMetodoDiRilevamento();
+            methodValue = profilo.getValoreMetodo();
 
             switch (selectedMethod) {
                 case NFC:
@@ -182,8 +193,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         nfcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wifiIntent = new Intent(getApplicationContext(), NfcActivity.class);
-                startActivityForResult(wifiIntent, REQUEST_WIFI);
+                Intent nfcIntent = new Intent(getApplicationContext(), NfcActivity.class);
+                startActivityForResult(nfcIntent, REQUEST_WIFI);
             }
         });
 
