@@ -38,7 +38,7 @@ public class ProfileNfcPoints {
 
         public final static String _ID = "id";
 
-        public final static String _NFCID = "idNfc";
+        public final static String _NFCID = "nfcId";
 
     }
 }

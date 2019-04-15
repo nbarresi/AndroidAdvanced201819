@@ -45,7 +45,7 @@ public class WifiActivity extends AppCompatActivity{
             wifiList = wifiManager.getScanResults();
 
             //TEMPO TOREMOVE MOCK
-            mockScanResultList();
+            //mockScanResultList();
 
             if (wifiList.size()>0)  loaderTxtView.setVisibility(View.GONE);
             setRecyclerViewLayoutManager();

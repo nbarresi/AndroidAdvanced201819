@@ -74,6 +74,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private static final int ADD_WIFI_REQUEST_CODE = 2;
     private static final int ADD_NFC_REQUEST_CODE = 3;
     public static int RESULT_MAP_ACTIVITY = 1111;
+    private static final int ADD_BEACON_REQUEST_CODE = 4 ;
     private String nfcId;
 
     @Override
@@ -141,6 +142,8 @@ public class NewProfileActivity extends AppCompatActivity {
                                 break;
                             case "beacon":
                                 radioConnectivityButton = (RadioButton) findViewById(R.id.beacon);
+                                Intent intentAddBeacon = new Intent(NewProfileActivity.this, BeaconActivity.class);
+                                startActivityForResult(intentAddBeacon, ADD_BEACON_REQUEST_CODE);
                                 break;
                         }
                     }
@@ -440,7 +443,7 @@ public class NewProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
         if (data != null)
-            if (requestCode == RESULT_OK){
+            if (resultCode == RESULT_OK){
                 switch (requestCode) {
                     case ADD_APP_REQUEST_CODE:
                         profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));

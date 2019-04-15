@@ -46,6 +46,11 @@ public abstract class GenericDBHelper extends SQLiteOpenHelper {
                     ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID + " TEXT," +
                     "PRIMARY KEY ("+Profile.ProfileEntry._ID + " , "+ WiFiPoint.WifiPointEntry._BSSID +"))";
 
+    private static final String SQL_CREATE_NFCPOINT=
+            "CREATE TABLE " + NfcPoint.NfcPointEntry.TABLE_NAME + " (" +
+                    NfcPoint.NfcPointEntry._NFCID + " TEXT PRIMARY KEY)";
+
+
     private static final String SQL_CREATE_PROFILENFCPOINT =  "CREATE TABLE " + ProfileNfcPoints.ProfileNfcPointsEntry.TABLE_NAME + " (" +
             ProfileNfcPoints.ProfileNfcPointsEntry._ID + " INTEGER," +
             ProfileNfcPoints.ProfileNfcPointsEntry._NFCID+ " INTEGER," +
@@ -60,6 +65,7 @@ public abstract class GenericDBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_PROFILE);
         db.execSQL(SQL_CREATE_COORDINATES);
         db.execSQL(SQL_CREATE_WIFIPOINT);
+        db.execSQL(SQL_CREATE_NFCPOINT);
         db.execSQL(SQL_CREATE_PROFILEWIFIPOINT);
         db.execSQL(SQL_CREATE_PROFILENFCPOINT);
     }
