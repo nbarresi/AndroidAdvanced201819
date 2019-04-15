@@ -26,6 +26,7 @@ public class ProfileDatabaseManager {
     public static final String KEY_APPLICATION_NAME = "application_name";
     public static final String KEY_AUTOBRIGHTNESS = "autobrightness";
     public static final String KEY_COORDINATES = "coordinate";
+    public static final String KEY_NFC = "nfc";
 
 
     public ProfileDatabaseManager(Context context) {
@@ -43,7 +44,7 @@ public class ProfileDatabaseManager {
     }
 
 
-    private ContentValues createContentValues(String profile_name, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int autoBrightness, String coordinates) {
+    private ContentValues createContentValues(String profile_name, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int autoBrightness, String coordinates, String nfc) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_PROFILE_NAME, profile_name);
         contentValues.put(KEY_OPTION_SELECTED, option);
@@ -55,12 +56,13 @@ public class ProfileDatabaseManager {
         contentValues.put(KEY_APPLICATION_NAME, application_name);
         contentValues.put(KEY_AUTOBRIGHTNESS, autoBrightness);
         contentValues.put(KEY_COORDINATES, coordinates);
+        contentValues.put(KEY_NFC, nfc);
 
         return contentValues;
     }
 
     public long createProfile(Profile profile) {
-        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate(), profile.getNfc());
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 
@@ -73,7 +75,7 @@ public class ProfileDatabaseManager {
     }
 
     public void editProfile(Profile profile) {
-        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate(), profile.getNfc());
         database.update(DATABASE_TABLE, initialValues, "id=" + profile.getId(), null);
     }
 }

@@ -23,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.androidadvanced201819.NFC.NFCReader;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.activities.WiFiActivity;
@@ -157,6 +158,8 @@ public class ProfileManagement extends AppCompatActivity {
             case R.id.nfcRadioButton:
                 if (checked)
                     option = Option.NFC.getOption();
+                Intent goToNFC = new Intent(this, NFCReader.class);
+                startActivityForResult(goToNFC, 4);
                 break;
             case R.id.beaconRadioButton:
                 if (checked)
@@ -184,6 +187,8 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setCoordinate(data.getExtras().getString("LatLong"));
         } else if (requestCode == 3 && data != null) {
             wiFiList = (WiFiList) data.getExtras().getSerializable("wifis");
+        } else if (requestCode == 4 && data != null) {
+            profile.setNfc(data.getExtras().getString("nfcId"));
         }
     }
 
