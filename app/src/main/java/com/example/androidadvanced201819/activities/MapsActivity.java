@@ -46,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         Intent toCreate = new Intent();
         String formatted = latLngProvided.latitude +";"+ latLngProvided.longitude+";"+radius.getProgress();
         toCreate.putExtra(EXTRA_MAP_LAT_LNG,formatted);
-        setResult(2,toCreate);
+        setResult(CreateProfileActivity.REQUEST_MAP,toCreate);
         super.onBackPressed();
     }
 
@@ -69,8 +69,10 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             String[] splitted = coordinates.split(";");
             double lat = Double.parseDouble(splitted[0]);
             double lng = Double.parseDouble(splitted[1]);
-            radius.setProgress(Integer.parseInt(splitted[2]));
-            range.setText(distanceFormatter(Integer.parseInt(splitted[2])*10));
+            int rad = Integer.parseInt(splitted[2]);
+            rad = rad == 0 ? 1 : rad;
+            radius.setProgress(rad);
+            range.setText(distanceFormatter(rad*10));
 
             latLngProvided = new LatLng(lat, lng);
         } else {

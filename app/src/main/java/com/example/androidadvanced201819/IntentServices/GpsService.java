@@ -147,22 +147,15 @@ public class GpsService extends IntentService implements LocationListener {
 
     private void activateProfile(UserProfile profile) {
 
-
-
         //FIXME: Brightness, trovare il modo di non aprire i settings per i permessi
-        /*if (Settings.System.canWrite(getApplicationContext())) {
+        if (Settings.System.canWrite(getApplicationContext())) {
             Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
             float floatBright = (float) profile.getLuminosita();
             float floated = (floatBright / 100) * 255;
             Log.d("myApp", "Bright: " + (int) floated);
 
             Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, (int) floated);
-
-        } else {
-            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }*/
+        }
 
         //Volume
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -173,7 +166,7 @@ public class GpsService extends IntentService implements LocationListener {
 
 
         //Bluetooth Switch - L'emulatore non supporta il bluetooth
-        if(bluetoothAdapter != null) {
+        if (bluetoothAdapter != null) {
             boolean bluetoothStatus = bluetoothAdapter.isEnabled();
 
             if (profile.isBluetooth() && !bluetoothStatus) {
@@ -184,7 +177,6 @@ public class GpsService extends IntentService implements LocationListener {
             }
         }
 
-        //TODO: Controllare se il service wifi è in uso
         //Wifi Switch
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(profile.isWifi());

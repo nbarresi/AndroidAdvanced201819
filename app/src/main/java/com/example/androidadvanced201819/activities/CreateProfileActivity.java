@@ -1,17 +1,11 @@
 package com.example.androidadvanced201819.activities;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +25,6 @@ import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +37,10 @@ public class CreateProfileActivity extends AppCompatActivity {
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 
-    private static final int REQUEST_WIFI = 3;
+    public static final int REQUEST_APP = 1;
+    public static final int REQUEST_MAP = 2;
+    public static final int REQUEST_WIFI = 3;
+    public static final int REQUEST_NFC = 4;
 
     private SharedPreferences sharedPreferences;
     private DbHelper dbHelper;
@@ -194,7 +190,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent nfcIntent = new Intent(getApplicationContext(), NfcActivity.class);
-                startActivityForResult(nfcIntent, REQUEST_WIFI);
+                startActivityForResult(nfcIntent, REQUEST_NFC);
             }
         });
 
@@ -209,8 +205,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         beaconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wifiIntent = new Intent(getApplicationContext(), ScanActivity.class);
-                startActivityForResult(wifiIntent, REQUEST_WIFI);
+                /*Intent wifiIntent = new Intent(getApplicationContext(), ScanActivity.class);
+                startActivityForResult(wifiIntent, REQUEST_WIFI);*/
             }
         });
 
@@ -218,7 +214,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toAppList = new Intent(getApplicationContext(), ApplicationListActivity.class);
-                startActivityForResult(toAppList, 1);
+                startActivityForResult(toAppList, REQUEST_APP);
             }
         });
     }
@@ -231,7 +227,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         if (!methodValue.isEmpty()) {
             toMap.putExtra(EXTRA_PROFILE_LAT_LNG, methodValue);
         }
-        startActivityForResult(toMap, 2);
+        startActivityForResult(toMap, REQUEST_MAP);
     }
 
     @Override
@@ -256,7 +252,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (resultCode) {
-            case 1:
+            case REQUEST_APP:
                 appNameVal = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_NAME);
                 appPackage = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_PACKAGE);
 
@@ -264,11 +260,15 @@ public class CreateProfileActivity extends AppCompatActivity {
                 appName.setVisibility(View.VISIBLE);
                 break;
 
-            case 2:
+            case REQUEST_MAP:
                 methodValue = (String) data.getExtras().getString(MapsActivity.EXTRA_MAP_LAT_LNG);
                 break;
-            case 3:
+            case REQUEST_WIFI:
                 wifis = (List<Wifi>) data.getExtras().get(WifiScanActivity.EXTRA_WIFI_LIST);
+                break;
+
+            case REQUEST_NFC:
+                methodValue = (String) data.getExtras().getString(NfcActivity.EXTRA_NFC_TAG);
                 break;
         }
     }
