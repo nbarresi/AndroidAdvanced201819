@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "profile.db";
 
 
@@ -54,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 6) {
+        if (oldVersion < 7) {
             db.execSQL("ALTER TABLE " + ProfileDatabaseManager.DATABASE_TABLE + " ADD COLUMN " + ProfileDatabaseManager.KEY_COORDINATES + " TEXT DEFAULT ''");
             db.execSQL("ALTER TABLE " + ProfileDatabaseManager.DATABASE_TABLE + " ADD COLUMN " + ProfileDatabaseManager.KEY_NFC + " TEXT DEFAULT ''");
         }
