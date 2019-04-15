@@ -23,4 +23,9 @@
     <string name="baseRange"> 100 m</string>
     <string name="app">Application</string>
     <string name="profilelist">Lista Profili</string>
+    <string name="tagId">Tag ID: </string>
+    <string name="techSupported">Tecnologie Supportate</string>
+    <string name="set">IMPOSTA</string>
+    <string name="nameBeacon">Nome:</string>
+    <string name="indirizzo">Address:</string>
 </resources>

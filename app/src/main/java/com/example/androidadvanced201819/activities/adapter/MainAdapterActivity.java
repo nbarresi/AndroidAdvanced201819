@@ -78,7 +78,8 @@ public class MainAdapterActivity extends ArrayAdapter<Profile> {
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION)),
                         cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION_NAME)),
                         cursor.getInt(cursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS)),
-                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_COORDINATES))
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_COORDINATES)),
+                        cursor.getString(cursor.getColumnIndex(ProfileDatabaseManager.KEY_NFC))
                 );
                 i++;
                 DataAccessUtils.addItem(profile, context);

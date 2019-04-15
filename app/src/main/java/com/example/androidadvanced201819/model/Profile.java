@@ -12,16 +12,13 @@ public class Profile {
     private String application_name;
     private int auto_birghtness;
     private String coordinate;
+    private String nfc;
 
     public Profile() {
         
     }
 
-    public Profile(String profile){
-
-    }
-
-    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int auto_birghtness, String coordinate) {
+    public Profile(int id, String nome, int option, int brightness, int volume, int bluethoot, int wifi, String application, String application_name, int auto_birghtness, String coordinate, String nfc) {
         this.id = id;
         this.nome = nome;
         this.option = option;
@@ -33,6 +30,7 @@ public class Profile {
         this.application_name = application_name;
         this.auto_birghtness = auto_birghtness;
         this.coordinate = coordinate;
+        this.nfc = nfc;
     }
 
     public String getNome() {
@@ -129,5 +127,13 @@ public class Profile {
 
     public void setCoordinate(String coordinate) {
         this.coordinate = coordinate;
+    }
+
+    public String getNfc() {
+        return nfc;
+    }
+
+    public void setNfc(String nfc) {
+        this.nfc = nfc;
     }
 }
