@@ -97,7 +97,8 @@ public class ProfileWifiChecker {
                         profileCursor.getString(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION)),
                         profileCursor.getString(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_APPLICATION_NAME)),
                         profileCursor.getInt(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_AUTOBRIGHTNESS)),
-                        profileCursor.getString(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_COORDINATES))
+                        profileCursor.getString(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_COORDINATES)),
+                        profileCursor.getString(profileCursor.getColumnIndex(ProfileDatabaseManager.KEY_NFC))
                 );
                 i++;
                 profiles.add(profile);
