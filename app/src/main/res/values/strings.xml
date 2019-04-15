@@ -29,4 +29,6 @@
     <string name="explanation">Contenuto:</string>
     <string name="tagId">Tag ID:</string>
     <string name="tecnologieSupportate">Tecnologie Supportate:</string>
+    <string name="name">Nome :</string>
+    <string name="indirizzo">Indirizzo :</string>
 </resources>

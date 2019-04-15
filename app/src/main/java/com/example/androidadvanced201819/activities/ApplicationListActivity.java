@@ -3,6 +3,7 @@ package com.example.androidadvanced201819.activities;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import android.widget.ListView;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.AppAdapter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ApplicationListActivity extends AppCompatActivity {
@@ -33,15 +36,24 @@ public class ApplicationListActivity extends AppCompatActivity {
 
         packageManager = getPackageManager();
         final List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(0);
+        final List<ApplicationInfo> applicationInfoListToSet = new ArrayList<>();
 
-        appAdapter = new AppAdapter(this,applicationInfoList,packageManager);
+        for(ApplicationInfo info:applicationInfoList){
+            if(getApplicationContext()
+                    .getPackageManager()
+                    .getLaunchIntentForPackage(info.packageName)!=null){
+                    applicationInfoListToSet.add(info);
+            }
+        }
+
+        appAdapter = new AppAdapter(this,applicationInfoListToSet,packageManager);
 
         appListView.setAdapter(appAdapter);
 
         appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ApplicationInfo appInfo = applicationInfoList.get(position);
+                ApplicationInfo appInfo = applicationInfoListToSet.get(position);
 
                 Intent backToList = new Intent();
                 backToList.putExtra(EXTRA_APP_NAME, appInfo.loadLabel(packageManager));

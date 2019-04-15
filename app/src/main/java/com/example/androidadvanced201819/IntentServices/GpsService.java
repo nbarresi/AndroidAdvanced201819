@@ -4,9 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.IntentService;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +28,7 @@ import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.activities.CreateProfileActivity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,8 +61,8 @@ public class GpsService extends IntentService implements LocationListener {
             if (profile.getMetodoDiRilevamento().equals(CreateProfileActivity.GPS)) {
                 LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 20, this);
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 20, this);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
                 }
                 break;
             }
@@ -82,14 +86,17 @@ public class GpsService extends IntentService implements LocationListener {
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
-        timer = new Timer();
-        TimerTask t = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("Timered");
-            }
-        };
-        timer.scheduleAtFixedRate(t, 5000, 5000);
+//        timer = new Timer();
+//        TimerTask t = new TimerTask() {
+//            @Override
+//            public void run() {
+//                System.out.println("Timered");
+//            }
+//        };
+//        timer.scheduleAtFixedRate(t, 5000, 5000);
+        while(serve){
+
+        }
     }
 
     @Override
@@ -106,6 +113,11 @@ public class GpsService extends IntentService implements LocationListener {
                 profileLocation.setLongitude(Double.parseDouble(splitted[1]));
 
                 Log.d("myApp", Integer.parseInt(splitted[2]) * 10 + " Radius");
+                Log.d("myApp", "Lat:"+ location.getLatitude());
+                Log.d("myApp", "Long:"+ location.getLongitude());
+                Log.d("myApp", "Lat2:"+ profileLocation.getLatitude());
+                Log.d("myApp", "Long2:"+ profileLocation.getLongitude());
+
                 Log.d("myApp", location.distanceTo(profileLocation) + " Distance");
 
                 if ((Integer.parseInt(splitted[2]) * 10) >= location.distanceTo(profileLocation)) {
@@ -164,10 +176,10 @@ public class GpsService extends IntentService implements LocationListener {
         if(bluetoothAdapter != null) {
             boolean bluetoothStatus = bluetoothAdapter.isEnabled();
 
-            if (profile.isBluetooth() && bluetoothStatus) {
+            if (profile.isBluetooth() && !bluetoothStatus) {
                 bluetoothAdapter.enable();
             }
-            if (!profile.isBluetooth() && !bluetoothStatus) {
+            if (!profile.isBluetooth() && bluetoothStatus) {
                 bluetoothAdapter.disable();
             }
         }
@@ -178,10 +190,13 @@ public class GpsService extends IntentService implements LocationListener {
         wifiManager.setWifiEnabled(profile.isWifi());
 
         //App open
+        Log.w("myapp", profile.getAppPackage());
         if(!profile.getAppPackage().isEmpty()){
-            Intent intentToApp = getApplicationContext()
+            Intent intentToApp = new Intent();
+            intentToApp=getApplicationContext()
                     .getPackageManager()
                     .getLaunchIntentForPackage(profile.getAppPackage());
+            Log.w("myapp", intentToApp.getPackage());
             startActivity(intentToApp);
         }
 

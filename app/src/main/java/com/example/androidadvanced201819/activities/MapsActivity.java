@@ -81,12 +81,12 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(latLngProvided == null) {
+//            if(latLngProvided == null) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200,20, this);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 20, this);
                 if(location!=null) {
                     latLngProvided = new LatLng(location.getLatitude(), location.getLongitude());
-                }
+//                }
             }
         }else{
             ActivityCompat.requestPermissions(MapsActivity.this,MAPS_PERMISSION,REQUEST_MAP);

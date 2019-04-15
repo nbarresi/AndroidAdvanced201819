@@ -161,13 +161,13 @@ public class CreateProfileActivity extends AppCompatActivity {
                                 dbHelper.insertWifi(single);
                             }
                         }
-
+                        finish();
                     } else {
                         Toast.makeText(CreateProfileActivity.this, "Inserire dati mancanti", Toast.LENGTH_SHORT).show();
                     }
 
 
-                    finish();
+
                 }
             }
         });
@@ -209,7 +209,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         beaconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent wifiIntent = new Intent(getApplicationContext(), ScanActivity.class);
+                startActivityForResult(wifiIntent, REQUEST_WIFI);
             }
         });
 

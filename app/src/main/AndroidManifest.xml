@@ -13,7 +13,9 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
     <uses-feature
         android:name="android.hardware.nfc"
@@ -86,6 +88,16 @@
 
         <activity
             android:name=".activities.WifiScanActivity"
+            android:label="@string/title_activity_wifi_scan"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.BeaconScanActivity"
+            android:label="@string/title_activity_wifi_scan"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.ScanActivity"
             android:label="@string/title_activity_wifi_scan"
             android:theme="@style/AppTheme.NoActionBar" />
 
