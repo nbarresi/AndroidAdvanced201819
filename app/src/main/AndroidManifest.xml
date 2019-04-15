@@ -30,6 +30,15 @@
         </activity>
 
         <service
+            android:name="org.its.services.GPSService"
+            android:exported="false" />
+
+        <receiver android:name="org.its.services.GPSReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service
             android:name="org.its.login.services.WifiService"
             android:enabled="true"
             android:exported="false" />
