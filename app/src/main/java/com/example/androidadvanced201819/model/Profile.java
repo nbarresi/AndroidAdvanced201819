@@ -51,14 +51,6 @@ public class Profile {
         this.option = option;
     }
 
-    public int getbrightness() {
-        return brightness;
-    }
-
-    public void setbrightness(int brightness) {
-        this.brightness = brightness;
-    }
-
     public int getVolume() {
         return volume;
     }

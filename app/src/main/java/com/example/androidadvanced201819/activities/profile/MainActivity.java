@@ -3,7 +3,10 @@ package com.example.androidadvanced201819.activities.profile;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.main_title);
         title.setText("Profili");
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.System.canWrite(getApplicationContext())) {
+                //Do stuff
+            } else {
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        }
         button.setVisibility(View.VISIBLE);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

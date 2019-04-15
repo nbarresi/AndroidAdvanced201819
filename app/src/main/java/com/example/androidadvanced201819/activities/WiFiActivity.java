@@ -1,6 +1,7 @@
 package com.example.androidadvanced201819.activities;
 
 import android.annotation.SuppressLint;
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -61,6 +63,7 @@ public class WiFiActivity extends AppCompatActivity {
             public void onReceive(Context c, Intent intent) {
                 wifiList = wifiManager.getScanResults();
                 wiFiAdapterActivity.updateList(wifiList);
+                unregisterReceiver(this);
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();

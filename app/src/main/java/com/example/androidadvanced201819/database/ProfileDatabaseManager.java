@@ -60,7 +60,7 @@ public class ProfileDatabaseManager {
     }
 
     public long createProfile(Profile profile) {
-        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getBrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
         return database.insertOrThrow(DATABASE_TABLE, null, initialValues);
     }
 
@@ -72,8 +72,12 @@ public class ProfileDatabaseManager {
         return database.query(DATABASE_TABLE, null, null, null, null, null, null);
     }
 
+    public Cursor fetchAllWifiProfile() {
+        return database.query(DATABASE_TABLE, null, KEY_OPTION_SELECTED + "=?", new String[]{String.valueOf(2)}, null, null, null);
+    }
+
     public void editProfile(Profile profile) {
-        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getbrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
+        ContentValues initialValues = createContentValues(profile.getNome(), profile.getOption(), profile.getBrightness(), profile.getVolume(), profile.getBluethoot(), profile.getWifi(), profile.getApplication(), profile.getApplicationName(), profile.getAuto_birghtness(), profile.getCoordinate());
         database.update(DATABASE_TABLE, initialValues, "id=" + profile.getId(), null);
     }
 }

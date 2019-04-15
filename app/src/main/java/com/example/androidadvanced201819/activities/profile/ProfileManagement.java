@@ -83,13 +83,15 @@ public class ProfileManagement extends AppCompatActivity {
             profile.setApplication("Application");
             profile.setApplicationName("Application");
         }
+        brightness.setMax(255);
+        volume.setMax(15);
 
         name.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.toString().trim().length()==0){
+                if (s.toString().trim().length() == 0) {
                     createButton.setEnabled(false);
                     createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
 
@@ -193,7 +195,7 @@ public class ProfileManagement extends AppCompatActivity {
         profile.setNome(profileName);
         profile.setOption(option);
         profile.setVolume(volume.getProgress());
-        profile.setbrightness(brightness.getProgress());
+        profile.setBrightness(brightness.getProgress());
 
         if (bluetooth.isChecked()) {
             profile.setBluethoot(1);
@@ -219,11 +221,13 @@ public class ProfileManagement extends AppCompatActivity {
         Long cursor = profileDatabaseManager.createProfile(profile);
         profileDatabaseManager.close();
 
-        profileWifiDatabaseManager.open();
-        for (WiFi wifi : wiFiList.getWiFis()) {
-            profileWifiDatabaseManager.createProfileWifi(cursor, wifi.getBSSID());
+        if (!(wiFiList == null)) {
+            profileWifiDatabaseManager.open();
+            for (WiFi wifi : wiFiList.getWiFis()) {
+                profileWifiDatabaseManager.createProfileWifi(cursor, wifi.getBSSID());
+            }
+            profileWifiDatabaseManager.close();
         }
-        profileWifiDatabaseManager.close();
 
         Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
         startActivity(backToMain);
@@ -238,7 +242,7 @@ public class ProfileManagement extends AppCompatActivity {
         createButton.setVisibility(View.GONE);
 
         option = profile.getOption();
-        int brightnessValue = profile.getbrightness();
+        int brightnessValue = profile.getBrightness();
         volumeValue = profile.getVolume();
         name.setText(profile.getNome());
         brightness.setProgress(brightnessValue);
@@ -290,7 +294,7 @@ public class ProfileManagement extends AppCompatActivity {
         profile.setNome(profileName);
         profile.setOption(option);
         profile.setVolume(volume.getProgress());
-        profile.setbrightness(brightness.getProgress());
+        profile.setBrightness(brightness.getProgress());
 
         if (bluetooth.isChecked()) {
             profile.setBluethoot(1);

@@ -50,4 +50,8 @@ public class ProfileWifiDatabaseManager {
     public Cursor fetchAllProfileWifi() {
         return database.query(DATABASE_TABLE, null, null, null, null, null, null);
     }
+
+    public Cursor fetchAllProfileWifiByIdProfile(Integer idProfile){
+        return database.query(DATABASE_TABLE, null, KEY_IDPROFILE+"=?", new String[]{Integer.toString(idProfile)}, null, null, null, null);
+    }
 }
