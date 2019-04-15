@@ -49,7 +49,7 @@ public class ListaProfiliActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("utilities", Context.MODE_PRIVATE);
 
         if(!nfcSupport && !sharedPreferences.contains("support")){
-            Toast.makeText(ListaProfiliActivity.this,"Il Telefono non supporta NFC", Toast.LENGTH_LONG).show();
+            Toast.makeText(ListaProfiliActivity.this,"Il Telefono non supporta Nfc", Toast.LENGTH_LONG).show();
         }
 
         if(!sharedPreferences.contains("support")) {

@@ -46,7 +46,10 @@ public class CreateProfileActivity extends AppCompatActivity {
     private static final String NFC = "NFC";
     private static final String BEACON = "Beacon";
 
-    private static final int REQUEST_WIFI = 3;
+    public static final int REQUEST_APP = 1;
+    public static final int REQUEST_MAP = 2;
+    public static final int REQUEST_WIFI = 3;
+    public static final int REQUEST_NFC = 4;
 
     private SharedPreferences sharedPreferences;
     private DbHelper dbHelper;
@@ -197,7 +200,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent nfcIntent = new Intent(getApplicationContext(), NfcActivity.class);
-                startActivityForResult(nfcIntent, REQUEST_WIFI);
+                startActivityForResult(nfcIntent, REQUEST_NFC);
             }
         });
 
@@ -221,7 +224,7 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toAppList = new Intent(getApplicationContext(), ApplicationListActivity.class);
-                startActivityForResult(toAppList, 1);
+                startActivityForResult(toAppList, REQUEST_APP);
             }
         });
     }
@@ -234,7 +237,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         if (!methodValue.isEmpty()) {
             toMap.putExtra(EXTRA_PROFILE_LAT_LNG, methodValue);
         }
-        startActivityForResult(toMap, 2);
+        startActivityForResult(toMap, REQUEST_MAP);
     }
 
     @Override
@@ -259,7 +262,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (resultCode) {
-            case 1:
+            case REQUEST_APP:
                 appNameVal = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_NAME);
                 appPackage = (String) data.getExtras().getString(ApplicationListActivity.EXTRA_APP_PACKAGE);
 
@@ -267,13 +270,17 @@ public class CreateProfileActivity extends AppCompatActivity {
                 appName.setVisibility(View.VISIBLE);
                 break;
 
-            case 2:
+            case REQUEST_MAP:
                 methodValue = (String) data.getExtras().getString(MapsActivity.EXTRA_MAP_LAT_LNG);
                 break;
-            case 3:
+            case REQUEST_WIFI:
                 wifis = (List<Wifi>) data.getExtras().get(WifiScanActivity.EXTRA_WIFI_LIST);
                 break;
-            case 4:
+
+            case REQUEST_NFC:
+                methodValue = (String) data.getExtras().getString(NfcActivity.EXTRA_NFC_TAG);
+                break;
+            case 5:
                 beacons = (List<Beacon>) data.getExtras().get(BeaconScanActivity.EXTRA_BEACON_LIST);
                 break;
         }

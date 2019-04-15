@@ -11,15 +11,17 @@ import android.nfc.tech.NfcF;
 import android.nfc.tech.NfcV;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.NfcTechAdapter;
 
 public class NfcActivity extends AppCompatActivity {
 
+    public static final String EXTRA_NFC_TAG = "nfcTagId";
 
     public NfcAdapter mNfcAdapter;
     private IntentFilter[] intentFiltersArray;
@@ -27,17 +29,19 @@ public class NfcActivity extends AppCompatActivity {
     private PendingIntent pendingIntent;
     private Tag tag;
     private ListView listView;
-    TextView tagId;
+    private TextView tagId;
+    private Button confirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
 
-         tagId= findViewById(R.id.tagId);
+        tagId = findViewById(R.id.tagId);
         listView = findViewById(R.id.listViewTech);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(NfcActivity.this);
         pendingIntent = PendingIntent.getActivity(this,0,new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
+        confirmButton = (Button) findViewById(R.id.confirmNfc);
 
         IntentFilter nDef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         try{
@@ -54,6 +58,16 @@ public class NfcActivity extends AppCompatActivity {
                 new String[]{NfcB.class.getName()},
                 new String[]{NfcV.class.getName()}
         };
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backToCreate = new Intent();
+                backToCreate.putExtra(EXTRA_NFC_TAG, tag.getId());
+                setResult(CreateProfileActivity.REQUEST_NFC, backToCreate);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -71,7 +85,6 @@ public class NfcActivity extends AppCompatActivity {
         super.onResume();
 
         mNfcAdapter.enableForegroundDispatch(this,pendingIntent,intentFiltersArray,techListsArray);
-
     }
 
     @Override
@@ -79,6 +92,5 @@ public class NfcActivity extends AppCompatActivity {
         super.onPause();
 
         mNfcAdapter.disableForegroundDispatch(this);
-
     }
 }

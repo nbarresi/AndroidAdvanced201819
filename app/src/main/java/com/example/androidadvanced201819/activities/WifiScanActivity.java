@@ -72,7 +72,7 @@ public class WifiScanActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent toCreate = new Intent();
                 toCreate.putExtra(EXTRA_WIFI_LIST, (Serializable) convertScanResult(wifiManager.getScanResults()));
-                setResult(3, toCreate);
+                setResult(CreateProfileActivity.REQUEST_WIFI, toCreate);
                 finish();
             }
         });
@@ -100,8 +100,8 @@ public class WifiScanActivity extends AppCompatActivity {
             registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-//                boolean success = intent.getBooleanExtra(
-//                        WifiManager.EXTRA_RESULTS_UPDATED, false);
+            //boolean success = intent.getBooleanExtra(
+            //WifiManager.EXTRA_RESULTS_UPDATED, false);
                     List<ScanResult> results = wifiManager.getScanResults();
                     if (true) {
                         scanAdapter = new ScanAdapter(WifiScanActivity.this, wifiManager.getScanResults());

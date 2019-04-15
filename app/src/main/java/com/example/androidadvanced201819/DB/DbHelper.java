@@ -22,6 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String WIFI_TABLE = "wifi";
 
     public static final String GENERIC_COLUMN_ID = "id";
+    public static final String GENERIC_COLUMN_ID_PROFILO = "id_profilo";
 
     public static final String PROFILE_COLUMN_UTENTE = "utente";
     public static final String PROFILE_COLUMN_NOME = "nome";
@@ -37,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String WIFI_COLUMN_SSID = "ssid";
     public static final String WIFI_COLUMN_BSSID = "bssid";
     public static final String WIFI_COLUMN_LEVEL = "level";
-    public static final String WIFI_COLUMN_ID_PROFILO = "id_profilo";
+
 
     private static final String CREATE_TABLE_PROFILO = "CREATE TABLE " + PROFILE_TABLE_NAME + "(" +
             GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -57,8 +58,8 @@ public class DbHelper extends SQLiteOpenHelper {
             WIFI_COLUMN_SSID + " TEXT," +
             WIFI_COLUMN_BSSID + " TEXT," +
             WIFI_COLUMN_LEVEL + " INTEGER," +
-            WIFI_COLUMN_ID_PROFILO + " INTEGER, " +
-            "FOREIGN KEY(" + WIFI_COLUMN_ID_PROFILO + ") REFERENCES " + PROFILE_TABLE_NAME + "(" + GENERIC_COLUMN_ID + "))";
+            GENERIC_COLUMN_ID_PROFILO + " INTEGER, " +
+            "FOREIGN KEY(" + GENERIC_COLUMN_ID_PROFILO + ") REFERENCES " + PROFILE_TABLE_NAME + "(" + GENERIC_COLUMN_ID + "))";
 
 
     public DbHelper(Context context) {
@@ -109,7 +110,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(WIFI_COLUMN_SSID, wifi.getSsid());
         contentValues.put(WIFI_COLUMN_BSSID, wifi.getBssid());
         contentValues.put(WIFI_COLUMN_LEVEL, wifi.getLevel());
-        contentValues.put(WIFI_COLUMN_ID_PROFILO, wifi.getIdProfilo());
+        contentValues.put(GENERIC_COLUMN_ID_PROFILO, wifi.getIdProfilo());
 
         db.insertOrThrow(WIFI_TABLE, null, contentValues);
     }
@@ -140,7 +141,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public List<Wifi> getWifi(int profileId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(WIFI_TABLE, null, WIFI_COLUMN_ID_PROFILO+"=?", new String[]{profileId+""}, null, null, null);
+        Cursor cursor = db.query(WIFI_TABLE, null, GENERIC_COLUMN_ID_PROFILO + "=?", new String[]{profileId + ""}, null, null, null);
         List<Wifi> wifis = new ArrayList<>();
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -149,8 +150,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     String ssid = cursor.getString(cursor.getColumnIndex(WIFI_COLUMN_SSID));
                     String bssid = cursor.getString(cursor.getColumnIndex(WIFI_COLUMN_BSSID));
                     int level = cursor.getInt(cursor.getColumnIndex(WIFI_COLUMN_LEVEL));
-                    int idProfilo = cursor.getInt(cursor.getColumnIndex(WIFI_COLUMN_ID_PROFILO));
-                    wifis.add(new Wifi(id,ssid,bssid,level,idProfilo));
+                    int idProfilo = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID_PROFILO));
+                    wifis.add(new Wifi(id, ssid, bssid, level, idProfilo));
                 } while (cursor.moveToNext());
             }
         }
@@ -164,7 +165,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public boolean removeWifiById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(WIFI_TABLE,GENERIC_COLUMN_ID + "=?",new String[]{id + ""}) != -1;
+        return db.delete(WIFI_TABLE, GENERIC_COLUMN_ID + "=?", new String[]{id + ""}) != -1;
     }
 
     public void updateProfile(UserProfile profile) {
