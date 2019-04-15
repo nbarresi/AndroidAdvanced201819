@@ -26,4 +26,6 @@
     <string name="tagId">Tag ID: </string>
     <string name="techSupported">Tecnologie Supportate</string>
     <string name="set">IMPOSTA</string>
+    <string name="nameBeacon">Nome:</string>
+    <string name="indirizzo">Address:</string>
 </resources>

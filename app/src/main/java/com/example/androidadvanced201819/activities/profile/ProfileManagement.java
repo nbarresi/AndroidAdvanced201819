@@ -1,7 +1,6 @@
 package com.example.androidadvanced201819.activities.profile;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,7 +21,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.androidadvanced201819.NFC.NFCReader;
+import com.example.androidadvanced201819.activities.nfc.NFCReader;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.MapsActivity;
 import com.example.androidadvanced201819.activities.WiFiActivity;
