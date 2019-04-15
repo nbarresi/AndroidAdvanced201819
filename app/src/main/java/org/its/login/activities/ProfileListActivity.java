@@ -42,7 +42,7 @@ public class ProfileListActivity extends AppCompatActivity {
         setRecyclerAdapter();
         setAddProfileButton();
 
-   registerReceiver( wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) );
+ //  registerReceiver( wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) );
 
        //MOCk
 

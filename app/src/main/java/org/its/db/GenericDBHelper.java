@@ -5,7 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.its.db.entities.Coordinates;
+import org.its.db.entities.NfcPoint;
 import org.its.db.entities.Profile;
+import org.its.db.entities.ProfileNfcPoints;
 import org.its.db.entities.ProfileWiFiPoints;
 import org.its.db.entities.WiFiPoint;
 
@@ -44,6 +46,11 @@ public abstract class GenericDBHelper extends SQLiteOpenHelper {
                     ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID + " TEXT," +
                     "PRIMARY KEY ("+Profile.ProfileEntry._ID + " , "+ WiFiPoint.WifiPointEntry._BSSID +"))";
 
+    private static final String SQL_CREATE_PROFILENFCPOINT =  "CREATE TABLE " + ProfileNfcPoints.ProfileNfcPointsEntry.TABLE_NAME + " (" +
+            ProfileNfcPoints.ProfileNfcPointsEntry._ID + " INTEGER," +
+            ProfileNfcPoints.ProfileNfcPointsEntry._NFCID+ " INTEGER," +
+            "PRIMARY KEY ("+Profile.ProfileEntry._ID + " , "+ NfcPoint.NfcPointEntry._NFCID +"))";
+
     public GenericDBHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -54,6 +61,7 @@ public abstract class GenericDBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_COORDINATES);
         db.execSQL(SQL_CREATE_WIFIPOINT);
         db.execSQL(SQL_CREATE_PROFILEWIFIPOINT);
+        db.execSQL(SQL_CREATE_PROFILENFCPOINT);
     }
 
     @Override

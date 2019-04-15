@@ -25,14 +25,18 @@ import android.widget.Toast;
 import com.example.androidadvanced201819.R;
 
 import org.its.db.CoordinatesDBHelper;
+import org.its.db.NfcPointDBHelper;
 import org.its.db.ProfileDBHelper;
+import org.its.db.ProfileNfcPointsDBHelper;
 import org.its.db.ProfileWifiPointsDBHelper;
 import org.its.db.WiFiPointDBHelper;
 import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
+import org.its.db.entities.ProfileNfcPoints;
 import org.its.db.entities.ProfileWiFiPoints;
 import org.its.db.entities.WiFiPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +46,13 @@ public class NewProfileActivity extends AppCompatActivity {
     private Coordinates coordinates = new Coordinates();
     private List<WiFiPoint> wiFiPointList = new ArrayList<>();
     ProfileWiFiPoints profileWiFiPoints = new ProfileWiFiPoints();
+    private ProfileNfcPoints profileNfcPoints = new ProfileNfcPoints();
 
     private ProfileDBHelper profileDbHelper;
     private CoordinatesDBHelper coordinatesDBHelper;
     private ProfileWifiPointsDBHelper profileWifiPointsDBHelper;
+    private ProfileNfcPointsDBHelper profileNfcPointsDBHelper;
+    private NfcPointDBHelper nfcPointDBHelper;
 
     private EditText editTextNameProfile;
     private RadioGroup radioConnectivityGroup;
@@ -65,7 +72,9 @@ public class NewProfileActivity extends AppCompatActivity {
     public final int ADD_APP_REQUEST_CODE = 0;
     public final int ADD_COORDINATES_REQUEST_CODE = 1;
     private static final int ADD_WIFI_REQUEST_CODE = 2;
+    private static final int ADD_NFC_REQUEST_CODE = 3;
     public static int RESULT_MAP_ACTIVITY = 1111;
+    private String nfcId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +136,8 @@ public class NewProfileActivity extends AppCompatActivity {
                                 break;
                             case "nfc":
                                 radioConnectivityButton = (RadioButton) findViewById(R.id.nfc);
+                                Intent intentAddNfc = new Intent(NewProfileActivity.this, NFCActivity.class);
+                                startActivityForResult(intentAddNfc, ADD_NFC_REQUEST_CODE);
                                 break;
                             case "beacon":
                                 radioConnectivityButton = (RadioButton) findViewById(R.id.beacon);
@@ -346,10 +357,11 @@ public class NewProfileActivity extends AppCompatActivity {
                     profileWiFiPoints.setIdProfile(profile.getId());
                     profileWiFiPoints.setWiFiPoints(wiFiPointList);
                     profileWifiPointsDBHelper.updateProfileWifiPoints(profileWiFiPoints);
-
-                    //TEMP
-                 ProfileWiFiPoints temp = profileWifiPointsDBHelper.getProfileWiFiPoints(profile.getId());
-
+                    break;
+                case  "nfc":
+                    profileNfcPoints.setIdProfile(profile.getId());
+                    profileNfcPoints.setIdNfc(nfcId);
+                    profileNfcPointsDBHelper.updateProfileNfcPoints(profileNfcPoints);
                     break;
             }
         }
@@ -364,14 +376,15 @@ public class NewProfileActivity extends AppCompatActivity {
                     profileWiFiPoints.setIdProfile(profileDbHelper.getLastInsertedProfileId());
                     profileWiFiPoints.setWiFiPoints(wiFiPointList);
                     profileWifiPointsDBHelper.insertProfileWiFiPoint(profileWiFiPoints);
-
-                    //TEMP
-                    ProfileWiFiPoints temp = profileWifiPointsDBHelper.getProfileWiFiPoints(profile.getId());
                     break;
+                case "nfc":
+                    profileNfcPoints.setIdProfile(profileDbHelper.getLastInsertedProfileId());
+                    profileNfcPoints.setIdNfc(nfcId);
+                    profileNfcPointsDBHelper.insertProfileNfcPoint(profileNfcPoints);
             }
         }
 
-        //TODO BEACON/NFC
+        //TODO BEACON
     }
 
 
@@ -427,23 +440,29 @@ public class NewProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
         if (data != null)
-        switch (requestCode) {
-            case ADD_APP_REQUEST_CODE:
-                profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
-                textViewAppList.setText(profile.getApp());
-                break;
-            case ADD_COORDINATES_REQUEST_CODE:
-                if ( data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE" )!= null){
-                coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
-            }
-            break;
-            case ADD_WIFI_REQUEST_CODE:
-                if (data.getSerializableExtra("ADD_WIFI_REQUEST_CODE") != null){
-                    wiFiPointList =  (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
-                } else wiFiPointList.clear();
-                break;
-            //TODO more cases
-        }
+            if (requestCode == RESULT_OK){
+                switch (requestCode) {
+                    case ADD_APP_REQUEST_CODE:
+                        profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
+                        textViewAppList.setText(profile.getApp());
+                        break;
+                    case ADD_COORDINATES_REQUEST_CODE:
+                        if ( data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE" )!= null){
+                            coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
+                        }
+                        break;
+                    case ADD_WIFI_REQUEST_CODE:
+                        if (data.getSerializableExtra("ADD_WIFI_REQUEST_CODE") != null){
+                            wiFiPointList =  (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
+                        } else wiFiPointList.clear();
+                        break;
+                    case ADD_NFC_REQUEST_CODE:
+                        if (data.getSerializableExtra("ADD_NFC_REQUEST_CODE") != null){
+                            nfcId =  data.getStringExtra("ADD_NFC_REQUEST_CODE");
+                        }
+                    //TODO beacon
+                }
+            } else radioConnectivityButton.setChecked(false);
     }
 }
 
