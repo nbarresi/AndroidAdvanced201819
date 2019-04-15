@@ -19,9 +19,12 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
+import com.example.androidadvanced201819.adapter.BeaconAdapter;
 import com.example.androidadvanced201819.adapter.ScanAdapter;
 
 import org.altbeacon.beacon.Beacon;
@@ -31,18 +34,25 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-public class BeaconScanActivity extends AppCompatActivity /*implements BeaconConsumer */{
+public class BeaconScanActivity extends AppCompatActivity implements BeaconConsumer {
+
+    public static String EXTRA_BEACON_LIST = "beacon_list";
 
     private BluetoothLeScanner bluetoothLeScanner;
     private ScanSettings scanSettings;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothManager bluetoothManager;
     private BeaconManager beaconManager;
+    private TextView textViewName;
+    private TextView textViewAddress;
+    private ListView beaconListView;
+    private List<Beacon> beaconList;
     public static final String ALTBEACON_LAYOUT = "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25";
     public static final String EDDYSTONE_TLM_LAYOUT = "x,s:0-1=feaa,m:2-2=20,d:3-3,d:4-5,d:6-7,d:8-11,d:12-15";
     public static final String EDDYSTONE_UID_LAYOUT = "s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19";
@@ -54,18 +64,10 @@ public class BeaconScanActivity extends AppCompatActivity /*implements BeaconCon
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_scan);
 
-        initializeBluetooth();
-        setScanSettings();
-//        initializeBeacon();
-        if(bluetoothLeScanner!=null)
-        bluetoothLeScanner.startScan(new ArrayList<ScanFilter>(), scanSettings, new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, android.bluetooth.le.ScanResult result) {
-                ScanRecord scanRecord= result.getScanRecord();
-                String deviceName = scanRecord.getDeviceName();
-                int mRssi = result.getRssi();
-            }
-        });
+        beaconListView = findViewById(R.id.beaconList);
+        textViewName = findViewById(R.id.nome);
+        textViewAddress = findViewById(R.id.indirizzo);
+        initializeBeacon();
 
         Button confirm = findViewById(R.id.confirm);
 
@@ -73,26 +75,26 @@ public class BeaconScanActivity extends AppCompatActivity /*implements BeaconCon
             @Override
             public void onClick(View v) {
                 Intent toCreate = new Intent();
-//                toCreate.putExtra(EXTRA_WIFI_LIST, (Serializable) );
+                toCreate.putExtra(EXTRA_BEACON_LIST, (Serializable) beaconList);
                 setResult(4, toCreate);
                 finish();
             }
         });
     }
 
-//    private void initializeBeacon() {
-//        beaconManager = BeaconManager.getInstanceForApplication(this);
+    private void initializeBeacon() {
+        beaconManager = BeaconManager.getInstanceForApplication(this);
 //        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(ALTBEACON_LAYOUT));
 //        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_TLM_LAYOUT));
 //        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_UID_LAYOUT));
-//        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_URL_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_URL_LAYOUT));
 //        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(URI_BEACON_LAYOUT));
-//        beaconManager.bind(this);
-//    }
+        beaconManager.bind(this);
+    }
 
     private void setScanSettings() {
         ScanSettings.Builder mBuilder= new ScanSettings.Builder();
-        scanSettings = mBuilder.setReportDelay(0).setScanMode(ScanSettings.SCAN_MODE_OPPORTUNISTIC).build();
+        scanSettings = mBuilder.setReportDelay(0).setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
     }
 
     private void initializeBluetooth() {
@@ -104,24 +106,30 @@ public class BeaconScanActivity extends AppCompatActivity /*implements BeaconCon
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
     }
 
-//    @Override
-//    public void onBeaconServiceConnect() {
-//        beaconManager.addRangeNotifier(new RangeNotifier() {
-//            @Override
-//            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-//                if (collection.size() > 0) {
-//                   if(region.equals(new Region("",null,null,null)));
-//                    {
-//                        int a=1;
-//                    }
-//                }
-//            }
-//        });
-//
-//        try{
-//            beaconManager.startRangingBeaconsInRegion(new Region("myMonitoringUniqueId",null,null,null));
-//        } catch(RemoteException e){
-//
-//        }
-//    }
+    @Override
+    public void onBeaconServiceConnect() {
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+                if (collection.size() > 0) {
+                   if(region.equals(new Region("",null,null,null)));
+                    {
+                        List<Beacon> beacons= new ArrayList<>();
+                        for(Beacon beacon:collection){
+                            beacons.add(beacon);
+                        }
+                        BeaconAdapter beaconAdapter= new BeaconAdapter(BeaconScanActivity.this,beacons);
+                        beaconListView.setAdapter(beaconAdapter);
+
+                    }
+                }
+            }
+        });
+
+        try{
+            beaconManager.startRangingBeaconsInRegion(new Region("myMonitoringUniqueId",null,null,null));
+        } catch(RemoteException e){
+
+        }
+    }
 }

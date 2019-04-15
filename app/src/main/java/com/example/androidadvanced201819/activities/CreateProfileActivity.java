@@ -31,6 +31,8 @@ import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.ProfileAdapter;
 
+import org.altbeacon.beacon.Beacon;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     private String appNameVal = "";
     private String methodValue = "";
     private List<Wifi> wifis = new ArrayList<Wifi>();
+    private List<Beacon> beacons = new ArrayList();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -209,7 +212,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         beaconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wifiIntent = new Intent(getApplicationContext(), ScanActivity.class);
+                Intent wifiIntent = new Intent(getApplicationContext(), BeaconScanActivity.class);
                 startActivityForResult(wifiIntent, REQUEST_WIFI);
             }
         });
@@ -269,6 +272,9 @@ public class CreateProfileActivity extends AppCompatActivity {
                 break;
             case 3:
                 wifis = (List<Wifi>) data.getExtras().get(WifiScanActivity.EXTRA_WIFI_LIST);
+                break;
+            case 4:
+                beacons = (List<Beacon>) data.getExtras().get(BeaconScanActivity.EXTRA_BEACON_LIST);
                 break;
         }
     }

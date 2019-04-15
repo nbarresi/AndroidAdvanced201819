@@ -97,11 +97,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.ScanActivity"
-            android:label="@string/title_activity_wifi_scan"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
             android:name=".activities.NfcActivity"
             android:label="@string/title_activity_wifi_scan"
             android:theme="@style/AppTheme.NoActionBar">
