@@ -39,12 +39,12 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="org.its.login.services.WifiService"
+            android:name="org.its.services.WifiService"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
-            android:name="org.its.login.services.WifiReceiver"
+            android:name="org.its.services.WifiReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="RestartServiceWhenStopped">

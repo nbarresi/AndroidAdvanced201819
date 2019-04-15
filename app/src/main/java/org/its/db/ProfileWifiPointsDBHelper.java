@@ -31,13 +31,12 @@ public class ProfileWifiPointsDBHelper extends GenericDBHelper {
             values.put(ProfileWiFiPoints.ProfileWiFiPointsEntry._ID, wiFiPoints.getIdProfile());
             values.put(ProfileWiFiPoints.ProfileWiFiPointsEntry._BSSID, wifiPoint.getBSSID());
 
-            // Insert the new row, returning the primary key value of the new row
-            db.insert(ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME, null, values);
-
             if(wifiHelper.getByBSSID(wifiPoint.getBSSID()) == null)
                 wifiHelper.insertWiFiPoint(wifiPoint);
             else
                 wifiHelper.updateWiFiPoint(wifiPoint);
+
+            db.insert(ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME, null, values);
 
         }
 

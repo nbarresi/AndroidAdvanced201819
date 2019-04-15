@@ -167,7 +167,7 @@ public class MapActivity extends Activity {
         coordinates.setRadius(radius);
         Intent returnCoordinatesIntent = new Intent();
         returnCoordinatesIntent.putExtra("ADD_COORDINATES_REQUEST_CODE", coordinates);
-        setResult(NewProfileActivity.RESULT_MAP_ACTIVITY, returnCoordinatesIntent);
+        setResult(RESULT_OK, returnCoordinatesIntent);
         finish();
         super.onBackPressed();
     }

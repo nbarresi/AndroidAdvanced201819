@@ -440,7 +440,7 @@ public class NewProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
         if (data != null)
-            if (requestCode == RESULT_OK){
+            if (resultCode == RESULT_OK){
                 switch (requestCode) {
                     case ADD_APP_REQUEST_CODE:
                         profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
