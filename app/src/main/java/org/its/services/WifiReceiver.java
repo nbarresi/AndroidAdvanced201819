@@ -1,4 +1,4 @@
-package org.its.login.services;
+package org.its.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

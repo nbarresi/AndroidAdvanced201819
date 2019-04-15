@@ -109,8 +109,6 @@ public class WiFiPointDBHelper extends GenericDBHelper{
 
     private List<WiFiPoint> cursorToWiFiPoint(Cursor cursor){
         List<WiFiPoint> wifiPoints = new ArrayList<>();
-
-        List itemIds = new ArrayList<>();
         while(cursor.moveToNext()) {
 
             WiFiPoint wifiPoint = new WiFiPoint(
