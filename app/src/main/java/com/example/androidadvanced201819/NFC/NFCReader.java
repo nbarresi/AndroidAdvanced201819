@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +107,8 @@ public class NFCReader extends AppCompatActivity {
         tagId.setText(nfcId);
 
         nfcAdapterActivity.updateList(Arrays.asList(tagFromIntent.getTechList()));
+        LinearLayout nfcLayout = (LinearLayout) findViewById(R.id.NFCActivityLayout);
+        nfcLayout.setVisibility(View.VISIBLE);
     }
 
 
