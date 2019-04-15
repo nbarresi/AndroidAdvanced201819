@@ -33,7 +33,7 @@ public class WifiActivity extends AppCompatActivity {
 
     private List<ScanResult> list = new ArrayList<>();
     private WifiManager wifiManager;
-    private WifiArrayAdapter adapter;
+    private WifiArrayAdapter nfcAdapter;
     private List<ScanResult> trovati;
 
     @Override
@@ -43,8 +43,8 @@ public class WifiActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.wifiList);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        Intent currentIntent= getIntent();
-        final int idForUpdate= currentIntent.getIntExtra(StringCollection.isUpdate,-1);
+        Intent currentIntent = getIntent();
+        final int idForUpdate = currentIntent.getIntExtra(StringCollection.isUpdate, -1);
 
         registerReceiver(new BroadcastReceiver() {
             @Override
@@ -55,8 +55,8 @@ public class WifiActivity extends AppCompatActivity {
                     list.add(item);
                 }
                 if (list.size() > 0) {
-                    adapter = new WifiArrayAdapter(context, list);
-                    listView.setAdapter(adapter);
+                    nfcAdapter = new WifiArrayAdapter(context, list);
+                    listView.setAdapter(nfcAdapter);
                 }
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));

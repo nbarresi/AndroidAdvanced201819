@@ -23,7 +23,7 @@ public class ListActivity extends AppCompatActivity {
     public final static String PROFILE = "accademia.lynxspa.com.PROFILE";
     public final int REFRESH_REQUESTCODE = 123;
 
-    CustomArrayAdapter adapter;
+    CustomArrayAdapter nfcAdapter;
     List<Profilo> list;
     private ProfiloDao db = new ProfiloDao();
 
@@ -35,17 +35,17 @@ public class ListActivity extends AppCompatActivity {
         list = db.getAllProfiles();
         db.closeConn();
 
-        adapter = new CustomArrayAdapter(this, list);
+        nfcAdapter = new CustomArrayAdapter(this, list);
 
         final ListView listView = (ListView) findViewById(R.id.profileList);
-        listView.setAdapter(adapter);
+        listView.setAdapter(nfcAdapter);
         listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Intent updateIntent = new Intent(ListActivity.this, DetailActivity.class);
-                Profilo profile = adapter.getItem(position);
+                Profilo profile = nfcAdapter.getItem(position);
                 updateIntent.putExtra(PROFILE, profile);
                 startActivity(updateIntent);
             }
@@ -60,7 +60,7 @@ public class ListActivity extends AppCompatActivity {
                        db.openConn(getApplicationContext());
                        if(db.deleteProfile(list.get(i).getId())){
                            list.remove(i);
-                           adapter.notifyDataSetChanged();
+                           nfcAdapter.notifyDataSetChanged();
                        }
                        db.closeConn();
                    }
@@ -87,7 +87,7 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        nfcAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.its.services;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.its.db.dao.ProfiloDao;
@@ -178,7 +174,6 @@ public class GpsTracker extends IntentService implements LocationListener {
     }
 
 
-
     @Override
     public void onLocationChanged(Location location) {
         //Log.d("location change", "dkfhej");
@@ -189,16 +184,17 @@ public class GpsTracker extends IntentService implements LocationListener {
 
         boolean findedMatch = false;
         Gson gson = new Gson();
+        Location gettedLocation = new Location("");
 
         for (int i = 0; i < list.size() && !findedMatch; i++) {
-           /* Logica per capire se un punto è in una mappa
+            Gps posizione = new Gson().fromJson(list.get(i).getRilevazione(), Gps.class);
 
-           Gps posizione = new Gson().fromJson(list.get(i).getRilevazione(), Gps.class);
-            circle.setCenter(new LatLng(posizione.getLatitudine(),posizione.getLongitudine()));
-            google.maps.geometry.spherical.computeDistanceBetween(
-                    new google.maps.LatLng( 100, 20 ),
-                    new google.maps.LatLng( 101, 21 )
-            ) <= 2000*/
+            gettedLocation.setLongitude(posizione.getLongitudine());
+            gettedLocation.setLatitude(posizione.getLatitudine());
+
+            if (location.distanceTo(gettedLocation) <= posizione.getRaggio()) {
+                findedMatch = true;
+            }
         }
 
     }

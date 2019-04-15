@@ -31,6 +31,7 @@ import org.its.db.dao.ProfiloDao;
 import org.its.db.dao.WifiDao;
 import org.its.db.entities.Gps;
 import org.its.db.entities.ListWifiConnection;
+import org.its.db.entities.Nfc;
 import org.its.db.entities.Profilo;
 import org.its.db.entities.WifiConnection;
 import org.its.utilities.ProfileTypeEnum;
@@ -48,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
     private int idForUpdate = -1;
     private TextView appChoiced = null;
     private Gps gps;
+    private Nfc nfc;
     private ListWifiConnection wifiConnectionList;
     private final WifiDao wifiDao = new WifiDao();
 
@@ -118,6 +120,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        nfcButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchIntentToNfc();
+            }
+        });
+
         wifiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,30 +154,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-       /* radioGroup.setOnClickListener(new RadioGroup.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.detailGPS:
-
-                        break;
-
-                    case R.id.detailWIFI:
-
-
-                        break;
-
-                    case R.id.detailNFC:
-                        System.out.println("premuto radiobutton 3");
-                        break;
-
-                    case R.id.detailBeacon:
-                        System.out.println("premuto radiobutton 4");
-                        break;
-                }
-            }
-        });
-*/
         app.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,6 +185,7 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case R.id.detailNFC:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.NFC);
+                        profiloDaSalvare.setRilevazione(new Gson().toJson(nfc));
                         break;
                     case R.id.detailBeacon:
                         profiloDaSalvare.setMetodo(ProfileTypeEnum.BEACON);
@@ -291,9 +277,24 @@ public class DetailActivity extends AppCompatActivity {
         startActivityForResult(mapIntent, RequestCodes.MAP_CODE);
     }
 
+    private void launchIntentToNfc() {
+        Intent nfcIntent = new Intent(DetailActivity.this, NfcActivity.class);
+        if (idForUpdate != -1) {
+            nfcIntent.putExtra(StringCollection.isUpdate, true);
+
+        } else {
+            nfcIntent.putExtra(StringCollection.isUpdate, false);
+        }
+
+        if (profiloFromIntent != null) {
+            nfcIntent.putExtra(StringCollection.nfcObject, profiloFromIntent.getRilevazione());
+        }
+        startActivityForResult(nfcIntent, RequestCodes.NFC_CODE);
+    }
+
     private void launchIntentToWifi() {
         Intent wifiIntent = new Intent(DetailActivity.this, WifiActivity.class);
-        wifiIntent.putExtra(StringCollection.isUpdate,idForUpdate);
+        wifiIntent.putExtra(StringCollection.isUpdate, idForUpdate);
         startActivityForResult(wifiIntent, RequestCodes.WIFI_CODE);
 
     }
@@ -317,6 +318,11 @@ public class DetailActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     wifiConnectionList = (ListWifiConnection) data.getSerializableExtra(ResultsCode.WIFI_RESULT);
                     setIsWifi(true);
+                }
+                break;
+            case RequestCodes.NFC_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    nfc = (Nfc) data.getSerializableExtra(ResultsCode.NFC_RESULT);
                 }
                 break;
             default:

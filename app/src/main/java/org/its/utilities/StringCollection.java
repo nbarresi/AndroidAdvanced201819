@@ -28,6 +28,7 @@ public class StringCollection {
 
     public final static String isUpdate="IsUpdate";
     public final static String gpsObject="gps";
+    public final static String nfcObject="nfc";
 
 
 

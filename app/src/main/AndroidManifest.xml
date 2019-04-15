@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
@@ -47,7 +48,9 @@
 
         <activity
             android:name="org.its.Activity.WifiActivity"
-            android:label="Wifi Scan"></activity>
+            android:label="@string/wifi_label"></activity>
+
+        <activity android:name="org.its.Activity.NfcActivity" android:label="@string/nfc_label" />
 
         <receiver android:name="org.its.receiver.BootReceiver">
             <intent-filter>

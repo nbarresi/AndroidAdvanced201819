@@ -9,6 +9,8 @@
     <string name="profili">Gestisci Profili</string>
     <string name="detail">Dettaglio Profilo</string>
     <string name="mappa">Mappa</string>
+    <string name="wifi_label">Wifi Scan</string>
+    <string name="nfc_label">NFC</string>
 
 
     <!--aggiunta/modifica section-->
@@ -36,4 +38,11 @@
     <string name="mapAlertMessage">La localizzazione non è attiva, vuoi attivarla?</string>
     <string name="currentPositionLabel">Posizione Attuale</string>
     <string name="meter"> m</string>
+
+    <!--nfc section-->
+    <string name="Descrizione">Passa il telefono su un dispositivo fornito di tag NFC</string>
+    <string name="tagId">Tag ID:</string>
+    <string name="nfcTech">Tecnologie Supportate:</string>
+
+    <string name="set">Imposta</string>
 </resources>
