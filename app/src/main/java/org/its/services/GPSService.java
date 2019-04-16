@@ -3,6 +3,7 @@ package org.its.services;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.IntentService;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,9 +24,13 @@ import org.its.db.entities.Profile;
 
 import java.util.List;
 
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
+
 public class GPSService extends IntentService implements LocationListener {
 
     private final Context mContext;
+
+    private Intent intent;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -89,6 +94,7 @@ public class GPSService extends IntentService implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         super.onStartCommand(intent, flags, startId);
+        this.intent = intent;
         return START_STICKY;
     }
 
@@ -245,6 +251,12 @@ public class GPSService extends IntentService implements LocationListener {
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)volume*maxVolume, 0);
 
 
+        final BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(bAdapter!=null) {
+            if (!bAdapter.isEnabled()) {
+                startActivityForResult(null, new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 1, null);
+            }
+        }
 
     }
 

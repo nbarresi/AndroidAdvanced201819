@@ -98,7 +98,10 @@ public class WiFiPointDBHelper extends GenericDBHelper{
 
         cursor.moveToFirst();
 
-        WiFiPoint wifiPoint = new WiFiPoint(
+        WiFiPoint wifiPoint = null;
+
+        if(cursor.getCount() > 0)
+        wifiPoint = new WiFiPoint(
                 cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._BSSID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._SSID)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(WiFiPoint.WifiPointEntry._LEVEL))

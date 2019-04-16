@@ -84,11 +84,12 @@ public class NfcPointDBHelper extends GenericDBHelper{
         );
 
         cursor.moveToFirst();
-
-        NfcPoint nfcPoint = new NfcPoint(
-                cursor.getString(cursor.getColumnIndexOrThrow(NfcPoint.NfcPointEntry._NFCID))
-        );
-
+        NfcPoint nfcPoint = null;
+        if(cursor.getCount() >0) {
+            nfcPoint = new NfcPoint(
+                    cursor.getString(cursor.getColumnIndexOrThrow(NfcPoint.NfcPointEntry._NFCID))
+            );
+        }
         return nfcPoint;
     }
 
