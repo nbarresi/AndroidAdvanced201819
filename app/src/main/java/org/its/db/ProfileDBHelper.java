@@ -99,7 +99,6 @@ public class ProfileDBHelper extends GenericDBHelper {
     private List<Profile> cursorToProfile(Cursor cursor){
         List<Profile> profiles = new ArrayList<>();
 
-        List itemIds = new ArrayList<>();
         while(cursor.moveToNext()) {
 
             Profile profile = new Profile(
@@ -119,7 +118,7 @@ public class ProfileDBHelper extends GenericDBHelper {
 
 
     public Profile getProfileById(Long idProfile){
-        String selection = Profile.ProfileEntry._ID + " == ?";
+        String selection = Profile.ProfileEntry._ID + " = ?";
         String[] selectionArgs = {idProfile+"" };
 
         Cursor cursor = this.getWritableDatabase().query(
@@ -132,7 +131,10 @@ public class ProfileDBHelper extends GenericDBHelper {
                 null               // The sort order
         );
 
-        Profile profiles = cursorToProfile(cursor).get(0);
+        Profile profiles = null;
+        if (cursor.getCount()>0){
+          profiles = cursorToProfile(cursor).get(0);
+        }
 
         cursor.close();
 

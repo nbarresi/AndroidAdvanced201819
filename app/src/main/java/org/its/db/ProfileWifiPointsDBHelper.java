@@ -60,7 +60,7 @@ public class ProfileWifiPointsDBHelper extends GenericDBHelper {
     }
 
     public ProfileWiFiPoints getProfileWiFiPoints(Long idProfile){
-        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " == ?";
+        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " = ?";
         String[] selectionArgs = {idProfile+"" };
         Cursor cursor = this.getWritableDatabase().query(
                 ProfileWiFiPoints.ProfileWiFiPointsEntry.TABLE_NAME,   // The table to query
