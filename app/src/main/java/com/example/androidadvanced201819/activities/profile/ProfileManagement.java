@@ -21,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.androidadvanced201819.activities.beacon.BeaconActivity;
 import com.example.androidadvanced201819.activities.nfc.NFCReader;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.activities.MapsActivity;
@@ -37,6 +38,7 @@ public class ProfileManagement extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private static final int MY_PERMISSIONS_REQUEST_WIFI = 2;
+    private static final int MY_PERMISSIONS_REQUEST_BEACON = 3;
     EditText name;
     SeekBar brightness, volume;
     Switch bluetooth, wifi;
@@ -164,6 +166,15 @@ public class ProfileManagement extends AppCompatActivity {
             case R.id.beaconRadioButton:
                 if (checked)
                     option = Option.BEACON.getOption();
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(
+                            this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Intent goToBeacon = new Intent(this, BeaconActivity.class);
+                        startActivityForResult(goToBeacon, 5);
+                    } else {
+                        checkLocationPermission(MY_PERMISSIONS_REQUEST_BEACON);
+                    }
+                }
                 break;
         }
 
@@ -347,7 +358,7 @@ public class ProfileManagement extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-//Alert prima di richiedere i permessi
+                //Alert prima di richiedere i permessi
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         request);
@@ -384,6 +395,19 @@ public class ProfileManagement extends AppCompatActivity {
                     // contacts-related task you need to do.
                     Intent goToWiFi = new Intent(this, WiFiActivity.class);
                     startActivityForResult(goToWiFi, 3);
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_BEACON: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Intent goToWiFi = new Intent(this, BeaconActivity.class);
+                    startActivityForResult(goToWiFi, 5);
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
