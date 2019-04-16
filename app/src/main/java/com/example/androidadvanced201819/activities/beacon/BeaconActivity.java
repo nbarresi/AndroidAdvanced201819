@@ -9,6 +9,7 @@ import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.content.Intent;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import java.util.Collection;
 
 public class BeaconActivity extends AppCompatActivity implements BeaconConsumer {
 
+    private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothManager bluetoothManager;
     private BluetoothLeScanner mBluetoothScanner;
@@ -42,6 +44,7 @@ public class BeaconActivity extends AppCompatActivity implements BeaconConsumer 
         if (bluetoothManager != null) {
             bluetoothAdapter = bluetoothManager.getAdapter();
         }
+        checkBluethootPermission(bluetoothAdapter);
         mBluetoothScanner = bluetoothAdapter.getBluetoothLeScanner();
         this.setScanSettings();
         mBluetoothScanner.startScan(
@@ -59,8 +62,17 @@ public class BeaconActivity extends AppCompatActivity implements BeaconConsumer 
         );
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
         beaconManager.bind(this);
+    }
+
+    private void checkBluethootPermission(BluetoothAdapter bluetoothAdapter) {
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
     }
 
     @Override

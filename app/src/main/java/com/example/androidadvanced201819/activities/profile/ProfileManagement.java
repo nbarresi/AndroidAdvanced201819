@@ -9,8 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -86,36 +84,6 @@ public class ProfileManagement extends AppCompatActivity {
         }
         brightness.setMax(255);
         volume.setMax(15);
-
-        name.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (s.toString().trim().length() == 0) {
-                    createButton.setEnabled(false);
-                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-
-                } else {
-                    createButton.setEnabled(true);
-                    createButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-
     }
 
     public void onRadioDetectionMethod(View view) {
@@ -344,8 +312,10 @@ public class ProfileManagement extends AppCompatActivity {
 
         profileWifiDatabaseManager.open();
         profileWifiDatabaseManager.deleteProfileWifi(profile.getId());
-        for (WiFi wifi : wiFiList.getWiFis()) {
-            profileWifiDatabaseManager.createProfileWifi(profile.getId(), wifi.getBSSID());
+        if (wiFiList != null) {
+            for (WiFi wifi : wiFiList.getWiFis()) {
+                profileWifiDatabaseManager.createProfileWifi(profile.getId(), wifi.getBSSID());
+            }
         }
 
         Intent backToMain = new Intent(ProfileManagement.this, MainActivity.class);
