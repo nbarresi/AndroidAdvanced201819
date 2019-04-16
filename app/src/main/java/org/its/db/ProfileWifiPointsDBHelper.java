@@ -44,7 +44,7 @@ public class ProfileWifiPointsDBHelper extends GenericDBHelper {
     }
 
     public boolean deleteProfileWifiPoints(ProfileWiFiPoints wiFiPoints){
-        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " == ?";
+        String selection = ProfileWiFiPoints.ProfileWiFiPointsEntry._ID + " = ?";
         // Specify arguments in placeholder order.
         String[] selectionArgs = {wiFiPoints.getIdProfile()+"" };
         // Issue SQL statement.
