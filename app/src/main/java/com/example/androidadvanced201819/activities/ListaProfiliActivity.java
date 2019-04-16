@@ -1,5 +1,6 @@
 package com.example.androidadvanced201819.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,7 +55,6 @@ public class ListaProfiliActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_list);
 
         dbHelper = DbHelper.getInstance(this);
-        dbHelper = new DbHelper(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
