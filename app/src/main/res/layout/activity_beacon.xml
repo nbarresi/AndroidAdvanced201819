@@ -7,64 +7,11 @@
     tools:context=".activities.beacon.BeaconActivity"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/listViewBeacon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/nameBeacon"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/indirizzo"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="5">
-
-            <TextView
-                android:id="@+id/beaconName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="nome beacon"/>
-
-            <TextView
-                android:id="@+id/beaconAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FC:VG:09:78:RF:04"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="0.00m"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </ListView>
 
 </LinearLayout>
