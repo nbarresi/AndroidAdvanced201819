@@ -99,6 +99,8 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
 
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
                 mMap.addMarker(new MarkerOptions().position(latLngProvided).title(" Marker"));
                 circle = mMap.addCircle(new CircleOptions()
                         .center(latLngProvided)
