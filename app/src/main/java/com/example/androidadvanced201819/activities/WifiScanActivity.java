@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
@@ -48,11 +49,16 @@ public class WifiScanActivity extends AppCompatActivity {
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0x12345);
         } else {
+            if(!wifiManager.isWifiEnabled()){
+                Toast.makeText(WifiScanActivity.this, "Attivare il WIFI", Toast.LENGTH_LONG).show();
+
+            }
+
             registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                boolean success = intent.getBooleanExtra(
-                        WifiManager.EXTRA_RESULTS_UPDATED, false);
+                    boolean success = intent.getBooleanExtra(
+                            WifiManager.EXTRA_RESULTS_UPDATED, false);
                     List<ScanResult> results = wifiManager.getScanResults();
                     if (success) {
                         scanAdapter = new ScanAdapter(WifiScanActivity.this, wifiManager.getScanResults());
@@ -70,10 +76,17 @@ public class WifiScanActivity extends AppCompatActivity {
         createProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toCreate = new Intent();
-                toCreate.putExtra(EXTRA_WIFI_LIST, (Serializable) convertScanResult(wifiManager.getScanResults()));
-                setResult(CreateProfileActivity.REQUEST_WIFI, toCreate);
-                finish();
+                List<Wifi> wifiResult = convertScanResult(wifiManager.getScanResults());
+
+                if (!wifiResult.isEmpty()) {
+                    Intent toCreate = new Intent();
+                    toCreate.putExtra(EXTRA_WIFI_LIST, (Serializable) wifiResult);
+                    setResult(CreateProfileActivity.REQUEST_WIFI, toCreate);
+                    finish();
+                } else {
+                    Toast.makeText(WifiScanActivity.this, "Non sono disponibili reti da salvare", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         });
     }
@@ -100,8 +113,8 @@ public class WifiScanActivity extends AppCompatActivity {
             registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-            //boolean success = intent.getBooleanExtra(
-            //WifiManager.EXTRA_RESULTS_UPDATED, false);
+                    //boolean success = intent.getBooleanExtra(
+                    //WifiManager.EXTRA_RESULTS_UPDATED, false);
                     List<ScanResult> results = wifiManager.getScanResults();
                     if (true) {
                         scanAdapter = new ScanAdapter(WifiScanActivity.this, wifiManager.getScanResults());

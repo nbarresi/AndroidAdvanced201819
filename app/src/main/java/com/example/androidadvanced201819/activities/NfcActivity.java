@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.NfcTechAdapter;
@@ -42,6 +43,10 @@ public class NfcActivity extends AppCompatActivity {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(NfcActivity.this);
         pendingIntent = PendingIntent.getActivity(this,0,new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
         confirmButton = (Button) findViewById(R.id.confirmNfc);
+
+        if(!mNfcAdapter.isEnabled()){
+            Toast.makeText(NfcActivity.this, "Attiva NFC", Toast.LENGTH_LONG).show();
+        }
 
         IntentFilter nDef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         try{

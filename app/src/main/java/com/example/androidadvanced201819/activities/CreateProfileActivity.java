@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -86,6 +87,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         final RadioButton beaconButton = (RadioButton) findViewById(R.id.beacon);
 
         final SeekBar luminosita = (SeekBar) findViewById(R.id.luminosita);
+        final CheckBox autoLuminosita = (CheckBox) findViewById(R.id.autoLuminosita);
         final SeekBar volume = (SeekBar) findViewById(R.id.volume);
         final Switch bluetoothSwitch = (Switch) findViewById(R.id.bluetoothSwitch);
         final Switch wifiSwitch = (Switch) findViewById(R.id.wifiSwitch);
@@ -101,7 +103,13 @@ public class CreateProfileActivity extends AppCompatActivity {
             profilo = (UserProfile) intent.getSerializableExtra(ProfileAdapter.EXTRA_PROFILE);
 
             textName.setText(profilo.getNome());
-            luminosita.setProgress(profilo.getLuminosita());
+
+            if (profilo.getLuminosita() != -1) {
+                luminosita.setProgress(profilo.getLuminosita());
+            } else {
+                autoLuminosita.setChecked(true);
+            }
+
             volume.setProgress(profilo.getVolume());
             bluetoothSwitch.setChecked(profilo.isBluetooth());
             wifiSwitch.setChecked(profilo.isWifi());
@@ -138,10 +146,12 @@ public class CreateProfileActivity extends AppCompatActivity {
                 RadioButton selected = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
                 String selectedString = selected != null ? selected.getText().toString() : "";
 
+                int checkLuminosita = autoLuminosita.isChecked() ? -1 : luminosita.getProgress();
+
                 boolean bluetooth = bluetoothSwitch.isChecked();
                 boolean wifi = wifiSwitch.isChecked();
 
-                UserProfile profile = new UserProfile(null, name, selectedString, methodValue, luminosita.getProgress(), volume.getProgress(), bluetooth, wifi, appPackage, appNameVal);
+                UserProfile profile = new UserProfile(null, name, selectedString, methodValue, checkLuminosita, volume.getProgress(), bluetooth, wifi, appPackage, appNameVal);
 
                 if (intent.hasExtra(ProfileAdapter.EXTRA_PROFILE)) {
                     profile.setId(profilo.getId());
@@ -171,8 +181,6 @@ public class CreateProfileActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(CreateProfileActivity.this, "Inserire dati mancanti", Toast.LENGTH_SHORT).show();
                     }
-
-
 
                 }
             }
