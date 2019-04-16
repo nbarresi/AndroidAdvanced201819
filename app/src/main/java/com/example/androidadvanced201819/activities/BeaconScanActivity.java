@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.androidadvanced201819.DB.Entities.MyBeacon;
 import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
 import com.example.androidadvanced201819.adapter.BeaconAdapter;
@@ -52,12 +53,18 @@ public class BeaconScanActivity extends AppCompatActivity implements BeaconConsu
     private TextView textViewName;
     private TextView textViewAddress;
     private ListView beaconListView;
-    private List<Beacon> beaconList;
+    private List<MyBeacon> beaconList = new ArrayList<>();
     public static final String ALTBEACON_LAYOUT = "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25";
     public static final String EDDYSTONE_TLM_LAYOUT = "x,s:0-1=feaa,m:2-2=20,d:3-3,d:4-5,d:6-7,d:8-11,d:12-15";
     public static final String EDDYSTONE_UID_LAYOUT = "s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19";
     public static final String EDDYSTONE_URL_LAYOUT = "s:0-1=feaa,m:2-2=10,p:3-3:-41,i:4-21v";
     public static final String URI_BEACON_LAYOUT = "s:0-1=fed8,m:2-2=00,p:3-3:-41,i:4-21v";
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        beaconManager.unbind(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,7 @@ public class BeaconScanActivity extends AppCompatActivity implements BeaconConsu
             public void onClick(View v) {
                 Intent toCreate = new Intent();
                 toCreate.putExtra(EXTRA_BEACON_LIST, (Serializable) beaconList);
-                setResult(4, toCreate);
+                setResult(5, toCreate);
                 finish();
             }
         });
@@ -117,6 +124,7 @@ public class BeaconScanActivity extends AppCompatActivity implements BeaconConsu
                         List<Beacon> beacons= new ArrayList<>();
                         for(Beacon beacon:collection){
                             beacons.add(beacon);
+                            beaconList.add(new MyBeacon(beacon.getBluetoothName(),beacon.getBluetoothAddress()));
                         }
                         BeaconAdapter beaconAdapter= new BeaconAdapter(BeaconScanActivity.this,beacons);
                         beaconListView.setAdapter(beaconAdapter);

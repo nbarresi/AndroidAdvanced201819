@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.androidadvanced201819.DB.Entities.MyBeacon;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.DB.Entities.Wifi;
 
@@ -14,12 +15,14 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static DbHelper dbHelper = null;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String DATABASE_NAME = "AndroidAndvanced.db";
 
     public static final String PROFILE_TABLE_NAME = "profile";
     public static final String WIFI_TABLE = "wifi";
+    public static final String BEACON_TABLE = "beacon";
 
     public static final String GENERIC_COLUMN_ID = "id";
     public static final String GENERIC_COLUMN_ID_PROFILO = "id_profilo";
@@ -39,6 +42,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String WIFI_COLUMN_BSSID = "bssid";
     public static final String WIFI_COLUMN_LEVEL = "level";
 
+    public static final String BEACON_COLUMN_NAME = "name";
+    public static final String BEACON_COLUMN_ADDRESS = "address";
 
     private static final String CREATE_TABLE_PROFILO = "CREATE TABLE " + PROFILE_TABLE_NAME + "(" +
             GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -61,15 +66,30 @@ public class DbHelper extends SQLiteOpenHelper {
             GENERIC_COLUMN_ID_PROFILO + " INTEGER, " +
             "FOREIGN KEY(" + GENERIC_COLUMN_ID_PROFILO + ") REFERENCES " + PROFILE_TABLE_NAME + "(" + GENERIC_COLUMN_ID + "))";
 
+    private static final String CREATE_TABLE_BEACON = "CREATE TABLE " + BEACON_TABLE + "(" +
+            GENERIC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            BEACON_COLUMN_NAME + " TEXT," +
+            BEACON_COLUMN_ADDRESS + " TEXT," +
+            GENERIC_COLUMN_ID_PROFILO + " INTEGER, " +
+            "FOREIGN KEY(" + GENERIC_COLUMN_ID_PROFILO + ") REFERENCES " + PROFILE_TABLE_NAME + "(" + GENERIC_COLUMN_ID + "))";
 
-    public DbHelper(Context context) {
+    private DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+    }
+
+    public static DbHelper getInstance(Context context){
+        if (dbHelper == null) {
+            dbHelper = new DbHelper(context);
+        }
+        return dbHelper;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_PROFILO);
         db.execSQL(CREATE_TABLE_WIFI);
+        db.execSQL(CREATE_TABLE_BEACON);
     }
 
     @Override
@@ -85,6 +105,9 @@ public class DbHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             String ADD_APPNAME = "ALTER TABLE " + PROFILE_TABLE_NAME + " ADD COLUMN " + PROFILE_COLUMN_APP_NAME + " TEXT;";
             db.execSQL(ADD_APPNAME);
+        }
+        if(oldVersion < 4){
+            db.execSQL(CREATE_TABLE_BEACON);
         }
     }
 
@@ -165,7 +188,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public boolean removeWifiById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(WIFI_TABLE, GENERIC_COLUMN_ID + "=?", new String[]{id + ""}) != -1;
+        return db.delete(WIFI_TABLE, GENERIC_COLUMN_ID_PROFILO + "=?", new String[]{id + ""}) != -1;
     }
 
     public void updateProfile(UserProfile profile) {
@@ -182,5 +205,38 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(PROFILE_COLUMN_BLUETOOTH, profile.isBluetooth() ? 1 : 0);
         contentValues.put(PROFILE_COLUMN_WIFI, profile.isWifi() ? 1 : 0);
         db.update(PROFILE_TABLE_NAME, contentValues, GENERIC_COLUMN_ID + "=?", new String[]{profile.getId() + ""});
+    }
+
+    public List<MyBeacon> getBeacon(Integer profileId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(BEACON_TABLE, null, GENERIC_COLUMN_ID_PROFILO + "=?", new String[]{profileId + ""}, null, null, null);
+        List<MyBeacon> dBeacons = new ArrayList<>();
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID));
+                    String nome = cursor.getString(cursor.getColumnIndex(BEACON_COLUMN_NAME));
+                    String address = cursor.getString(cursor.getColumnIndex(BEACON_COLUMN_ADDRESS));
+                    int idProfilo = cursor.getInt(cursor.getColumnIndex(GENERIC_COLUMN_ID_PROFILO));
+                    dBeacons.add(new MyBeacon(id, nome, address, idProfilo));
+                } while (cursor.moveToNext());
+            }
+        }
+        return dBeacons;
+    }
+
+    public boolean removeBeaconByID(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(BEACON_TABLE, GENERIC_COLUMN_ID_PROFILO + "=?", new String[]{id + ""}) != -1;
+    }
+
+    public void insertBeacon(MyBeacon single) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BEACON_COLUMN_NAME, single.getName());
+        contentValues.put(BEACON_COLUMN_ADDRESS, single.getAddress());
+        contentValues.put(GENERIC_COLUMN_ID_PROFILO, single.getProfileId());
+
+        db.insertOrThrow(BEACON_TABLE, null, contentValues);
     }
 }

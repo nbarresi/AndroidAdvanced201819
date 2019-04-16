@@ -54,7 +54,7 @@ public class GpsService extends IntentService implements LocationListener {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        DbHelper dbHelper = new DbHelper(getApplicationContext());
+        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         List<UserProfile> profiles = dbHelper.getProfiles();
 
         for (UserProfile profile : profiles) {
@@ -102,7 +102,7 @@ public class GpsService extends IntentService implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.w("myapp", "locationChanged");
-        DbHelper dbHelper = new DbHelper(getApplicationContext());
+        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         List<UserProfile> profiles = dbHelper.getProfiles();
         for (UserProfile profile : profiles) {
             if (profile.getMetodoDiRilevamento().equals(CreateProfileActivity.GPS)) {

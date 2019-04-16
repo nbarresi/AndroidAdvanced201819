@@ -43,7 +43,7 @@ public class ListaProfiliActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_list);
 
-        dbHelper = new DbHelper(this);
+        dbHelper = DbHelper.getInstance(this);
         boolean nfcSupport = NfcAdapter.getDefaultAdapter(this) != null;
 
         sharedPreferences = this.getSharedPreferences("utilities", Context.MODE_PRIVATE);

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidadvanced201819.DB.DbHelper;
+import com.example.androidadvanced201819.DB.Entities.MyBeacon;
 import com.example.androidadvanced201819.DB.Entities.UserProfile;
 import com.example.androidadvanced201819.DB.Entities.Wifi;
 import com.example.androidadvanced201819.R;
@@ -50,6 +51,7 @@ public class CreateProfileActivity extends AppCompatActivity {
     public static final int REQUEST_MAP = 2;
     public static final int REQUEST_WIFI = 3;
     public static final int REQUEST_NFC = 4;
+    public static final int REQUEST_BEACON = 5;
 
     private SharedPreferences sharedPreferences;
     private DbHelper dbHelper;
@@ -60,14 +62,14 @@ public class CreateProfileActivity extends AppCompatActivity {
     private String appNameVal = "";
     private String methodValue = "";
     private List<Wifi> wifis = new ArrayList<Wifi>();
-    private List<Beacon> beacons = new ArrayList();
+    private List<MyBeacon> beacons = new ArrayList();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
 
-        dbHelper = new DbHelper(getApplicationContext());
+        dbHelper = DbHelper.getInstance(getApplicationContext());
 
         sharedPreferences = this.getSharedPreferences("utilities", MODE_PRIVATE);
         boolean nfcSupport = sharedPreferences.getBoolean("support", false);
@@ -147,11 +149,19 @@ public class CreateProfileActivity extends AppCompatActivity {
                     profile.setId(profilo.getId());
                     dbHelper.updateProfile(profile);
 
-                    if (wifi && !wifis.isEmpty()) {
+                    if (!wifis.isEmpty()) {
                         dbHelper.removeWifiById(profilo.getId());
                         for (Wifi single : wifis) {
                             single.setIdProfilo(profilo.getId());
                             dbHelper.insertWifi(single);
+                        }
+                    }
+
+                    if (!beacons.isEmpty()) {
+                        dbHelper.removeBeaconByID(profilo.getId());
+                        for (MyBeacon single : beacons) {
+                            single.setProfileId(profilo.getId());
+                            dbHelper.insertBeacon(single);
                         }
                     }
 
@@ -161,10 +171,18 @@ public class CreateProfileActivity extends AppCompatActivity {
                     if (!profile.getNome().equals("") && !profile.getMetodoDiRilevamento().equals("")) {
                         int idProfilo = (int) dbHelper.insertProfile(profile);
 
-                        if (wifi && !wifis.isEmpty()) {
+                        if (!wifis.isEmpty()) {
                             for (Wifi single : wifis) {
                                 single.setIdProfilo(idProfilo);
                                 dbHelper.insertWifi(single);
+                            }
+                        }
+
+                        if (!beacons.isEmpty()) {
+                            dbHelper.removeBeaconByID(profilo.getId());
+                            for (MyBeacon single : beacons) {
+                                single.setProfileId(profilo.getId());
+                                dbHelper.insertBeacon(single);
                             }
                         }
                         finish();
@@ -280,8 +298,8 @@ public class CreateProfileActivity extends AppCompatActivity {
             case REQUEST_NFC:
                 methodValue = (String) data.getExtras().getString(NfcActivity.EXTRA_NFC_TAG);
                 break;
-            case 5:
-                beacons = (List<Beacon>) data.getExtras().get(BeaconScanActivity.EXTRA_BEACON_LIST);
+            case REQUEST_BEACON:
+                beacons = (List<MyBeacon>) data.getExtras().get(BeaconScanActivity.EXTRA_BEACON_LIST);
                 break;
         }
     }

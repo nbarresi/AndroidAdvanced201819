@@ -27,5 +27,13 @@ public class GpsReceiver extends BroadcastReceiver {
         }else{
             context.startService(startWifiServiceIntent);
         }
+
+        Intent startBeaconServiceIntent = new Intent (context, BeaconService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(startBeaconServiceIntent);
+            context.startService(startBeaconServiceIntent);
+        }else{
+            context.startService(startBeaconServiceIntent);
+        }
     }
 }

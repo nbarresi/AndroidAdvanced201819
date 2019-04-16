@@ -40,6 +40,14 @@
         </service>
 
         <service
+            android:name=".IntentServices.BeaconService"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.example.androidadvanced201819.IntentServices"></action>
+            </intent-filter>
+        </service>
+
+        <service
             android:name=".IntentServices.WifiService"
             android:enabled="true">
             <intent-filter>

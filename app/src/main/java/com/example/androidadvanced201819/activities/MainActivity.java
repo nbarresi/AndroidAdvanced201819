@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Call<LoginResponse> call, Response<LoginResponse> response) {
                         if(response.body().getBody().equals("OK") && response.body().getStatusCode().equals("200")) {
+                            loginButton.setClickable(false);
                             Toast.makeText(MainActivity.this, "Login effettuato", Toast.LENGTH_LONG).show();
                             image.setImageResource(R.mipmap.ok);
 

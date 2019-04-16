@@ -34,7 +34,7 @@ public class WifiService extends IntentService{
         super.onCreate();
         Log.w("myapp2","onCreate");
 
-        final DbHelper dbHelper= new DbHelper(getApplicationContext());
+        final DbHelper dbHelper= DbHelper.getInstance( getApplicationContext());
         final List<UserProfile> profiles=dbHelper.getProfiles();// TODO: gestire l'inserimento a db di un nuovo profilo, da riavviare il service o cercare altro.
 
         final WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -55,7 +55,7 @@ public class WifiService extends IntentService{
                             {
                                 Log.d("myApp2","trovato");
                                 Toast.makeText(context,"Funziona",Toast.LENGTH_SHORT).show();
-                                //activateProfile(profile);
+//                                activateProfile(profile);
 //                                serve=false;//da vedere come gestire al posto di chiudere il service
                                 break;
                             }
