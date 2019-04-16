@@ -24,12 +24,14 @@ import android.widget.Toast;
 
 import com.example.androidadvanced201819.R;
 
+import org.altbeacon.beacon.Beacon;
 import org.its.db.CoordinatesDBHelper;
 import org.its.db.NfcPointDBHelper;
 import org.its.db.ProfileDBHelper;
 import org.its.db.ProfileNfcPointsDBHelper;
 import org.its.db.ProfileWifiPointsDBHelper;
 import org.its.db.WiFiPointDBHelper;
+import org.its.db.entities.BeaconDBO;
 import org.its.db.entities.Coordinates;
 import org.its.db.entities.Profile;
 import org.its.db.entities.ProfileNfcPoints;
@@ -74,8 +76,9 @@ public class NewProfileActivity extends AppCompatActivity {
     private static final int ADD_WIFI_REQUEST_CODE = 2;
     private static final int ADD_NFC_REQUEST_CODE = 3;
     public static int RESULT_MAP_ACTIVITY = 1111;
-    private static final int ADD_BEACON_REQUEST_CODE = 4 ;
+    private static final int ADD_BEACON_REQUEST_CODE = 4;
     private String nfcId;
+    private List<BeaconDBO> beaconDBOList = new ArrayList<BeaconDBO>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,6 @@ public class NewProfileActivity extends AppCompatActivity {
         profileDbHelper = new ProfileDBHelper(getApplicationContext());
         coordinatesDBHelper = new CoordinatesDBHelper(getApplicationContext());
         profileWifiPointsDBHelper = new ProfileWifiPointsDBHelper(getApplicationContext());
-
 
 
         Intent editProfile = getIntent();
@@ -361,14 +363,13 @@ public class NewProfileActivity extends AppCompatActivity {
                     profileWiFiPoints.setWiFiPoints(wiFiPointList);
                     profileWifiPointsDBHelper.updateProfileWifiPoints(profileWiFiPoints);
                     break;
-                case  "nfc":
+                case "nfc":
                     profileNfcPoints.setIdProfile(profile.getId());
                     profileNfcPoints.setIdNfc(nfcId);
                     profileNfcPointsDBHelper.updateProfileNfcPoints(profileNfcPoints);
                     break;
             }
-        }
-            else {
+        } else {
             profileDbHelper.insertProfile(profile);
             switch (profile.getMetodoRilevamento().toLowerCase()) {
                 case "gps":
@@ -423,16 +424,17 @@ public class NewProfileActivity extends AppCompatActivity {
     }
 
     private String setLabelAppName() {
-        if (profile.getApp() != null) { String result = profile.getApp();
-        PackageManager pm = getPackageManager();
-        List<ApplicationInfo> appList = pm.getInstalledApplications(0);
-        for (ApplicationInfo applicationInfo : appList) {
-            String packageName = applicationInfo.packageName;
-            if (packageName.equals(profile.getApp())) {
-                return applicationInfo.loadLabel(pm).toString();
+        if (profile.getApp() != null) {
+            String result = profile.getApp();
+            PackageManager pm = getPackageManager();
+            List<ApplicationInfo> appList = pm.getInstalledApplications(0);
+            for (ApplicationInfo applicationInfo : appList) {
+                String packageName = applicationInfo.packageName;
+                if (packageName.equals(profile.getApp())) {
+                    return applicationInfo.loadLabel(pm).toString();
+                }
             }
-        }
-        return result;
+            return result;
         }
         return null;
     }
@@ -443,27 +445,36 @@ public class NewProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //codice per manipolare i dati ritornati
         if (data != null)
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 switch (requestCode) {
                     case ADD_APP_REQUEST_CODE:
                         profile.setApp(data.getStringExtra("ADD_APP_REQUEST_CODE"));
                         textViewAppList.setText(profile.getApp());
                         break;
                     case ADD_COORDINATES_REQUEST_CODE:
-                        if ( data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE" )!= null){
+                        if (data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE") != null) {
                             coordinates = (Coordinates) data.getSerializableExtra("ADD_COORDINATES_REQUEST_CODE");
                         }
                         break;
                     case ADD_WIFI_REQUEST_CODE:
-                        if (data.getSerializableExtra("ADD_WIFI_REQUEST_CODE") != null){
-                            wiFiPointList =  (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
+                        if (data.getSerializableExtra("ADD_WIFI_REQUEST_CODE") != null) {
+                            wiFiPointList = (List<WiFiPoint>) data.getSerializableExtra("ADD_WIFI_REQUEST_CODE");
                         } else wiFiPointList.clear();
                         break;
                     case ADD_NFC_REQUEST_CODE:
-                        if (data.getSerializableExtra("ADD_NFC_REQUEST_CODE") != null){
-                            nfcId =  data.getStringExtra("ADD_NFC_REQUEST_CODE");
+                        if (data.getSerializableExtra("ADD_NFC_REQUEST_CODE") != null) {
+                            nfcId = data.getStringExtra("ADD_NFC_REQUEST_CODE");
                         }
-                    //TODO beacon
+                        break;
+                    case ADD_BEACON_REQUEST_CODE:
+                        if (data.getSerializableExtra("ADD_BEACON_REQUEST_CODE") != null) {
+                            List<Beacon> listBeacon = (List<Beacon>) data.getSerializableExtra("ADD_BEACON_REQUEST_CODE");
+                            for (Beacon beacon: listBeacon){
+                                BeaconDBO beaconDBO = new BeaconDBO(beacon);
+                                beaconDBOList.add(beaconDBO);
+                            }
+                            break;
+                        }
                 }
             } else radioConnectivityButton.setChecked(false);
     }
