@@ -39,6 +39,7 @@ public class ListaProfili extends AppCompatActivity {
         });
 
         creazioneListView();
+        //creazioneListViewLatLng();
         final Button add_profilo=findViewById(R.id.add_profilo);
         add_profilo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +66,17 @@ public class ListaProfili extends AppCompatActivity {
         ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
         listView.setAdapter(adapter);
     }
+
+   /* private void creazioneListViewLatLng(){
+        Cursor data=db.getDataLatLng();
+        ArrayList<String> lista=new ArrayList<>();
+        while(data.moveToNext()){
+            lista.add(data.getString(1));
+            lista.add(data.getString(2));
+        }
+        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
+        listView.setAdapter(adapter);
+    }*/
 
 
 

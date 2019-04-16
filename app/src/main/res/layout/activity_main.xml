@@ -38,7 +38,7 @@
         android:inputType="textPassword"
         android:layout_marginStart="60dp"
         android:singleLine="true"
-        android:hint="@string/Password"/>
+        android:hint="@string/Password" />
 
         <Button
             android:id="@+id/loginButton"

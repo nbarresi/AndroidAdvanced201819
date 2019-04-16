@@ -15,4 +15,7 @@
     <string name="Error_name_user">nome profilo non inserito</string>
     <string name="Login_success">Login effettuato</string>
     <string name="Login_failed">Login non effettuato</string>
+    <string name="tagId">Tag ID:</string>
+    <string name="TectSup">Tecnologie supportate</string>
+    <string name="imposta">IMPOSTA</string>
 </resources>

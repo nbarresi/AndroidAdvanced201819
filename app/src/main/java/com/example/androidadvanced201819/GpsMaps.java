@@ -39,6 +39,7 @@ public class GpsMaps extends AppCompatActivity {
     boolean isGPSEnabled;
     boolean isNetworkEnabled;
     LocationManager mLocationManager;
+    LatLngClass latLngClass;
     GoogleMap mGoogleMap;
     private static String[] MAPS_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.INTERNET};
@@ -93,10 +94,11 @@ public class GpsMaps extends AppCompatActivity {
         public void onLocationChanged(Location location) {
 
             if (location != null) {
-
-                mGoogleMap.addCircle(new CircleOptions().center(new LatLng(location.getLatitude(), location.getLongitude())).radius(100).strokeColor(Color.RED));
-                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18.0f));
+                //double latitudine=latLngClass.getLatitudine(location.getLatitude());
+                //double longitudine=latLngClass.getLongitudine(location.getLongitude());
+                mGoogleMap.addCircle(new CircleOptions().center(new LatLng(location.getLatitude(),location.getLongitude())).radius(100).strokeColor(Color.RED));
+                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()), 18.0f));
                 mLocationManager.removeUpdates(mLocationListener);
             }
         }

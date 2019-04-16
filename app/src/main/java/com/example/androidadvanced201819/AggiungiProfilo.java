@@ -1,6 +1,7 @@
 package com.example.androidadvanced201819;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 
 
 public class AggiungiProfilo extends AppCompatActivity {
-    DB db;
+    private DB db;
     private EditText nome_profilo;
     private Button conferma;
+    private Location location=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +56,23 @@ public class AggiungiProfilo extends AppCompatActivity {
 
             }
         });
-
+        final RadioButton NFC=findViewById(R.id.NFC);
+        NFC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),NFC.class);
+                startActivity(intent);
+            }
+        });
         conferma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dato=nome_profilo.getText().toString();
                 if (nome_profilo.length()!=0){
                     addData(dato);
+                    //location.getLatitude();
+                    //location.getLongitude();
+                    //addDataLatLang(location);
                     nome_profilo.setText("");
                     Intent intent=new Intent(getApplicationContext(), ListaProfili.class);
                     startActivity(intent);
@@ -74,7 +87,14 @@ public class AggiungiProfilo extends AppCompatActivity {
 
     public void addData(String nuovoDato){
         boolean inserisci=db.addData(nuovoDato);
+        inserisciTrueFalse(inserisci);
+    }
 
+    public void addDataLatLang(Location location){
+        boolean inserisci=db.addLatLng(location);
+        inserisciTrueFalse(inserisci);
+    }
+    private void inserisciTrueFalse(boolean inserisci) {
         if (inserisci){
             toast("Dato inserito");
         }else{
@@ -83,8 +103,5 @@ public class AggiungiProfilo extends AppCompatActivity {
     }
     private void toast(String toast){
         Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
-    }
-    private void permissionRequest(){
-
     }
 }

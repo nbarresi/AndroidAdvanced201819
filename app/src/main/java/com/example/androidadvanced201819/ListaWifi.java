@@ -9,11 +9,8 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextClock;
-import android.widget.TextView;
+
 
 import java.util.ArrayList;
 import java.util.List;

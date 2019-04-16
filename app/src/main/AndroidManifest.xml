@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +23,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCyPT-NFBaVdXM9m495C8V4uHruBsH4lb8"/>
         <activity
-            android:name=".ListaProfili"
+            android:name=".MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +33,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".AggiungiProfilo"></activity>
-        <!--<activity android:name=".ListaProfili"></activity>-->
+        <activity android:name=".ListaProfili"></activity>
         <activity android:name=".ListaApplicazioni"></activity>
         <activity android:name=".GpsMaps"></activity>
         <activity android:name=".ListaWifi" ></activity>
-
+        <activity android:name=".NFC"></activity>
+        <!--<service android:name=".TestService" android:exported="false"/>-->
     </application>
 
 </manifest>
